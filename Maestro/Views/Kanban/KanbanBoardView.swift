@@ -151,6 +151,7 @@ struct KanbanBoardView: View {
                 FileManager.default.fileExists(atPath: "\(project.workspaceRoot)/CLAUDE.md")
         }
         .focusable()
+        .focusEffectDisabled()
         .focused($isBoardFocused)
         .onExitCommand {
             selectedTask = nil

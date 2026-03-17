@@ -11,6 +11,10 @@ struct TaskDetailView: View {
     @Environment(AgentOrchestrator.self) private var orchestrator
     @State private var showDeleteConfirmation = false
     @State private var newCommentText = ""
+    @State private var rollbackTargetRunId: String?
+    @State private var showRollbackConfirmation = false
+    @State private var rollbackError: String?
+    @State private var showRollbackError = false
 
     var body: some View {
         ScrollView {
@@ -342,10 +346,12 @@ struct TaskDetailView: View {
                                     HStack {
                                         Image(systemName: run.status == .completed ? "checkmark.circle.fill" :
                                                 run.status == .running ? "bolt.fill" :
-                                                run.status == .failed ? "xmark.circle.fill" : "circle")
+                                                run.status == .failed ? "xmark.circle.fill" :
+                                                run.status == .rolledBack ? "arrow.uturn.backward.circle" : "circle")
                                             .foregroundStyle(run.status == .completed ? .green :
                                                     run.status == .running ? .orange :
-                                                    run.status == .failed ? .red : .gray)
+                                                    run.status == .failed ? .red :
+                                                    run.status == .rolledBack ? .purple : .gray)
                                         Text(run.startedAt, style: .date)
                                             .font(.caption)
                                         Text("\u{00B7}")
@@ -353,8 +359,22 @@ struct TaskDetailView: View {
                                             .font(.caption)
                                             .foregroundStyle(.secondary)
 
+                                        Spacer()
+
+                                        if run.canRollback {
+                                            Button {
+                                                rollbackTargetRunId = run.id
+                                                showRollbackConfirmation = true
+                                            } label: {
+                                                Label("Rollback", systemImage: "arrow.uturn.backward")
+                                                    .font(.caption)
+                                            }
+                                            .buttonStyle(.bordered)
+                                            .controlSize(.small)
+                                            .tint(.purple)
+                                        }
+
                                         if let onNavigateToRun {
-                                            Spacer()
                                             Button {
                                                 onNavigateToRun(run.id)
                                             } label: {
@@ -385,6 +405,32 @@ struct TaskDetailView: View {
                 }
             }
             .padding()
+        }
+        .confirmationDialog(
+            "Rollback this agent run?",
+            isPresented: $showRollbackConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Rollback", role: .destructive) {
+                if let runId = rollbackTargetRunId,
+                   let run = task.agentRuns?.first(where: { $0.id == runId }) {
+                    if let error = orchestrator.rollbackRun(run) {
+                        rollbackError = error
+                        showRollbackError = true
+                    }
+                }
+                rollbackTargetRunId = nil
+            }
+            Button("Cancel", role: .cancel) {
+                rollbackTargetRunId = nil
+            }
+        } message: {
+            Text("This will reset the workspace to the Git state before the agent ran. This action cannot be undone.")
+        }
+        .alert("Rollback Failed", isPresented: $showRollbackError) {
+            Button("OK") {}
+        } message: {
+            Text(rollbackError ?? "Unknown error")
         }
     }
 

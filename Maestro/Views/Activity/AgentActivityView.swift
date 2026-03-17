@@ -8,22 +8,25 @@ struct AgentActivityView: View {
     @Environment(\.modelContext) private var modelContext
     @Binding var selectedRunId: String?
     @State private var showClearHistoryConfirmation = false
+    @State private var historyLimit: Int = 10
 
-    var allRuns: [AgentRun] {
+    var activeRuns: [AgentRun] {
         let projectId = project.id
         let descriptor = FetchDescriptor<AgentRun>(
-            predicate: #Predicate { $0.projectId == projectId },
+            predicate: #Predicate { $0.projectId == projectId && $0.statusRaw == "running" },
             sortBy: [SortDescriptor(\.startedAt, order: .reverse)]
         )
         return (try? modelContext.fetch(descriptor)) ?? []
     }
 
-    var activeRuns: [AgentRun] {
-        allRuns.filter { $0.status == .running }
-    }
-
     var completedRuns: [AgentRun] {
-        allRuns.filter { $0.status != .running && $0.status != .queued }
+        let projectId = project.id
+        var descriptor = FetchDescriptor<AgentRun>(
+            predicate: #Predicate { $0.projectId == projectId && $0.statusRaw != "running" && $0.statusRaw != "queued" },
+            sortBy: [SortDescriptor(\.startedAt, order: .reverse)]
+        )
+        descriptor.fetchLimit = historyLimit + 1
+        return (try? modelContext.fetch(descriptor)) ?? []
     }
 
     var body: some View {
@@ -42,6 +45,14 @@ struct AgentActivityView: View {
                                     } label: {
                                         Label("Cancel", systemImage: "stop.circle")
                                     }
+                                    Button(role: .destructive) {
+                                        if selectedRunId == run.id {
+                                            selectedRunId = nil
+                                        }
+                                        orchestrator.deleteRun(run)
+                                    } label: {
+                                        Label("Force Delete", systemImage: "trash")
+                                    }
                                 }
                         }
                     }
@@ -55,7 +66,8 @@ struct AgentActivityView: View {
 
                 if !completedRuns.isEmpty {
                     Section("History") {
-                        ForEach(completedRuns, id: \.id) { run in
+                        let displayedRuns = Array(completedRuns.prefix(historyLimit))
+                        ForEach(displayedRuns, id: \.id) { run in
                             AgentRunRow(run: run, isActive: false)
                                 .tag(run.id)
                                 .contextMenu {
@@ -70,13 +82,26 @@ struct AgentActivityView: View {
                                 }
                         }
                         .onDelete { indexSet in
-                            let runsToDelete = indexSet.map { completedRuns[$0] }
+                            let runsToDelete = indexSet.map { displayedRuns[$0] }
                             for run in runsToDelete {
                                 if selectedRunId == run.id {
                                     selectedRunId = nil
                                 }
                             }
                             orchestrator.deleteRuns(runsToDelete)
+                        }
+
+                        if completedRuns.count > historyLimit {
+                            Button {
+                                historyLimit += 10
+                            } label: {
+                                Text("Load More...")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            .buttonStyle(.plain)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 4)
                         }
                     }
                 }
@@ -99,7 +124,8 @@ struct AgentActivityView: View {
             }
         } detail: {
             if let runId = selectedRunId,
-               let run = allRuns.first(where: { $0.id == runId }) {
+               let run = activeRuns.first(where: { $0.id == runId })
+                   ?? completedRuns.first(where: { $0.id == runId }) {
                 AgentSessionView(run: run, project: project)
             } else {
                 ContentUnavailableView("Select a Session", systemImage: "bolt.circle", description: Text("Select an agent session to view details."))
@@ -113,7 +139,13 @@ struct AgentActivityView: View {
         ) {
             Button("Clear History", role: .destructive) {
                 selectedRunId = nil
-                orchestrator.deleteRuns(completedRuns)
+                let projectId = project.id
+                let descriptor = FetchDescriptor<AgentRun>(
+                    predicate: #Predicate { $0.projectId == projectId && $0.statusRaw != "running" && $0.statusRaw != "queued" },
+                    sortBy: [SortDescriptor(\.startedAt, order: .reverse)]
+                )
+                let allCompleted = (try? modelContext.fetch(descriptor)) ?? []
+                orchestrator.deleteRuns(allCompleted)
             }
             Button("Cancel", role: .cancel) {}
         } message: {
