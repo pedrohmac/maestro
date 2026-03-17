@@ -151,6 +151,12 @@ struct KanbanBoardView: View {
         .onExitCommand {
             selectedTask = nil
         }
+        .onDeleteCommand {
+            if let task = selectedTask {
+                selectedTask = nil
+                modelContext.delete(task)
+            }
+        }
     }
 
     @ViewBuilder
