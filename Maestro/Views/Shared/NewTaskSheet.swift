@@ -63,10 +63,18 @@ struct NewTaskSheet: View {
                     let task = ProjectTask(title: title, description: description, project: project)
                     task.priority = priority
                     task.status = status
-                    task.columnId = project.columnForStatus(status)?.id ?? project.customColumns.first?.id ?? ""
+                    let targetColumnId = project.columnForStatus(status)?.id ?? project.customColumns.first?.id ?? ""
+                    task.columnId = targetColumnId
                     task.dueDate = hasDueDate ? (dueDate ?? Date()) : nil
                     task.useWorktree = useWorktree
-                    task.order = (project.tasks?.count ?? 0)
+
+                    // Place new task at the top of its column
+                    let columnTasks = (project.tasks ?? []).filter { $0.columnId == targetColumnId }
+                    for existing in columnTasks {
+                        existing.order += 1
+                    }
+                    task.order = 0
+
                     modelContext.insert(task)
                     dismiss()
                 }
