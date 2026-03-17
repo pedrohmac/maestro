@@ -8,6 +8,7 @@ struct KanbanBoardView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.isDarkerMode) private var isDarkerMode
     @State private var showingNewTask = false
+    @State private var newTaskColumn: KanbanColumn?
     @State private var selectedTask: ProjectTask?
     @State private var claudeMDExists: Bool = true  // default true to avoid flash
     @State private var showingNewColumn = false
@@ -55,7 +56,7 @@ struct KanbanBoardView: View {
                         allTasks: tasks,
                         project: project,
                         selectedTask: $selectedTask,
-                        onAddTask: { showingNewTask = true },
+                        onAddTask: { newTaskColumn = column; showingNewTask = true },
                         onColumnChanged: { updated in
                             updateColumn(updated)
                         },
@@ -127,7 +128,7 @@ struct KanbanBoardView: View {
         }
         .navigationTitle(project.name)
         .sheet(isPresented: $showingNewTask) {
-            NewTaskSheet(project: project)
+            NewTaskSheet(project: project, initialColumn: newTaskColumn)
         }
         .overlay(alignment: .trailing) {
             if let task = selectedTask {

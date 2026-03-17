@@ -6,6 +6,7 @@ struct NewTaskSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     let project: Project
+    var initialColumn: KanbanColumn?
 
     @State private var title = ""
     @State private var description = ""
@@ -63,7 +64,13 @@ struct NewTaskSheet: View {
                     let task = ProjectTask(title: title, description: description, project: project)
                     task.priority = priority
                     task.status = status
-                    let targetColumnId = project.columnForStatus(status)?.id ?? project.customColumns.first?.id ?? ""
+                    let targetColumnId: String
+                    if let col = initialColumn,
+                       col.order < (project.columnForStatus(.inProgress)?.order ?? Int.max) {
+                        targetColumnId = col.id
+                    } else {
+                        targetColumnId = project.columnForStatus(status)?.id ?? project.customColumns.first?.id ?? ""
+                    }
                     task.columnId = targetColumnId
                     task.dueDate = hasDueDate ? (dueDate ?? Date()) : nil
                     task.useWorktree = useWorktree
@@ -87,6 +94,12 @@ struct NewTaskSheet: View {
         .frame(width: 450)
         .onAppear {
             useWorktree = project.defaultUseWorktree
+            if let col = initialColumn {
+                let inProgressOrder = project.columnForStatus(.inProgress)?.order ?? Int.max
+                if col.order < inProgressOrder, let taskStatus = col.taskStatus {
+                    status = taskStatus
+                }
+            }
         }
     }
 }
