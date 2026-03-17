@@ -6,9 +6,10 @@ import Charts
 struct GanttChartView: View {
     @Bindable var project: Project
     @State private var selectedTask: ProjectTask?
+    @State private var sortedTasks: [ProjectTask] = []
 
-    var tasks: [ProjectTask] {
-        (project.tasks ?? []).sorted { ($0.startDate ?? $0.createdDate) < ($1.startDate ?? $1.createdDate) }
+    private func refreshSortedTasks() {
+        sortedTasks = (project.tasks ?? []).sorted { ($0.startDate ?? $0.createdDate) < ($1.startDate ?? $1.createdDate) }
     }
 
     func barColor(for status: TaskStatus) -> Color {
@@ -22,11 +23,11 @@ struct GanttChartView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            if tasks.isEmpty {
+            if sortedTasks.isEmpty {
                 ContentUnavailableView("No Tasks", systemImage: "chart.bar.xaxis", description: Text("Create tasks to see them on the Gantt chart."))
             } else {
                 ScrollView {
-                    Chart(tasks, id: \.id) { task in
+                    Chart(sortedTasks, id: \.id) { task in
                         let start = task.startDate ?? task.createdDate
                         let end = task.dueDate ?? task.completedDate ?? Calendar.current.date(byAdding: .day, value: 3, to: start)!
 
@@ -60,7 +61,7 @@ struct GanttChartView: View {
                             AxisValueLabel()
                         }
                     }
-                    .frame(height: max(CGFloat(tasks.count) * 44, 200))
+                    .frame(height: max(CGFloat(sortedTasks.count) * 44, 200))
                     .padding()
                 }
 

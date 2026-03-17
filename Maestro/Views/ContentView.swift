@@ -31,28 +31,28 @@ struct ContentView: View {
         } detail: {
             Group {
                 if let project = selectedProject {
-                    switch selectedNav {
-                    case .kanban:
+                    ZStack {
                         KanbanBoardView(project: project, onNavigateToRun: { runId in
                             activitySelectedRunId = runId
                             selectedNav = .activity
                         }, onNavigateToSettings: {
                             selectedNav = .settings
                         })
-                    case .gantt:
+                        .opacity(selectedNav == .kanban || selectedNav == nil ? 1 : 0)
+                        .allowsHitTesting(selectedNav == .kanban || selectedNav == nil)
+
                         GanttChartView(project: project)
-                    case .activity:
+                            .opacity(selectedNav == .gantt ? 1 : 0)
+                            .allowsHitTesting(selectedNav == .gantt)
+
                         AgentActivityView(project: project, selectedRunId: $activitySelectedRunId)
-                    case .settings:
+                            .opacity(selectedNav == .activity ? 1 : 0)
+                            .allowsHitTesting(selectedNav == .activity)
+
                         ProjectSettingsView(project: project)
                             .id(project.id)
-                    case nil:
-                        KanbanBoardView(project: project, onNavigateToRun: { runId in
-                            activitySelectedRunId = runId
-                            selectedNav = .activity
-                        }, onNavigateToSettings: {
-                            selectedNav = .settings
-                        })
+                            .opacity(selectedNav == .settings ? 1 : 0)
+                            .allowsHitTesting(selectedNav == .settings)
                     }
                 } else {
                     ContentUnavailableView("No Project Selected", systemImage: "folder", description: Text("Select a project from the sidebar or create a new one."))

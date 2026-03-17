@@ -130,6 +130,12 @@ final class AgentOrchestrator {
                         task.status = .review
                         if let column = task.project?.columnForStatus(.review) {
                             task.columnId = column.id
+                            // Place task at the top of the review column
+                            let columnTasks = (task.project?.tasks ?? []).filter { $0.columnId == column.id && $0.id != task.id }
+                            for existing in columnTasks {
+                                existing.order += 1
+                            }
+                            task.order = 0
                         }
                     }
 
@@ -246,6 +252,12 @@ final class AgentOrchestrator {
                         task.status = .review
                         if let column = task.project?.columnForStatus(.review) {
                             task.columnId = column.id
+                            // Place task at the top of the review column
+                            let columnTasks = (task.project?.tasks ?? []).filter { $0.columnId == column.id && $0.id != task.id }
+                            for existing in columnTasks {
+                                existing.order += 1
+                            }
+                            task.order = 0
                         }
                     }
 

@@ -18,13 +18,15 @@ struct ProjectSettingsView: View {
     @State private var showGenerateConfirmation: Bool = false
     @State private var isGitInitialized: Bool = false
 
-    var totalCostUSD: Double {
+    @State private var totalCostUSD: Double = 0
+
+    private func refreshTotalCost() {
         let projectId = project.id
         let descriptor = FetchDescriptor<AgentRun>(
             predicate: #Predicate { $0.projectId == projectId }
         )
         let runs = (try? modelContext.fetch(descriptor)) ?? []
-        return runs.compactMap(\.costUSD).reduce(0, +)
+        totalCostUSD = runs.compactMap(\.costUSD).reduce(0, +)
     }
 
     var archivedTasks: [ProjectTask] {
