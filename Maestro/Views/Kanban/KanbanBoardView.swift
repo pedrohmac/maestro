@@ -10,6 +10,7 @@ struct KanbanBoardView: View {
     @State private var showingNewTask = false
     @State private var newTaskColumn: KanbanColumn?
     @State private var selectedTask: ProjectTask?
+    @FocusState private var isBoardFocused: Bool
     @State private var claudeMDExists: Bool = true  // default true to avoid flash
     @State private var showingNewColumn = false
     @State private var columnDropTargetIndex: Int?
@@ -149,6 +150,8 @@ struct KanbanBoardView: View {
             claudeMDExists = !project.workspaceRoot.isEmpty &&
                 FileManager.default.fileExists(atPath: "\(project.workspaceRoot)/CLAUDE.md")
         }
+        .focusable()
+        .focused($isBoardFocused)
         .onExitCommand {
             selectedTask = nil
         }
@@ -156,6 +159,11 @@ struct KanbanBoardView: View {
             if let task = selectedTask {
                 selectedTask = nil
                 modelContext.delete(task)
+            }
+        }
+        .onChange(of: selectedTask) {
+            if selectedTask != nil {
+                isBoardFocused = true
             }
         }
     }
