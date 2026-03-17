@@ -318,6 +318,25 @@ final class AgentOrchestrator {
         activeRunners[taskId]
     }
 
+    func deleteRun(_ run: AgentRun) {
+        // Cancel if still running
+        if run.status == .running, let taskId = run.task?.id {
+            cancelAgent(taskId: taskId)
+        }
+        modelContext?.delete(run)
+        try? modelContext?.save()
+    }
+
+    func deleteRuns(_ runs: [AgentRun]) {
+        for run in runs {
+            if run.status == .running, let taskId = run.task?.id {
+                cancelAgent(taskId: taskId)
+            }
+            modelContext?.delete(run)
+        }
+        try? modelContext?.save()
+    }
+
     // MARK: - Private
 
     private func handleEvent(_ event: AgentEvent, run: AgentRun, taskId: String, task: ProjectTask, permissionRules: [PermissionRule]) {

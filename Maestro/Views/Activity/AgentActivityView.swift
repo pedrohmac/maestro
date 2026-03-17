@@ -7,6 +7,7 @@ struct AgentActivityView: View {
     @Environment(AgentOrchestrator.self) private var orchestrator
     @Environment(\.modelContext) private var modelContext
     @Binding var selectedRunId: String?
+    @State private var showClearHistoryConfirmation = false
 
     var allRuns: [AgentRun] {
         let projectId = project.id
@@ -33,6 +34,15 @@ struct AgentActivityView: View {
                         ForEach(activeRuns, id: \.id) { run in
                             AgentRunRow(run: run, isActive: true)
                                 .tag(run.id)
+                                .contextMenu {
+                                    Button(role: .destructive) {
+                                        if let taskId = run.task?.id {
+                                            orchestrator.cancelAgent(taskId: taskId)
+                                        }
+                                    } label: {
+                                        Label("Cancel", systemImage: "stop.circle")
+                                    }
+                                }
                         }
                     }
                 }
@@ -48,6 +58,25 @@ struct AgentActivityView: View {
                         ForEach(completedRuns, id: \.id) { run in
                             AgentRunRow(run: run, isActive: false)
                                 .tag(run.id)
+                                .contextMenu {
+                                    Button(role: .destructive) {
+                                        if selectedRunId == run.id {
+                                            selectedRunId = nil
+                                        }
+                                        orchestrator.deleteRun(run)
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
+                                }
+                        }
+                        .onDelete { indexSet in
+                            let runsToDelete = indexSet.map { completedRuns[$0] }
+                            for run in runsToDelete {
+                                if selectedRunId == run.id {
+                                    selectedRunId = nil
+                                }
+                            }
+                            orchestrator.deleteRuns(runsToDelete)
                         }
                     }
                 }
@@ -61,6 +90,12 @@ struct AgentActivityView: View {
                     }
                     .disabled(orchestrator.activeRunners.isEmpty)
                 }
+                ToolbarItem {
+                    Button(action: { showClearHistoryConfirmation = true }) {
+                        Label("Clear History", systemImage: "trash")
+                    }
+                    .disabled(completedRuns.isEmpty)
+                }
             }
         } detail: {
             if let runId = selectedRunId,
@@ -71,6 +106,19 @@ struct AgentActivityView: View {
             }
         }
         .navigationTitle("\(project.name) — Activity")
+        .confirmationDialog(
+            "Clear all history?",
+            isPresented: $showClearHistoryConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Clear History", role: .destructive) {
+                selectedRunId = nil
+                orchestrator.deleteRuns(completedRuns)
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This will permanently remove all completed agent runs from history. Active runs will not be affected.")
+        }
     }
 }
 
