@@ -56,6 +56,15 @@ struct ImportCommand: ParsableCommand {
                 }
             }
 
+            // Assign column and place at top
+            let targetColumnId = proj.columnForStatus(task.status)?.id ?? proj.customColumns.first?.id ?? ""
+            task.columnId = targetColumnId
+            let columnTasks = (proj.tasks ?? []).filter { $0.columnId == targetColumnId }
+            for existing in columnTasks {
+                existing.order += 1
+            }
+            task.order = 0
+
             context.insert(task)
             created += 1
         }

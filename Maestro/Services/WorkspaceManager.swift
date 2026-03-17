@@ -299,9 +299,7 @@ struct WorkspaceManager {
     /// Commits all changes in the working tree if any exist. Returns true if a commit was made.
     @discardableResult
     static func gitAutoCommit(message: String, in directory: String) -> Bool {
-        let gitDir = URL(fileURLWithPath: directory).appendingPathComponent(".git").path
-        guard FileManager.default.fileExists(atPath: gitDir) ||
-              FileManager.default.fileExists(atPath: directory + "/.git") else { return false }
+        print("[WorkspaceManager] gitAutoCommit called in: \(directory)")
 
         // Check if there are any changes to commit
         let statusProcess = Process()
@@ -311,16 +309,27 @@ struct WorkspaceManager {
 
         let statusPipe = Pipe()
         statusProcess.standardOutput = statusPipe
-        statusProcess.standardError = Pipe()
+        let statusErrPipe = Pipe()
+        statusProcess.standardError = statusErrPipe
 
         do {
             try statusProcess.run()
             statusProcess.waitUntilExit()
-            guard statusProcess.terminationStatus == 0 else { return false }
+            guard statusProcess.terminationStatus == 0 else {
+                let errData = statusErrPipe.fileHandleForReading.readDataToEndOfFile()
+                let errStr = String(data: errData, encoding: .utf8) ?? ""
+                print("[WorkspaceManager] git status failed (\(statusProcess.terminationStatus)): \(errStr)")
+                return false
+            }
             let data = statusPipe.fileHandleForReading.readDataToEndOfFile()
             let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            guard !output.isEmpty else { return false }
+            guard !output.isEmpty else {
+                print("[WorkspaceManager] No uncommitted changes to auto-commit")
+                return false
+            }
+            print("[WorkspaceManager] Found changes to commit:\n\(output)")
         } catch {
+            print("[WorkspaceManager] git status error: \(error.localizedDescription)")
             return false
         }
 
@@ -330,13 +339,20 @@ struct WorkspaceManager {
         addProcess.arguments = ["add", "-A"]
         addProcess.currentDirectoryURL = URL(fileURLWithPath: directory)
         addProcess.standardOutput = Pipe()
-        addProcess.standardError = Pipe()
+        let addErrPipe = Pipe()
+        addProcess.standardError = addErrPipe
 
         do {
             try addProcess.run()
             addProcess.waitUntilExit()
-            guard addProcess.terminationStatus == 0 else { return false }
+            guard addProcess.terminationStatus == 0 else {
+                let errData = addErrPipe.fileHandleForReading.readDataToEndOfFile()
+                let errStr = String(data: errData, encoding: .utf8) ?? ""
+                print("[WorkspaceManager] git add failed (\(addProcess.terminationStatus)): \(errStr)")
+                return false
+            }
         } catch {
+            print("[WorkspaceManager] git add error: \(error.localizedDescription)")
             return false
         }
 
@@ -345,14 +361,25 @@ struct WorkspaceManager {
         commitProcess.executableURL = URL(fileURLWithPath: "/usr/bin/git")
         commitProcess.arguments = ["commit", "-m", message]
         commitProcess.currentDirectoryURL = URL(fileURLWithPath: directory)
-        commitProcess.standardOutput = Pipe()
-        commitProcess.standardError = Pipe()
+        let commitOutPipe = Pipe()
+        commitProcess.standardOutput = commitOutPipe
+        let commitErrPipe = Pipe()
+        commitProcess.standardError = commitErrPipe
 
         do {
             try commitProcess.run()
             commitProcess.waitUntilExit()
-            return commitProcess.terminationStatus == 0
+            if commitProcess.terminationStatus == 0 {
+                print("[WorkspaceManager] Auto-commit succeeded")
+                return true
+            } else {
+                let errData = commitErrPipe.fileHandleForReading.readDataToEndOfFile()
+                let errStr = String(data: errData, encoding: .utf8) ?? ""
+                print("[WorkspaceManager] git commit failed (\(commitProcess.terminationStatus)): \(errStr)")
+                return false
+            }
         } catch {
+            print("[WorkspaceManager] git commit error: \(error.localizedDescription)")
             return false
         }
     }

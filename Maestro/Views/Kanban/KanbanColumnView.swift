@@ -81,6 +81,7 @@ struct KanbanColumnView: View {
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 10)
+            .background(Color.primary.opacity(0.001))
             .contentShape(Rectangle())
             .background(
                 RoundedRectangle(cornerRadius: 6)
