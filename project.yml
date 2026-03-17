@@ -1,0 +1,79 @@
+name: Maestro
+options:
+  bundleIdPrefix: com.maestro
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "16.0"
+  minimumXcodeGenVersion: "2.35"
+
+settings:
+  base:
+    ENABLE_USER_SCRIPT_SANDBOXING: "NO"
+
+packages:
+  Semaphore:
+    url: https://github.com/groue/Semaphore
+    from: "0.1.0"
+  ArgumentParser:
+    url: https://github.com/apple/swift-argument-parser
+    from: "1.3.0"
+
+targets:
+  MaestroCore:
+    type: library.static
+    platform: macOS
+    sources:
+      - path: MaestroCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.maestro.core
+        SWIFT_VERSION: "5.9"
+        MACOSX_DEPLOYMENT_TARGET: "14.0"
+        SWIFT_INSTALL_OBJC_HEADER: "NO"
+
+  Maestro:
+    type: application
+    platform: macOS
+    sources:
+      - path: Maestro
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.maestro.app
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_VERSION: "5.9"
+        MACOSX_DEPLOYMENT_TARGET: "14.0"
+        CODE_SIGN_ENTITLEMENTS: Maestro/Maestro.entitlements
+        GENERATE_INFOPLIST_FILE: "YES"
+        INFOPLIST_KEY_LSApplicationCategoryType: "public.app-category.developer-tools"
+    dependencies:
+      - package: Semaphore
+      - target: MaestroCore
+      - target: MaestroCLI
+        embed: false
+    postBuildScripts:
+      - script: |
+          mkdir -p "$BUILT_PRODUCTS_DIR/Maestro.app/Contents/Resources"
+          cp "$BUILT_PRODUCTS_DIR/maestro" "$BUILT_PRODUCTS_DIR/Maestro.app/Contents/Resources/maestro"
+          chmod +x "$BUILT_PRODUCTS_DIR/Maestro.app/Contents/Resources/maestro"
+        name: "Embed CLI binary"
+        basedOnDependencyAnalysis: false
+    entitlements:
+      path: Maestro/Maestro.entitlements
+      properties:
+        com.apple.security.app-sandbox: false
+
+  MaestroCLI:
+    type: tool
+    platform: macOS
+    sources:
+      - path: CLI
+    settings:
+      base:
+        PRODUCT_NAME: maestro
+        SWIFT_VERSION: "5.9"
+        MACOSX_DEPLOYMENT_TARGET: "14.0"
+    dependencies:
+      - package: ArgumentParser
+        product: ArgumentParser
+      - target: MaestroCore

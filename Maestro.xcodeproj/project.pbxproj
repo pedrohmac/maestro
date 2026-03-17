@@ -1,0 +1,853 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		016C4B625D8A5A7F280AEC1D /* GanttBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACB2F5F71E03EED6C2A651D0 /* GanttBarView.swift */; };
+		029F2A866367E66FBB7338D6 /* WorkspaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989CC2A436FFEFAA0A576A03 /* WorkspaceManager.swift */; };
+		16C5D82AD71C6064BFD5987D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = D40500BED9C672277835179A /* ArgumentParser */; };
+		182D87DDACE0D6964B9B4348 /* Resolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD06AD9B373B918B5B053949 /* Resolver.swift */; };
+		1F1F2AF48EDD340067740211 /* ProjectSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC116D9EE16B279E194F31E /* ProjectSettingsView.swift */; };
+		222C453954D2596574A1FDB4 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254CDDB033CFCA673D424059 /* Project.swift */; };
+		2DFD5ECA0D6B7D1C4029BD72 /* TaskCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4B4F983191C6264796D9FD /* TaskCommand.swift */; };
+		3B65DC9DD451271A28BDA631 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A7960896E9520C46949A5D /* Enums.swift */; };
+		416C9B372C71C107834115B7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F4D315C3688D21359F416 /* SettingsView.swift */; };
+		4194B90BE0E8B8F70DD7DA6F /* MaestroStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844EA070BE6719036A77FDD6 /* MaestroStore.swift */; };
+		43F9DBE364867B2D19ADBAF2 /* ProjectCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84486C756E1730495A760481 /* ProjectCommand.swift */; };
+		4652660D2ED5445FD9963F13 /* Semaphore in Frameworks */ = {isa = PBXBuildFile; productRef = 270952061025E375B7D1B413 /* Semaphore */; };
+		4A6BD9F4A3E835819F2A6634 /* AgentRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = C844AF8B00974E6E74AE3A9A /* AgentRunner.swift */; };
+		52F84CC8CE98AB0D07D62870 /* TaskDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B78DD6436B8620E56011D2 /* TaskDetailView.swift */; };
+		554A1A41DDC7D01BE102F3B0 /* TaskCommentRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34598C79F92A13B4C8A9405F /* TaskCommentRow.swift */; };
+		5FB4F50954FA4BDEE52EAC4C /* PermissionRuleEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192706A91F9B97244FC0171D /* PermissionRuleEngine.swift */; };
+		66FE03E9FA1B1AC68956A14E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C72282F4106932B5C9865F /* ContentView.swift */; };
+		6CFBB314C0C532A07A434E90 /* PermissionRequestCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C62005E94C0EE7C5D9A6CD4 /* PermissionRequestCard.swift */; };
+		77D5F7C1A38A1B39A0453913 /* KanbanBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789F6490ED572AC30B5CE365 /* KanbanBoardView.swift */; };
+		79C6BC4C7DF8F9498707FD7E /* MaestroApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9892AFAEEA1B9B5BF63A2AF /* MaestroApp.swift */; };
+		7CE7382B304174334AB58CB4 /* TaskCommit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A0EDC741B246D84E0FAE4A /* TaskCommit.swift */; };
+		7D3D97034EBF28C44CCBC02A /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AEA8ABDB68EC5C1C7F307F /* AppearanceSettingsView.swift */; };
+		8D4945A50032C860B1D1E6D4 /* AgentSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7B9F32B88F4BBDA4F7F337 /* AgentSessionView.swift */; };
+		8F256FE7FB7B7E6097082765 /* ExportCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFD1C9378CF02FE60FEE592 /* ExportCommand.swift */; };
+		92243EB72F311A93372D1B1F /* AgentActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65E003488CDA386AFA9B033 /* AgentActivityView.swift */; };
+		AD89559F376CF77E5D567394 /* NarrationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38DB7A8C66E44D2A9E0FE257 /* NarrationEngine.swift */; };
+		AF2CE764FE95960F305D6AFD /* AgentOrchestrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEA98346D576EDEA6B6CDE2 /* AgentOrchestrator.swift */; };
+		B55135FE27B205DC88690C8A /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16516C93349282E34B02124 /* SidebarView.swift */; };
+		BA57C6152E7DF6E19DE2CFC9 /* MaestroCLI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059EE7E5B27E7F28D71284AF /* MaestroCLI.swift */; };
+		C1279EF017CB7495D7840E3F /* NewTaskSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5177C3B949480C930A19BDD /* NewTaskSheet.swift */; };
+		C9740A3C217BBFCABD07CC3A /* TaskCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5FC02A9EE73FC23FC6FB9E1 /* TaskCardView.swift */; };
+		D0399625E36D7C014007C83A /* PromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545434EA4E7E472C55B2AE83 /* PromptBuilder.swift */; };
+		D3FA92C4476EC26CD900EFB6 /* TableFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0077B05EE45F077594F4DB /* TableFormatter.swift */; };
+		DBA9289997094F50459D510F /* libMaestroCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3439F6D3AF2352EFF476112F /* libMaestroCore.a */; };
+		DC14ADB9F1F2FC28B65419F8 /* SchemaVersioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A9450440A3890AA948E614 /* SchemaVersioning.swift */; };
+		DF2CC95B6B65647C716223B0 /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3364262FD17D421CE04398AB /* GeneralSettingsView.swift */; };
+		E40E9F691946C0E69EE48E12 /* ImportCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AE10861BDF637372E8D46 /* ImportCommand.swift */; };
+		E4605978193FAE3ACD8F9555 /* RunCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CD4377C7C2146E317225BB /* RunCommand.swift */; };
+		E5498E63D3BFDA793F85AFC6 /* GanttChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7324937488AACC067DEAF55 /* GanttChartView.swift */; };
+		E9BA581522AB61682AC7A4D5 /* KanbanColumnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA58F54E0DD381C3D0542A2 /* KanbanColumnView.swift */; };
+		EEAFF978653277417211634E /* OutputParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BCD3B1FC88427B9A039CC8 /* OutputParser.swift */; };
+		F4A3FE44B3D8117148966787 /* ClaudePathResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04B2F76E6DCECEEE2758353 /* ClaudePathResolver.swift */; };
+		F4D73B7DF8C8BB5E65B7D315 /* ProjectTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B71EA91B002D2D24B45163 /* ProjectTask.swift */; };
+		FA44CA1BB2F2B83476746C69 /* TaskComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEBD082448E0A3699183C13 /* TaskComment.swift */; };
+		FBBC81D3D3E9389FCE33530B /* AgentPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B356937DFC8DB0549232EF /* AgentPool.swift */; };
+		FC5923395F8522D60B09F527 /* libMaestroCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3439F6D3AF2352EFF476112F /* libMaestroCore.a */; };
+		FF6727D92023806292D5EDDF /* AgentRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75448AA6F26B0C8E7DD4B315 /* AgentRun.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7FCD7BA175073A7BAC5ABA5C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 947BF46DA442257C7E34EAAB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9CFE2C868D29BB429ED602D2;
+			remoteInfo = MaestroCLI;
+		};
+		A8DE0AFC8903C2F931834F98 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 947BF46DA442257C7E34EAAB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BB37E93037D91A8894145367;
+			remoteInfo = MaestroCore;
+		};
+		BBE4822BA49CCCDDFF8D339F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 947BF46DA442257C7E34EAAB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BB37E93037D91A8894145367;
+			remoteInfo = MaestroCore;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		04B356937DFC8DB0549232EF /* AgentPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentPool.swift; sourceTree = "<group>"; };
+		059EE7E5B27E7F28D71284AF /* MaestroCLI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaestroCLI.swift; sourceTree = "<group>"; };
+		0AC116D9EE16B279E194F31E /* ProjectSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSettingsView.swift; sourceTree = "<group>"; };
+		192706A91F9B97244FC0171D /* PermissionRuleEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionRuleEngine.swift; sourceTree = "<group>"; };
+		1DA58F54E0DD381C3D0542A2 /* KanbanColumnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanbanColumnView.swift; sourceTree = "<group>"; };
+		254CDDB033CFCA673D424059 /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
+		3364262FD17D421CE04398AB /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
+		3439F6D3AF2352EFF476112F /* libMaestroCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMaestroCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		34598C79F92A13B4C8A9405F /* TaskCommentRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCommentRow.swift; sourceTree = "<group>"; };
+		38DB7A8C66E44D2A9E0FE257 /* NarrationEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NarrationEngine.swift; sourceTree = "<group>"; };
+		3AEBD082448E0A3699183C13 /* TaskComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskComment.swift; sourceTree = "<group>"; };
+		44A9450440A3890AA948E614 /* SchemaVersioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaVersioning.swift; sourceTree = "<group>"; };
+		498417103A6AB970270B062C /* Maestro.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Maestro.entitlements; sourceTree = "<group>"; };
+		4C62005E94C0EE7C5D9A6CD4 /* PermissionRequestCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionRequestCard.swift; sourceTree = "<group>"; };
+		4CFD1C9378CF02FE60FEE592 /* ExportCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportCommand.swift; sourceTree = "<group>"; };
+		545434EA4E7E472C55B2AE83 /* PromptBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptBuilder.swift; sourceTree = "<group>"; };
+		5D89E2FA8A82D88218732BE6 /* Maestro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Maestro.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		75448AA6F26B0C8E7DD4B315 /* AgentRun.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentRun.swift; sourceTree = "<group>"; };
+		789F6490ED572AC30B5CE365 /* KanbanBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanbanBoardView.swift; sourceTree = "<group>"; };
+		7A8BABEC65B3E4B5F09D8D27 /* MaestroCLI */ = {isa = PBXFileReference; includeInIndex = 0; path = MaestroCLI; sourceTree = BUILT_PRODUCTS_DIR; };
+		84486C756E1730495A760481 /* ProjectCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCommand.swift; sourceTree = "<group>"; };
+		844EA070BE6719036A77FDD6 /* MaestroStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaestroStore.swift; sourceTree = "<group>"; };
+		8D4B4F983191C6264796D9FD /* TaskCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCommand.swift; sourceTree = "<group>"; };
+		93A7960896E9520C46949A5D /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		95CD4377C7C2146E317225BB /* RunCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunCommand.swift; sourceTree = "<group>"; };
+		989CC2A436FFEFAA0A576A03 /* WorkspaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceManager.swift; sourceTree = "<group>"; };
+		A11F4D315C3688D21359F416 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A4BCD3B1FC88427B9A039CC8 /* OutputParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputParser.swift; sourceTree = "<group>"; };
+		ACB2F5F71E03EED6C2A651D0 /* GanttBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GanttBarView.swift; sourceTree = "<group>"; };
+		B5177C3B949480C930A19BDD /* NewTaskSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskSheet.swift; sourceTree = "<group>"; };
+		B65E003488CDA386AFA9B033 /* AgentActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentActivityView.swift; sourceTree = "<group>"; };
+		B6AEA8ABDB68EC5C1C7F307F /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
+		B7324937488AACC067DEAF55 /* GanttChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GanttChartView.swift; sourceTree = "<group>"; };
+		B7B71EA91B002D2D24B45163 /* ProjectTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectTask.swift; sourceTree = "<group>"; };
+		B9892AFAEEA1B9B5BF63A2AF /* MaestroApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaestroApp.swift; sourceTree = "<group>"; };
+		BD06AD9B373B918B5B053949 /* Resolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resolver.swift; sourceTree = "<group>"; };
+		C16516C93349282E34B02124 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
+		C34AE10861BDF637372E8D46 /* ImportCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportCommand.swift; sourceTree = "<group>"; };
+		C844AF8B00974E6E74AE3A9A /* AgentRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentRunner.swift; sourceTree = "<group>"; };
+		CCEA98346D576EDEA6B6CDE2 /* AgentOrchestrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentOrchestrator.swift; sourceTree = "<group>"; };
+		D4A0EDC741B246D84E0FAE4A /* TaskCommit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCommit.swift; sourceTree = "<group>"; };
+		E0B78DD6436B8620E56011D2 /* TaskDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailView.swift; sourceTree = "<group>"; };
+		E6C72282F4106932B5C9865F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		EC7B9F32B88F4BBDA4F7F337 /* AgentSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentSessionView.swift; sourceTree = "<group>"; };
+		F04B2F76E6DCECEEE2758353 /* ClaudePathResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudePathResolver.swift; sourceTree = "<group>"; };
+		F5FC02A9EE73FC23FC6FB9E1 /* TaskCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCardView.swift; sourceTree = "<group>"; };
+		FA0077B05EE45F077594F4DB /* TableFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableFormatter.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2E8742D300933CD17524B685 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16C5D82AD71C6064BFD5987D /* ArgumentParser in Frameworks */,
+				DBA9289997094F50459D510F /* libMaestroCore.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BBE9D901B385374555BE7779 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4652660D2ED5445FD9963F13 /* Semaphore in Frameworks */,
+				FC5923395F8522D60B09F527 /* libMaestroCore.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0A5A1FDB5FE66E78CF869DA1 /* Activity */ = {
+			isa = PBXGroup;
+			children = (
+				B65E003488CDA386AFA9B033 /* AgentActivityView.swift */,
+				EC7B9F32B88F4BBDA4F7F337 /* AgentSessionView.swift */,
+			);
+			path = Activity;
+			sourceTree = "<group>";
+		};
+		1EBC46D6BD907252546FEABC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				CCEA98346D576EDEA6B6CDE2 /* AgentOrchestrator.swift */,
+				04B356937DFC8DB0549232EF /* AgentPool.swift */,
+				C844AF8B00974E6E74AE3A9A /* AgentRunner.swift */,
+				F04B2F76E6DCECEEE2758353 /* ClaudePathResolver.swift */,
+				38DB7A8C66E44D2A9E0FE257 /* NarrationEngine.swift */,
+				A4BCD3B1FC88427B9A039CC8 /* OutputParser.swift */,
+				192706A91F9B97244FC0171D /* PermissionRuleEngine.swift */,
+				545434EA4E7E472C55B2AE83 /* PromptBuilder.swift */,
+				989CC2A436FFEFAA0A576A03 /* WorkspaceManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		2A294FD6D91689925C867894 /* Maestro */ = {
+			isa = PBXGroup;
+			children = (
+				498417103A6AB970270B062C /* Maestro.entitlements */,
+				B9892AFAEEA1B9B5BF63A2AF /* MaestroApp.swift */,
+				1EBC46D6BD907252546FEABC /* Services */,
+				EBFB8972365B2EB9973681AB /* Views */,
+			);
+			path = Maestro;
+			sourceTree = "<group>";
+		};
+		36FBAF8F73D56CC4AD1FF0E8 /* MaestroCore */ = {
+			isa = PBXGroup;
+			children = (
+				844EA070BE6719036A77FDD6 /* MaestroStore.swift */,
+				AB5F345BFA89653F625C1B96 /* Models */,
+			);
+			path = MaestroCore;
+			sourceTree = "<group>";
+		};
+		51898806D5B5119747749585 /* Kanban */ = {
+			isa = PBXGroup;
+			children = (
+				789F6490ED572AC30B5CE365 /* KanbanBoardView.swift */,
+				1DA58F54E0DD381C3D0542A2 /* KanbanColumnView.swift */,
+				F5FC02A9EE73FC23FC6FB9E1 /* TaskCardView.swift */,
+			);
+			path = Kanban;
+			sourceTree = "<group>";
+		};
+		5876803FBC466B4DBF0FE5C0 /* Gantt */ = {
+			isa = PBXGroup;
+			children = (
+				ACB2F5F71E03EED6C2A651D0 /* GanttBarView.swift */,
+				B7324937488AACC067DEAF55 /* GanttChartView.swift */,
+			);
+			path = Gantt;
+			sourceTree = "<group>";
+		};
+		6FBBD558C470D01D87456D2C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3439F6D3AF2352EFF476112F /* libMaestroCore.a */,
+				5D89E2FA8A82D88218732BE6 /* Maestro.app */,
+				7A8BABEC65B3E4B5F09D8D27 /* MaestroCLI */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		75313B8D2872F4347710E9B6 = {
+			isa = PBXGroup;
+			children = (
+				77D1F2716635E5135E934D15 /* CLI */,
+				2A294FD6D91689925C867894 /* Maestro */,
+				36FBAF8F73D56CC4AD1FF0E8 /* MaestroCore */,
+				6FBBD558C470D01D87456D2C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		77D1F2716635E5135E934D15 /* CLI */ = {
+			isa = PBXGroup;
+			children = (
+				059EE7E5B27E7F28D71284AF /* MaestroCLI.swift */,
+				C147D87232EBDD856C5E56ED /* Commands */,
+				BD4B190AB8A5F1A33ABA0AC5 /* Helpers */,
+			);
+			path = CLI;
+			sourceTree = "<group>";
+		};
+		AB5F345BFA89653F625C1B96 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				75448AA6F26B0C8E7DD4B315 /* AgentRun.swift */,
+				93A7960896E9520C46949A5D /* Enums.swift */,
+				254CDDB033CFCA673D424059 /* Project.swift */,
+				B7B71EA91B002D2D24B45163 /* ProjectTask.swift */,
+				44A9450440A3890AA948E614 /* SchemaVersioning.swift */,
+				3AEBD082448E0A3699183C13 /* TaskComment.swift */,
+				D4A0EDC741B246D84E0FAE4A /* TaskCommit.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		BD4B190AB8A5F1A33ABA0AC5 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				BD06AD9B373B918B5B053949 /* Resolver.swift */,
+				FA0077B05EE45F077594F4DB /* TableFormatter.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		BE5E737DDD0284704C74BE97 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				B6AEA8ABDB68EC5C1C7F307F /* AppearanceSettingsView.swift */,
+				3364262FD17D421CE04398AB /* GeneralSettingsView.swift */,
+				0AC116D9EE16B279E194F31E /* ProjectSettingsView.swift */,
+				A11F4D315C3688D21359F416 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		C147D87232EBDD856C5E56ED /* Commands */ = {
+			isa = PBXGroup;
+			children = (
+				4CFD1C9378CF02FE60FEE592 /* ExportCommand.swift */,
+				C34AE10861BDF637372E8D46 /* ImportCommand.swift */,
+				84486C756E1730495A760481 /* ProjectCommand.swift */,
+				95CD4377C7C2146E317225BB /* RunCommand.swift */,
+				8D4B4F983191C6264796D9FD /* TaskCommand.swift */,
+			);
+			path = Commands;
+			sourceTree = "<group>";
+		};
+		DDAE18C21047FA4137ABF582 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				B5177C3B949480C930A19BDD /* NewTaskSheet.swift */,
+				4C62005E94C0EE7C5D9A6CD4 /* PermissionRequestCard.swift */,
+				34598C79F92A13B4C8A9405F /* TaskCommentRow.swift */,
+				E0B78DD6436B8620E56011D2 /* TaskDetailView.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		E3264EFE502C7D767ECC767A /* Sidebar */ = {
+			isa = PBXGroup;
+			children = (
+				C16516C93349282E34B02124 /* SidebarView.swift */,
+			);
+			path = Sidebar;
+			sourceTree = "<group>";
+		};
+		EBFB8972365B2EB9973681AB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E6C72282F4106932B5C9865F /* ContentView.swift */,
+				0A5A1FDB5FE66E78CF869DA1 /* Activity */,
+				5876803FBC466B4DBF0FE5C0 /* Gantt */,
+				51898806D5B5119747749585 /* Kanban */,
+				BE5E737DDD0284704C74BE97 /* Settings */,
+				DDAE18C21047FA4137ABF582 /* Shared */,
+				E3264EFE502C7D767ECC767A /* Sidebar */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		18D8774E114076BC54C5F2DF /* Maestro */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 095129749B5EB1F38DB4A090 /* Build configuration list for PBXNativeTarget "Maestro" */;
+			buildPhases = (
+				D0BBD679BD76D09FDE4CD0C0 /* Sources */,
+				BBE9D901B385374555BE7779 /* Frameworks */,
+				8F46BC17356FE446B6D2896F /* Embed CLI binary */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7E95C84731A09488087B7760 /* PBXTargetDependency */,
+				3B93CDC2E4901B7FF6099BF6 /* PBXTargetDependency */,
+			);
+			name = Maestro;
+			packageProductDependencies = (
+				270952061025E375B7D1B413 /* Semaphore */,
+			);
+			productName = Maestro;
+			productReference = 5D89E2FA8A82D88218732BE6 /* Maestro.app */;
+			productType = "com.apple.product-type.application";
+		};
+		9CFE2C868D29BB429ED602D2 /* MaestroCLI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A157A281BF6997665A832888 /* Build configuration list for PBXNativeTarget "MaestroCLI" */;
+			buildPhases = (
+				4F2F433B6C462C99BF4AEE38 /* Sources */,
+				2E8742D300933CD17524B685 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A54C794F4D613027F12AB971 /* PBXTargetDependency */,
+			);
+			name = MaestroCLI;
+			packageProductDependencies = (
+				D40500BED9C672277835179A /* ArgumentParser */,
+			);
+			productName = MaestroCLI;
+			productReference = 7A8BABEC65B3E4B5F09D8D27 /* MaestroCLI */;
+			productType = "com.apple.product-type.tool";
+		};
+		BB37E93037D91A8894145367 /* MaestroCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B4B6DE26513FC42C318E26AD /* Build configuration list for PBXNativeTarget "MaestroCore" */;
+			buildPhases = (
+				22839EB0EE0DE76DAB887775 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MaestroCore;
+			packageProductDependencies = (
+			);
+			productName = MaestroCore;
+			productReference = 3439F6D3AF2352EFF476112F /* libMaestroCore.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		947BF46DA442257C7E34EAAB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 9DD24BAA2C74F6B45661D816 /* Build configuration list for PBXProject "Maestro" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 75313B8D2872F4347710E9B6;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				1D1D3538CEF362C1715D7343 /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
+				727AF753FE70D4F792FA4A21 /* XCRemoteSwiftPackageReference "Semaphore" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 6FBBD558C470D01D87456D2C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				18D8774E114076BC54C5F2DF /* Maestro */,
+				9CFE2C868D29BB429ED602D2 /* MaestroCLI */,
+				BB37E93037D91A8894145367 /* MaestroCore */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8F46BC17356FE446B6D2896F /* Embed CLI binary */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Embed CLI binary";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "mkdir -p \"$BUILT_PRODUCTS_DIR/Maestro.app/Contents/Resources\"\ncp \"$BUILT_PRODUCTS_DIR/maestro\" \"$BUILT_PRODUCTS_DIR/Maestro.app/Contents/Resources/maestro\"\nchmod +x \"$BUILT_PRODUCTS_DIR/Maestro.app/Contents/Resources/maestro\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		22839EB0EE0DE76DAB887775 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF6727D92023806292D5EDDF /* AgentRun.swift in Sources */,
+				3B65DC9DD451271A28BDA631 /* Enums.swift in Sources */,
+				4194B90BE0E8B8F70DD7DA6F /* MaestroStore.swift in Sources */,
+				222C453954D2596574A1FDB4 /* Project.swift in Sources */,
+				F4D73B7DF8C8BB5E65B7D315 /* ProjectTask.swift in Sources */,
+				DC14ADB9F1F2FC28B65419F8 /* SchemaVersioning.swift in Sources */,
+				FA44CA1BB2F2B83476746C69 /* TaskComment.swift in Sources */,
+				7CE7382B304174334AB58CB4 /* TaskCommit.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F2F433B6C462C99BF4AEE38 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8F256FE7FB7B7E6097082765 /* ExportCommand.swift in Sources */,
+				E40E9F691946C0E69EE48E12 /* ImportCommand.swift in Sources */,
+				BA57C6152E7DF6E19DE2CFC9 /* MaestroCLI.swift in Sources */,
+				43F9DBE364867B2D19ADBAF2 /* ProjectCommand.swift in Sources */,
+				182D87DDACE0D6964B9B4348 /* Resolver.swift in Sources */,
+				E4605978193FAE3ACD8F9555 /* RunCommand.swift in Sources */,
+				D3FA92C4476EC26CD900EFB6 /* TableFormatter.swift in Sources */,
+				2DFD5ECA0D6B7D1C4029BD72 /* TaskCommand.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0BBD679BD76D09FDE4CD0C0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				92243EB72F311A93372D1B1F /* AgentActivityView.swift in Sources */,
+				AF2CE764FE95960F305D6AFD /* AgentOrchestrator.swift in Sources */,
+				FBBC81D3D3E9389FCE33530B /* AgentPool.swift in Sources */,
+				4A6BD9F4A3E835819F2A6634 /* AgentRunner.swift in Sources */,
+				8D4945A50032C860B1D1E6D4 /* AgentSessionView.swift in Sources */,
+				7D3D97034EBF28C44CCBC02A /* AppearanceSettingsView.swift in Sources */,
+				F4A3FE44B3D8117148966787 /* ClaudePathResolver.swift in Sources */,
+				66FE03E9FA1B1AC68956A14E /* ContentView.swift in Sources */,
+				016C4B625D8A5A7F280AEC1D /* GanttBarView.swift in Sources */,
+				E5498E63D3BFDA793F85AFC6 /* GanttChartView.swift in Sources */,
+				DF2CC95B6B65647C716223B0 /* GeneralSettingsView.swift in Sources */,
+				77D5F7C1A38A1B39A0453913 /* KanbanBoardView.swift in Sources */,
+				E9BA581522AB61682AC7A4D5 /* KanbanColumnView.swift in Sources */,
+				79C6BC4C7DF8F9498707FD7E /* MaestroApp.swift in Sources */,
+				AD89559F376CF77E5D567394 /* NarrationEngine.swift in Sources */,
+				C1279EF017CB7495D7840E3F /* NewTaskSheet.swift in Sources */,
+				EEAFF978653277417211634E /* OutputParser.swift in Sources */,
+				6CFBB314C0C532A07A434E90 /* PermissionRequestCard.swift in Sources */,
+				5FB4F50954FA4BDEE52EAC4C /* PermissionRuleEngine.swift in Sources */,
+				1F1F2AF48EDD340067740211 /* ProjectSettingsView.swift in Sources */,
+				D0399625E36D7C014007C83A /* PromptBuilder.swift in Sources */,
+				416C9B372C71C107834115B7 /* SettingsView.swift in Sources */,
+				B55135FE27B205DC88690C8A /* SidebarView.swift in Sources */,
+				C9740A3C217BBFCABD07CC3A /* TaskCardView.swift in Sources */,
+				554A1A41DDC7D01BE102F3B0 /* TaskCommentRow.swift in Sources */,
+				52F84CC8CE98AB0D07D62870 /* TaskDetailView.swift in Sources */,
+				029F2A866367E66FBB7338D6 /* WorkspaceManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3B93CDC2E4901B7FF6099BF6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9CFE2C868D29BB429ED602D2 /* MaestroCLI */;
+			targetProxy = 7FCD7BA175073A7BAC5ABA5C /* PBXContainerItemProxy */;
+		};
+		7E95C84731A09488087B7760 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BB37E93037D91A8894145367 /* MaestroCore */;
+			targetProxy = A8DE0AFC8903C2F931834F98 /* PBXContainerItemProxy */;
+		};
+		A54C794F4D613027F12AB971 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BB37E93037D91A8894145367 /* MaestroCore */;
+			targetProxy = BBE4822BA49CCCDDFF8D339F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		162CC723B75A1E9F82DE695A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Maestro/Maestro.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.maestro.app;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		4E0EAC879B65ACCA116E87F6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.maestro.MaestroCLI;
+				PRODUCT_NAME = maestro;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		52D91852BF1070D0B48C990E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maestro.core;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		6359B2DE2A48ADD85329BE4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		6532D293C9AB1BEA986B8B88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.maestro.core;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		9A4A488A67C7047A62EBD092 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.maestro.MaestroCLI;
+				PRODUCT_NAME = maestro;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		AA7A36D1310F1E07F11F67CE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Maestro/Maestro.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.maestro.app;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		BF595D840419FA1A6BA2BCE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		095129749B5EB1F38DB4A090 /* Build configuration list for PBXNativeTarget "Maestro" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				162CC723B75A1E9F82DE695A /* Debug */,
+				AA7A36D1310F1E07F11F67CE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9DD24BAA2C74F6B45661D816 /* Build configuration list for PBXProject "Maestro" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF595D840419FA1A6BA2BCE1 /* Debug */,
+				6359B2DE2A48ADD85329BE4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A157A281BF6997665A832888 /* Build configuration list for PBXNativeTarget "MaestroCLI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A4A488A67C7047A62EBD092 /* Debug */,
+				4E0EAC879B65ACCA116E87F6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B4B6DE26513FC42C318E26AD /* Build configuration list for PBXNativeTarget "MaestroCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6532D293C9AB1BEA986B8B88 /* Debug */,
+				52D91852BF1070D0B48C990E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1D1D3538CEF362C1715D7343 /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-argument-parser";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.0;
+			};
+		};
+		727AF753FE70D4F792FA4A21 /* XCRemoteSwiftPackageReference "Semaphore" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/Semaphore";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		270952061025E375B7D1B413 /* Semaphore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 727AF753FE70D4F792FA4A21 /* XCRemoteSwiftPackageReference "Semaphore" */;
+			productName = Semaphore;
+		};
+		D40500BED9C672277835179A /* ArgumentParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1D1D3538CEF362C1715D7343 /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
+			productName = ArgumentParser;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 947BF46DA442257C7E34EAAB /* Project object */;
+}
