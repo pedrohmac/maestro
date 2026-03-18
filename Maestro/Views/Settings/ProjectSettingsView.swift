@@ -363,9 +363,13 @@ struct ProjectSettingsView: View {
         .onAppear {
             loadClaudeMD()
             checkGitStatus()
+            refreshTotalCost()
         }
         .onChange(of: project.workspaceRoot) {
             checkGitStatus()
+        }
+        .onChange(of: project.id) {
+            refreshTotalCost()
         }
 .onDisappear {
             if isGenerating {

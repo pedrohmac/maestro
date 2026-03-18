@@ -229,7 +229,7 @@ struct TaskDetailView: View {
                                         Text("\u{00B7}")
                                             .foregroundStyle(.secondary)
 
-                                        Text(commit.authorDate, style: .relative)
+                                        Text(commit.authorDate.relativeFormatted)
                                             .font(.caption)
                                             .foregroundStyle(.secondary)
                                     }

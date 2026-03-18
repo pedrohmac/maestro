@@ -94,5 +94,7 @@ struct GanttChartView: View {
             }
         }
         .navigationTitle("\(project.name) — Gantt")
+        .onAppear { refreshSortedTasks() }
+        .onChange(of: project.tasks) { refreshSortedTasks() }
     }
 }

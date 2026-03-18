@@ -28,7 +28,7 @@ struct TaskCommentRow: View {
                     Text("Progress")
                         .font(.caption2.bold())
                         .foregroundStyle(.teal)
-                    Text(comment.createdDate, style: .relative)
+                    Text(comment.createdDate.relativeFormatted)
                         .font(.caption2)
                         .foregroundStyle(.secondary)
 
@@ -94,7 +94,7 @@ struct TaskCommentRow: View {
                 HStack(spacing: 6) {
                     Text(comment.authorType.rawValue)
                         .font(.caption.bold())
-                    Text(comment.createdDate, style: .relative)
+                    Text(comment.createdDate.relativeFormatted)
                         .font(.caption2)
                         .foregroundStyle(.secondary)
 

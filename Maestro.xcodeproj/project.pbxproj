@@ -29,6 +29,7 @@
 		79C6BC4C7DF8F9498707FD7E /* MaestroApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9892AFAEEA1B9B5BF63A2AF /* MaestroApp.swift */; };
 		7CE7382B304174334AB58CB4 /* TaskCommit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A0EDC741B246D84E0FAE4A /* TaskCommit.swift */; };
 		7D3D97034EBF28C44CCBC02A /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AEA8ABDB68EC5C1C7F307F /* AppearanceSettingsView.swift */; };
+		7EE80F0B3555DC420344BB39 /* Date+RelativeFormatted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCAB7C55266C45106D54EAF /* Date+RelativeFormatted.swift */; };
 		8D4945A50032C860B1D1E6D4 /* AgentSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7B9F32B88F4BBDA4F7F337 /* AgentSessionView.swift */; };
 		8F256FE7FB7B7E6097082765 /* ExportCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFD1C9378CF02FE60FEE592 /* ExportCommand.swift */; };
 		92243EB72F311A93372D1B1F /* AgentActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65E003488CDA386AFA9B033 /* AgentActivityView.swift */; };
@@ -86,6 +87,7 @@
 		0AC116D9EE16B279E194F31E /* ProjectSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSettingsView.swift; sourceTree = "<group>"; };
 		192706A91F9B97244FC0171D /* PermissionRuleEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionRuleEngine.swift; sourceTree = "<group>"; };
 		1DA58F54E0DD381C3D0542A2 /* KanbanColumnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanbanColumnView.swift; sourceTree = "<group>"; };
+		1FCAB7C55266C45106D54EAF /* Date+RelativeFormatted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+RelativeFormatted.swift"; sourceTree = "<group>"; };
 		254CDDB033CFCA673D424059 /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
 		3364262FD17D421CE04398AB /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		3439F6D3AF2352EFF476112F /* libMaestroCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMaestroCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -250,6 +252,7 @@
 			isa = PBXGroup;
 			children = (
 				75448AA6F26B0C8E7DD4B315 /* AgentRun.swift */,
+				1FCAB7C55266C45106D54EAF /* Date+RelativeFormatted.swift */,
 				93A7960896E9520C46949A5D /* Enums.swift */,
 				254CDDB033CFCA673D424059 /* Project.swift */,
 				B7B71EA91B002D2D24B45163 /* ProjectTask.swift */,
@@ -451,6 +454,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF6727D92023806292D5EDDF /* AgentRun.swift in Sources */,
+				7EE80F0B3555DC420344BB39 /* Date+RelativeFormatted.swift in Sources */,
 				3B65DC9DD451271A28BDA631 /* Enums.swift in Sources */,
 				4194B90BE0E8B8F70DD7DA6F /* MaestroStore.swift in Sources */,
 				222C453954D2596574A1FDB4 /* Project.swift in Sources */,

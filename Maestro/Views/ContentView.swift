@@ -38,6 +38,7 @@ struct ContentView: View {
                         }, onNavigateToSettings: {
                             selectedNav = .settings
                         })
+                        .id(project.id)
                         .opacity(selectedNav == .kanban || selectedNav == nil ? 1 : 0)
                         .allowsHitTesting(selectedNav == .kanban || selectedNav == nil)
 

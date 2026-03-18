@@ -12,7 +12,7 @@ struct PermissionRequestCard: View {
                 Text(permission.toolName)
                     .font(.system(size: 12, weight: .semibold, design: .monospaced))
                 Spacer()
-                Text(permission.receivedAt, style: .relative)
+                Text(permission.receivedAt.relativeFormatted)
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
