@@ -9,6 +9,7 @@ final class AgentOrchestrator {
     var chatRunners: [String: AgentRunner] = [:]   // projectId -> chat runner
     var claudePath: String = "/usr/local/bin/claude"
     var defaultMaxConcurrency: Int = 3
+    var appState: AppState?
 
     var modelContext: ModelContext?
     let pool: AgentPool
@@ -30,6 +31,10 @@ final class AgentOrchestrator {
     // MARK: - Public API
 
     func runAgent(task: ProjectTask, project: Project) {
+        guard appState?.canRunAgents == true else {
+            print("[Agent] Blocked: license check failed or AppState not configured")
+            return
+        }
         let taskId = task.id
         let taskTitle = task.title
         print("[Agent] runAgent called for task: \(taskTitle) (id: \(taskId))")
@@ -176,6 +181,10 @@ final class AgentOrchestrator {
     }
 
     func resumeAgent(task: ProjectTask, project: Project, sessionId: String) {
+        guard appState?.canRunAgents == true else {
+            print("[Agent] Blocked: license check failed or AppState not configured")
+            return
+        }
         let taskId = task.id
         let taskTitle = task.title
 
