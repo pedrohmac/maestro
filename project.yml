@@ -24,6 +24,8 @@ targets:
     platform: macOS
     sources:
       - path: MaestroCore
+    dependencies:
+      - sdk: Security.framework
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.maestro.core
@@ -77,3 +79,16 @@ targets:
       - package: ArgumentParser
         product: ArgumentParser
       - target: MaestroCore
+
+  MaestroTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: MaestroTests
+    dependencies:
+      - target: MaestroCore
+    settings:
+      base:
+        SWIFT_VERSION: "5.9"
+        MACOSX_DEPLOYMENT_TARGET: "14.0"
+        GENERATE_INFOPLIST_FILE: "YES"
