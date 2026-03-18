@@ -10,6 +10,7 @@ enum AgentEvent: Sendable, Codable {
     case toolError(String)
     case systemMessage(String)
     case permissionRequest(toolName: String, input: String, requestId: String)
+    case userMessage(String)
 }
 
 struct OutputParser {

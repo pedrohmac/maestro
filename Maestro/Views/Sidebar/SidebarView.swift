@@ -15,7 +15,8 @@ struct SidebarView: View {
                 navRow("Kanban Board", systemImage: "rectangle.split.3x1", item: .kanban, shortcut: "1")
                 navRow("Agent Activity", systemImage: "bolt.circle", item: .activity, shortcut: "2")
                 navRow("Gantt Chart", systemImage: "chart.bar.xaxis", item: .gantt, shortcut: "3")
-                navRow("Project Settings", systemImage: "gearshape", item: .settings, shortcut: "4")
+                navRow("Chat", systemImage: "bubble.left.and.text.bubble.right", item: .chat, shortcut: "4")
+                navRow("Project Settings", systemImage: "gearshape", item: .settings, shortcut: "5")
             }
 
             Section("Projects") {

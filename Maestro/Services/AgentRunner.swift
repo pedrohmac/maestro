@@ -143,9 +143,17 @@ final class AgentRunner: Identifiable, @unchecked Sendable {
         )
     }
 
+    /// Add a user message to the visible events list (does not send to process)
+    func addUserMessage(_ text: String) {
+        events.append(.userMessage(text))
+    }
+
     /// Send a follow-up message to the running process's stdin
     func sendMessage(_ text: String) {
         guard isRunning, let stdinPipe = stdinPipe else { return }
+
+        // Record the user message as a visible event
+        addUserMessage(text)
 
         // Format as JSON for stream-json input
         let message: [String: Any] = [

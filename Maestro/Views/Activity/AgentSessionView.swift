@@ -228,6 +228,7 @@ private func isNoiseEvent(_ event: AgentEvent) -> Bool {
     case .toolError: return false
     case .systemMessage: return true
     case .permissionRequest: return false
+    case .userMessage: return false
     }
 }
 
@@ -451,6 +452,20 @@ struct AgentEventBubble: View {
             .padding(10)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Color.yellow.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
+
+        case .userMessage(let text):
+            HStack(alignment: .top, spacing: 8) {
+                Image(systemName: "person.fill")
+                    .foregroundStyle(.blue)
+                    .font(.caption)
+                    .padding(.top, 3)
+                Text(text)
+                    .font(.system(.body, design: .default))
+                    .textSelection(.enabled)
+            }
+            .padding(10)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.blue.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
         }
     }
 }
@@ -675,6 +690,8 @@ private extension AgentEvent {
             return message
         case .permissionRequest(let toolName, let input, _):
             return "Permission Request: \(toolName)\n\(input)"
+        case .userMessage(let text):
+            return "User: \(text)"
         }
     }
 }

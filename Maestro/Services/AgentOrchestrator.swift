@@ -6,6 +6,7 @@ import MaestroCore
 @Observable
 final class AgentOrchestrator {
     var activeRunners: [String: AgentRunner] = [:]  // taskId -> runner
+    var chatRunners: [String: AgentRunner] = [:]   // projectId -> chat runner
     var claudePath: String = "/usr/local/bin/claude"
     var defaultMaxConcurrency: Int = 3
 
@@ -343,6 +344,83 @@ final class AgentOrchestrator {
 
     func getRunner(for taskId: String) -> AgentRunner? {
         activeRunners[taskId]
+    }
+
+    // MARK: - Chat
+
+    func startChat(project: Project, initialMessage: String) {
+        let projectId = project.id
+        guard chatRunners[projectId] == nil else { return }
+
+        let runner = AgentRunner(taskId: "chat-\(projectId)", taskTitle: "Chat")
+        chatRunners[projectId] = runner
+
+        // Record the user's initial message
+        runner.addUserMessage(initialMessage)
+
+        let workspacePath = project.workspaceRoot
+        let claudeP = claudePath
+        let permissionRules = project.permissionRules
+
+        Task {
+            let eventStream = runner.eventStream()
+
+            Task {
+                for await event in eventStream {
+                    await MainActor.run {
+                        self.handleChatEvent(event, runner: runner, projectId: projectId, permissionRules: permissionRules)
+                    }
+                }
+                await MainActor.run {
+                    self.chatRunners.removeValue(forKey: projectId)
+                }
+            }
+
+            let prompt = """
+            You are a helpful assistant for this project. The user will ask you questions about the codebase, \
+            testing, implementation details, and other development topics. Be conversational, concise, and helpful. \
+            Read code when needed to give accurate answers. Do not make changes to the codebase unless explicitly asked.
+
+            User's question: \(initialMessage)
+            """
+
+            await runner.start(
+                prompt: prompt,
+                workspacePath: workspacePath,
+                allowedTools: "Read,Grep,Glob,Bash(read-only),WebSearch,WebFetch",
+                maxTurns: 0,
+                maxBudget: nil,
+                systemPrompt: nil,
+                claudePath: claudeP,
+                timeoutMinutes: 60
+            )
+        }
+    }
+
+    func sendChatMessage(projectId: String, message: String) {
+        chatRunners[projectId]?.sendMessage(message)
+    }
+
+    func endChat(projectId: String) {
+        if let runner = chatRunners[projectId] {
+            runner.cancel()
+        }
+    }
+
+    func getChatRunner(for projectId: String) -> AgentRunner? {
+        chatRunners[projectId]
+    }
+
+    private func handleChatEvent(_ event: AgentEvent, runner: AgentRunner, projectId: String, permissionRules: [PermissionRule]) {
+        switch event {
+        case .permissionRequest(let toolName, let input, let requestId):
+            runner.addPendingPermission(requestId: requestId, toolName: toolName, input: input)
+            if let action = PermissionRuleEngine.evaluate(toolName: toolName, input: input, rules: permissionRules) {
+                runner.resolvePendingPermission(requestId: requestId, granted: action == .allow, auto: true)
+            }
+        default:
+            break
+        }
     }
 
     func deleteRun(_ run: AgentRun) {
