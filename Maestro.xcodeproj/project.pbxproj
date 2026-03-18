@@ -19,8 +19,10 @@
 		4194B90BE0E8B8F70DD7DA6F /* MaestroStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844EA070BE6719036A77FDD6 /* MaestroStore.swift */; };
 		43F9DBE364867B2D19ADBAF2 /* ProjectCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84486C756E1730495A760481 /* ProjectCommand.swift */; };
 		4652660D2ED5445FD9963F13 /* Semaphore in Frameworks */ = {isa = PBXBuildFile; productRef = 270952061025E375B7D1B413 /* Semaphore */; };
+		482564833B8779D7F41181C1 /* KeychainHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DC2E786FC5CB7BF57A3A47 /* KeychainHelperTests.swift */; };
 		4A6BD9F4A3E835819F2A6634 /* AgentRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = C844AF8B00974E6E74AE3A9A /* AgentRunner.swift */; };
 		4FEB2EA94EA976AFBD6406FA /* GitIntegrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D360E3A46EDB892741784C /* GitIntegrationView.swift */; };
+		51CF8FC7628A4EF8C1E7375A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A02CBA676540B37B614B6DA /* Security.framework */; };
 		52F84CC8CE98AB0D07D62870 /* TaskDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B78DD6436B8620E56011D2 /* TaskDetailView.swift */; };
 		554A1A41DDC7D01BE102F3B0 /* TaskCommentRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34598C79F92A13B4C8A9405F /* TaskCommentRow.swift */; };
 		5FB4F50954FA4BDEE52EAC4C /* PermissionRuleEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192706A91F9B97244FC0171D /* PermissionRuleEngine.swift */; };
@@ -30,7 +32,9 @@
 		79C6BC4C7DF8F9498707FD7E /* MaestroApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9892AFAEEA1B9B5BF63A2AF /* MaestroApp.swift */; };
 		7CE7382B304174334AB58CB4 /* TaskCommit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A0EDC741B246D84E0FAE4A /* TaskCommit.swift */; };
 		7D3D97034EBF28C44CCBC02A /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AEA8ABDB68EC5C1C7F307F /* AppearanceSettingsView.swift */; };
+		7E6313E5C3B16E0DCEB6070A /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CB77FBAC591F3F36E0F016 /* KeychainHelper.swift */; };
 		7EE80F0B3555DC420344BB39 /* Date+RelativeFormatted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCAB7C55266C45106D54EAF /* Date+RelativeFormatted.swift */; };
+		822BA0B44C8F6AAF634386E2 /* libMaestroCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3439F6D3AF2352EFF476112F /* libMaestroCore.a */; };
 		8D4945A50032C860B1D1E6D4 /* AgentSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7B9F32B88F4BBDA4F7F337 /* AgentSessionView.swift */; };
 		8F256FE7FB7B7E6097082765 /* ExportCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFD1C9378CF02FE60FEE592 /* ExportCommand.swift */; };
 		92243EB72F311A93372D1B1F /* AgentActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65E003488CDA386AFA9B033 /* AgentActivityView.swift */; };
@@ -41,6 +45,7 @@
 		BA57C6152E7DF6E19DE2CFC9 /* MaestroCLI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059EE7E5B27E7F28D71284AF /* MaestroCLI.swift */; };
 		C1279EF017CB7495D7840E3F /* NewTaskSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5177C3B949480C930A19BDD /* NewTaskSheet.swift */; };
 		C81D2DE740137777707ABB3B /* GitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27BB1FEB5F45FB06337E9D7 /* GitService.swift */; };
+		C8E9518A16CBF3868A44093A /* MaestroTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176787C543DC11C15C2119E1 /* MaestroTests.swift */; };
 		C9740A3C217BBFCABD07CC3A /* TaskCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5FC02A9EE73FC23FC6FB9E1 /* TaskCardView.swift */; };
 		D0399625E36D7C014007C83A /* PromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545434EA4E7E472C55B2AE83 /* PromptBuilder.swift */; };
 		D3FA92C4476EC26CD900EFB6 /* TableFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0077B05EE45F077594F4DB /* TableFormatter.swift */; };
@@ -68,6 +73,13 @@
 			remoteGlobalIDString = 9CFE2C868D29BB429ED602D2;
 			remoteInfo = MaestroCLI;
 		};
+		8AD4E4F522A89466296C64C1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 947BF46DA442257C7E34EAAB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BB37E93037D91A8894145367;
+			remoteInfo = MaestroCore;
+		};
 		A8DE0AFC8903C2F931834F98 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 947BF46DA442257C7E34EAAB /* Project object */;
@@ -88,11 +100,13 @@
 		04B356937DFC8DB0549232EF /* AgentPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentPool.swift; sourceTree = "<group>"; };
 		059EE7E5B27E7F28D71284AF /* MaestroCLI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaestroCLI.swift; sourceTree = "<group>"; };
 		0AC116D9EE16B279E194F31E /* ProjectSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSettingsView.swift; sourceTree = "<group>"; };
+		176787C543DC11C15C2119E1 /* MaestroTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaestroTests.swift; sourceTree = "<group>"; };
 		192706A91F9B97244FC0171D /* PermissionRuleEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionRuleEngine.swift; sourceTree = "<group>"; };
 		1DA58F54E0DD381C3D0542A2 /* KanbanColumnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanbanColumnView.swift; sourceTree = "<group>"; };
 		1FCAB7C55266C45106D54EAF /* Date+RelativeFormatted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+RelativeFormatted.swift"; sourceTree = "<group>"; };
 		254CDDB033CFCA673D424059 /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
 		3364262FD17D421CE04398AB /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
+		33DC2E786FC5CB7BF57A3A47 /* KeychainHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelperTests.swift; sourceTree = "<group>"; };
 		3439F6D3AF2352EFF476112F /* libMaestroCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMaestroCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		34598C79F92A13B4C8A9405F /* TaskCommentRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCommentRow.swift; sourceTree = "<group>"; };
 		38DB7A8C66E44D2A9E0FE257 /* NarrationEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NarrationEngine.swift; sourceTree = "<group>"; };
@@ -109,6 +123,7 @@
 		84486C756E1730495A760481 /* ProjectCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCommand.swift; sourceTree = "<group>"; };
 		844EA070BE6719036A77FDD6 /* MaestroStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaestroStore.swift; sourceTree = "<group>"; };
 		854DD07C95E9CF86C5AB8B64 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		8A02CBA676540B37B614B6DA /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		8D4B4F983191C6264796D9FD /* TaskCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCommand.swift; sourceTree = "<group>"; };
 		93A7960896E9520C46949A5D /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		95CD4377C7C2146E317225BB /* RunCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunCommand.swift; sourceTree = "<group>"; };
@@ -116,6 +131,7 @@
 		A11F4D315C3688D21359F416 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A4BCD3B1FC88427B9A039CC8 /* OutputParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputParser.swift; sourceTree = "<group>"; };
 		A4D360E3A46EDB892741784C /* GitIntegrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitIntegrationView.swift; sourceTree = "<group>"; };
+		AAFDA0B4A6E491B651F6B41A /* MaestroTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MaestroTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACB2F5F71E03EED6C2A651D0 /* GanttBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GanttBarView.swift; sourceTree = "<group>"; };
 		B5177C3B949480C930A19BDD /* NewTaskSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskSheet.swift; sourceTree = "<group>"; };
 		B65E003488CDA386AFA9B033 /* AgentActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentActivityView.swift; sourceTree = "<group>"; };
@@ -130,6 +146,7 @@
 		CCEA98346D576EDEA6B6CDE2 /* AgentOrchestrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentOrchestrator.swift; sourceTree = "<group>"; };
 		D27BB1FEB5F45FB06337E9D7 /* GitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitService.swift; sourceTree = "<group>"; };
 		D4A0EDC741B246D84E0FAE4A /* TaskCommit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCommit.swift; sourceTree = "<group>"; };
+		D4CB77FBAC591F3F36E0F016 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		E0B78DD6436B8620E56011D2 /* TaskDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailView.swift; sourceTree = "<group>"; };
 		E6C72282F4106932B5C9865F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		EC7B9F32B88F4BBDA4F7F337 /* AgentSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentSessionView.swift; sourceTree = "<group>"; };
@@ -148,12 +165,28 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3D1AAEAADC0E299D26D2459E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				51CF8FC7628A4EF8C1E7375A /* Security.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BBE9D901B385374555BE7779 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				4652660D2ED5445FD9963F13 /* Semaphore in Frameworks */,
 				FC5923395F8522D60B09F527 /* libMaestroCore.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C26A7C4ABAE1B8E91D6D5766 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				822BA0B44C8F6AAF634386E2 /* libMaestroCore.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,6 +235,7 @@
 			children = (
 				844EA070BE6719036A77FDD6 /* MaestroStore.swift */,
 				AB5F345BFA89653F625C1B96 /* Models */,
+				B38385FF04FFB723B52E02C7 /* Services */,
 			);
 			path = MaestroCore;
 			sourceTree = "<group>";
@@ -225,6 +259,14 @@
 			path = Gantt;
 			sourceTree = "<group>";
 		};
+		5A269C07E334203F6F0D40FE /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				33DC2E786FC5CB7BF57A3A47 /* KeychainHelperTests.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		5FDF85096E088B08BE3A3016 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
@@ -239,6 +281,7 @@
 				3439F6D3AF2352EFF476112F /* libMaestroCore.a */,
 				5D89E2FA8A82D88218732BE6 /* Maestro.app */,
 				7A8BABEC65B3E4B5F09D8D27 /* MaestroCLI */,
+				AAFDA0B4A6E491B651F6B41A /* MaestroTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -249,6 +292,8 @@
 				77D1F2716635E5135E934D15 /* CLI */,
 				2A294FD6D91689925C867894 /* Maestro */,
 				36FBAF8F73D56CC4AD1FF0E8 /* MaestroCore */,
+				FAD759E58E0A872D2FD9F8BD /* MaestroTests */,
+				78FB2D24B9FCED5E24F91369 /* Frameworks */,
 				6FBBD558C470D01D87456D2C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -261,6 +306,14 @@
 				BD4B190AB8A5F1A33ABA0AC5 /* Helpers */,
 			);
 			path = CLI;
+			sourceTree = "<group>";
+		};
+		78FB2D24B9FCED5E24F91369 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8A02CBA676540B37B614B6DA /* Security.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		AB5F345BFA89653F625C1B96 /* Models */ = {
@@ -276,6 +329,14 @@
 				D4A0EDC741B246D84E0FAE4A /* TaskCommit.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		B38385FF04FFB723B52E02C7 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				D4CB77FBAC591F3F36E0F016 /* KeychainHelper.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		BD4B190AB8A5F1A33ABA0AC5 /* Helpers */ = {
@@ -353,6 +414,15 @@
 			path = Git;
 			sourceTree = "<group>";
 		};
+		FAD759E58E0A872D2FD9F8BD /* MaestroTests */ = {
+			isa = PBXGroup;
+			children = (
+				176787C543DC11C15C2119E1 /* MaestroTests.swift */,
+				5A269C07E334203F6F0D40FE /* Services */,
+			);
+			path = MaestroTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -377,6 +447,25 @@
 			productName = Maestro;
 			productReference = 5D89E2FA8A82D88218732BE6 /* Maestro.app */;
 			productType = "com.apple.product-type.application";
+		};
+		82ECF05ED6F0BC0B1B4DE990 /* MaestroTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F0D5C7C6410F9E1EC6C728E5 /* Build configuration list for PBXNativeTarget "MaestroTests" */;
+			buildPhases = (
+				A478D5810244B220F4CC5B75 /* Sources */,
+				C26A7C4ABAE1B8E91D6D5766 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2E85526EF9B6EDA77402F9F1 /* PBXTargetDependency */,
+			);
+			name = MaestroTests;
+			packageProductDependencies = (
+			);
+			productName = MaestroTests;
+			productReference = AAFDA0B4A6E491B651F6B41A /* MaestroTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		9CFE2C868D29BB429ED602D2 /* MaestroCLI */ = {
 			isa = PBXNativeTarget;
@@ -403,6 +492,7 @@
 			buildConfigurationList = B4B6DE26513FC42C318E26AD /* Build configuration list for PBXNativeTarget "MaestroCore" */;
 			buildPhases = (
 				22839EB0EE0DE76DAB887775 /* Sources */,
+				3D1AAEAADC0E299D26D2459E /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -447,6 +537,7 @@
 				18D8774E114076BC54C5F2DF /* Maestro */,
 				9CFE2C868D29BB429ED602D2 /* MaestroCLI */,
 				BB37E93037D91A8894145367 /* MaestroCore */,
+				82ECF05ED6F0BC0B1B4DE990 /* MaestroTests */,
 			);
 		};
 /* End PBXProject section */
@@ -481,6 +572,7 @@
 				FF6727D92023806292D5EDDF /* AgentRun.swift in Sources */,
 				7EE80F0B3555DC420344BB39 /* Date+RelativeFormatted.swift in Sources */,
 				3B65DC9DD451271A28BDA631 /* Enums.swift in Sources */,
+				7E6313E5C3B16E0DCEB6070A /* KeychainHelper.swift in Sources */,
 				4194B90BE0E8B8F70DD7DA6F /* MaestroStore.swift in Sources */,
 				222C453954D2596574A1FDB4 /* Project.swift in Sources */,
 				F4D73B7DF8C8BB5E65B7D315 /* ProjectTask.swift in Sources */,
@@ -502,6 +594,15 @@
 				E4605978193FAE3ACD8F9555 /* RunCommand.swift in Sources */,
 				D3FA92C4476EC26CD900EFB6 /* TableFormatter.swift in Sources */,
 				2DFD5ECA0D6B7D1C4029BD72 /* TaskCommand.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A478D5810244B220F4CC5B75 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				482564833B8779D7F41181C1 /* KeychainHelperTests.swift in Sources */,
+				C8E9518A16CBF3868A44093A /* MaestroTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -545,6 +646,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2E85526EF9B6EDA77402F9F1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BB37E93037D91A8894145367 /* MaestroCore */;
+			targetProxy = 8AD4E4F522A89466296C64C1 /* PBXContainerItemProxy */;
+		};
 		3B93CDC2E4901B7FF6099BF6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 9CFE2C868D29BB429ED602D2 /* MaestroCLI */;
@@ -563,6 +669,28 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		024BB48E6097C014E4230E80 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.maestro.MaestroTests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
 		162CC723B75A1E9F82DE695A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -698,6 +826,28 @@
 				SWIFT_VERSION = 5.9;
 			};
 			name = Debug;
+		};
+		674E35166CD90394FFE12862 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.maestro.MaestroTests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
 		};
 		9A4A488A67C7047A62EBD092 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -843,6 +993,15 @@
 			buildConfigurations = (
 				6532D293C9AB1BEA986B8B88 /* Debug */,
 				52D91852BF1070D0B48C990E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F0D5C7C6410F9E1EC6C728E5 /* Build configuration list for PBXNativeTarget "MaestroTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				024BB48E6097C014E4230E80 /* Debug */,
+				674E35166CD90394FFE12862 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
