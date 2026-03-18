@@ -318,6 +318,21 @@ final class AgentOrchestrator {
         return nil
     }
 
+    func rollbackCommit(_ commit: TaskCommit, task: ProjectTask) -> String? {
+        let workspace: String
+        if let worktreePath = task.worktreePath, !worktreePath.isEmpty {
+            workspace = worktreePath
+        } else if let projectRoot = task.project?.workspaceRoot, !projectRoot.isEmpty {
+            workspace = projectRoot
+        } else {
+            return "Cannot rollback: no workspace path found."
+        }
+        let error = WorkspaceManager.gitResetHard(to: "\(commit.sha)~1", in: workspace)
+        if let error { return error }
+        try? modelContext?.save()
+        return nil
+    }
+
     func sendMessage(to taskId: String, message: String) {
         activeRunners[taskId]?.sendMessage(message)
     }

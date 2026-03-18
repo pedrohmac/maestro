@@ -11,7 +11,7 @@ struct TaskDetailView: View {
     @Environment(AgentOrchestrator.self) private var orchestrator
     @State private var showDeleteConfirmation = false
     @State private var newCommentText = ""
-    @State private var rollbackTargetRunId: String?
+    @State private var rollbackTargetCommitId: String?
     @State private var showRollbackConfirmation = false
     @State private var rollbackError: String?
     @State private var showRollbackError = false
@@ -234,6 +234,19 @@ struct TaskDetailView: View {
                                             .foregroundStyle(.secondary)
                                     }
                                 }
+
+                                Spacer()
+
+                                Button {
+                                    rollbackTargetCommitId = commit.id
+                                    showRollbackConfirmation = true
+                                } label: {
+                                    Label("Rollback", systemImage: "arrow.uturn.backward")
+                                        .font(.caption)
+                                }
+                                .buttonStyle(.bordered)
+                                .controlSize(.small)
+                                .tint(.purple)
                             }
                         }
                     }
@@ -361,19 +374,6 @@ struct TaskDetailView: View {
 
                                         Spacer()
 
-                                        if run.canRollback {
-                                            Button {
-                                                rollbackTargetRunId = run.id
-                                                showRollbackConfirmation = true
-                                            } label: {
-                                                Label("Rollback", systemImage: "arrow.uturn.backward")
-                                                    .font(.caption)
-                                            }
-                                            .buttonStyle(.bordered)
-                                            .controlSize(.small)
-                                            .tint(.purple)
-                                        }
-
                                         if let onNavigateToRun {
                                             Button {
                                                 onNavigateToRun(run.id)
@@ -407,25 +407,25 @@ struct TaskDetailView: View {
             .padding()
         }
         .confirmationDialog(
-            "Rollback this agent run?",
+            "Rollback this commit?",
             isPresented: $showRollbackConfirmation,
             titleVisibility: .visible
         ) {
             Button("Rollback", role: .destructive) {
-                if let runId = rollbackTargetRunId,
-                   let run = task.agentRuns?.first(where: { $0.id == runId }) {
-                    if let error = orchestrator.rollbackRun(run) {
+                if let commitId = rollbackTargetCommitId,
+                   let commit = task.commits?.first(where: { $0.id == commitId }) {
+                    if let error = orchestrator.rollbackCommit(commit, task: task) {
                         rollbackError = error
                         showRollbackError = true
                     }
                 }
-                rollbackTargetRunId = nil
+                rollbackTargetCommitId = nil
             }
             Button("Cancel", role: .cancel) {
-                rollbackTargetRunId = nil
+                rollbackTargetCommitId = nil
             }
         } message: {
-            Text("This will reset the workspace to the Git state before the agent ran. This action cannot be undone.")
+            Text("This will reset the workspace to before this commit. This action cannot be undone.")
         }
         .alert("Rollback Failed", isPresented: $showRollbackError) {
             Button("OK") {}
