@@ -14,6 +14,7 @@ enum NavigationItem: Hashable {
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(AgentOrchestrator.self) private var orchestrator
+    @Environment(AppState.self) private var appState
     @Query(sort: \Project.createdDate, order: .reverse) private var projects: [Project]
     @State private var selectedProject: Project?
     @State private var selectedNav: NavigationItem? = .kanban
@@ -23,7 +24,10 @@ struct ContentView: View {
     @State private var columnVisibility: NavigationSplitViewVisibility = .automatic
 
     var body: some View {
-        NavigationSplitView(columnVisibility: $columnVisibility) {
+        VStack(spacing: 0) {
+            TrialBannerView()
+
+            NavigationSplitView(columnVisibility: $columnVisibility) {
             SidebarView(
                 projects: projects,
                 selectedProject: $selectedProject,
@@ -70,6 +74,7 @@ struct ContentView: View {
                 }
             }
         }
+        }
         .sheet(isPresented: $showingNewTask) {
             if let project = selectedProject {
                 NewTaskSheet(project: project)
@@ -81,6 +86,13 @@ struct ContentView: View {
                 modelContext.insert(project)
                 selectedProject = project
             }
+        }
+        .sheet(isPresented: Binding(
+            get: { appState.isShowingOnboarding },
+            set: { appState.isShowingOnboarding = $0 }
+        )) {
+            OnboardingView()
+                .interactiveDismissDisabled()
         }
         .onAppear {
             if selectedProject == nil {

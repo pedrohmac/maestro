@@ -2,10 +2,16 @@ import SwiftUI
 import SwiftData
 import MaestroCore
 
+private enum GitViewMode: String, CaseIterable {
+    case graph = "Graph"
+    case branches = "Branches"
+}
+
 struct GitIntegrationView: View {
     @Bindable var project: Project
     @Environment(\.modelContext) private var modelContext
     @Environment(\.isDarkerMode) private var isDarkerMode
+    @State private var viewMode: GitViewMode = .graph
     @State private var branches: [GitBranchInfo] = []
     @State private var selectedBranch: String?
     @State private var isLoading = false
@@ -16,6 +22,60 @@ struct GitIntegrationView: View {
     }
 
     var body: some View {
+        VStack(spacing: 0) {
+            // View mode picker
+            HStack {
+                Picker("View", selection: $viewMode) {
+                    ForEach(GitViewMode.allCases, id: \.self) { mode in
+                        Label(mode.rawValue, systemImage: mode == .graph
+                              ? "point.3.filled.connected.trianglepath.dotted"
+                              : "arrow.triangle.branch"
+                        ).tag(mode)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .frame(width: 220)
+
+                Spacer()
+
+                if viewMode == .branches {
+                    Button(action: refreshBranches) {
+                        Label("Refresh", systemImage: "arrow.clockwise")
+                    }
+                    .disabled(isLoading)
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+
+            Divider()
+
+            // Content
+            switch viewMode {
+            case .graph:
+                GitGraphView(project: project)
+            case .branches:
+                branchesSplitView
+            }
+        }
+        .navigationTitle("\(project.name) — Git")
+        .onChange(of: viewMode) {
+            if viewMode == .branches && branches.isEmpty {
+                refreshBranches()
+            }
+        }
+        .onChange(of: project.id) {
+            branches = []
+            selectedBranch = nil
+            if viewMode == .branches {
+                refreshBranches()
+            }
+        }
+    }
+
+    // MARK: - Branches Split View
+
+    private var branchesSplitView: some View {
         NavigationSplitView {
             branchListSidebar
         } detail: {
@@ -35,8 +95,6 @@ struct GitIntegrationView: View {
                 )
             }
         }
-        .navigationTitle("\(project.name) — Git")
-        .onAppear { refreshBranches() }
     }
 
     // MARK: - Sidebar
@@ -78,14 +136,6 @@ struct GitIntegrationView: View {
         }
         .listStyle(.sidebar)
         .navigationSplitViewColumnWidth(min: 250, ideal: 300)
-        .toolbar {
-            ToolbarItem {
-                Button(action: refreshBranches) {
-                    Label("Refresh", systemImage: "arrow.clockwise")
-                }
-                .disabled(isLoading)
-            }
-        }
     }
 
     // MARK: - Actions

@@ -4,11 +4,23 @@ import MaestroCore
 
 @MainActor
 @Observable
+final class ClaudeMDGeneration {
+    var isGenerating: Bool = true
+    var result: String?
+    var error: String?
+    fileprivate var process: Process?
+    fileprivate var task: Task<Void, Never>?
+}
+
+@MainActor
+@Observable
 final class AgentOrchestrator {
     var activeRunners: [String: AgentRunner] = [:]  // taskId -> runner
     var chatRunners: [String: AgentRunner] = [:]   // projectId -> chat runner
+    var claudeMDGenerations: [String: ClaudeMDGeneration] = [:]  // projectId -> generation
     var claudePath: String = "/usr/local/bin/claude"
     var defaultMaxConcurrency: Int = 3
+    var appState: AppState?
 
     var modelContext: ModelContext?
     let pool: AgentPool
@@ -30,6 +42,10 @@ final class AgentOrchestrator {
     // MARK: - Public API
 
     func runAgent(task: ProjectTask, project: Project) {
+        guard appState?.canRunAgents == true else {
+            print("[Agent] Blocked: license check failed or AppState not configured")
+            return
+        }
         let taskId = task.id
         let taskTitle = task.title
         print("[Agent] runAgent called for task: \(taskTitle) (id: \(taskId))")
@@ -176,6 +192,10 @@ final class AgentOrchestrator {
     }
 
     func resumeAgent(task: ProjectTask, project: Project, sessionId: String) {
+        guard appState?.canRunAgents == true else {
+            print("[Agent] Blocked: license check failed or AppState not configured")
+            return
+        }
         let taskId = task.id
         let taskTitle = task.title
 
@@ -452,6 +472,130 @@ final class AgentOrchestrator {
 
     func getChatRunner(for projectId: String) -> AgentRunner? {
         chatRunners[projectId]
+    }
+
+    // MARK: - CLAUDE.md Generation
+
+    func generateClaudeMD(projectId: String, workspacePath: String) {
+        guard claudeMDGenerations[projectId] == nil else { return }
+
+        let generation = ClaudeMDGeneration()
+        claudeMDGenerations[projectId] = generation
+
+        let claudeP = claudePath
+
+        generation.task = Task {
+            let resolvedPath = await ClaudePathResolver.resolve(preferredPath: claudeP)
+
+            let prompt = """
+            Analyze this codebase and generate a CLAUDE.md file that will give AI coding agents instant context about this project. Output ONLY the raw markdown content with no preamble or explanation.
+
+            Cover these sections:
+            - Project name and one-paragraph description of what it does
+            - Tech stack (languages, frameworks, key dependencies)
+            - Project structure (key directories and what lives where)
+            - Build commands (how to build, test, run)
+            - Key architecture decisions
+            - Conventions (naming, patterns, anything non-obvious)
+
+            Be concise and specific. Focus on information that would help an agent start working immediately without exploring the codebase first.
+            """
+
+            let proc = Process()
+            let stdoutPipe = Pipe()
+            let stderrPipe = Pipe()
+
+            let shellCmd = [resolvedPath, "-p", prompt, "--output-format", "text", "--max-turns", "5", "--allowedTools", "Bash,Read,Glob,Grep"]
+                .map { "'" + $0.replacingOccurrences(of: "'", with: "'\\''") + "'" }
+                .joined(separator: " ")
+
+            proc.executableURL = URL(fileURLWithPath: "/bin/zsh")
+            proc.arguments = ["-l", "-c", shellCmd]
+            proc.currentDirectoryURL = URL(fileURLWithPath: workspacePath)
+            proc.standardOutput = stdoutPipe
+            proc.standardError = stderrPipe
+            proc.environment = [
+                "HOME": NSHomeDirectory(),
+                "USER": NSUserName(),
+                "SHELL": "/bin/zsh",
+                "TERM": "xterm-256color",
+                "LANG": "en_US.UTF-8",
+                "PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+                "TMPDIR": NSTemporaryDirectory(),
+                "NO_COLOR": "1"
+            ]
+
+            await MainActor.run {
+                generation.process = proc
+            }
+
+            do {
+                try proc.run()
+            } catch {
+                await MainActor.run {
+                    generation.error = "Failed to start Claude: \(error.localizedDescription)"
+                    generation.isGenerating = false
+                    generation.process = nil
+                }
+                return
+            }
+
+            var stderrData = Data()
+            let stderrQueue = DispatchQueue(label: "claudemd.stderr")
+            stderrPipe.fileHandleForReading.readabilityHandler = { handle in
+                let data = handle.availableData
+                if data.isEmpty {
+                    stderrPipe.fileHandleForReading.readabilityHandler = nil
+                } else {
+                    stderrQueue.sync { stderrData.append(data) }
+                }
+            }
+
+            let stdout = stdoutPipe.fileHandleForReading.readDataToEndOfFile()
+            proc.waitUntilExit()
+
+            stderrPipe.fileHandleForReading.readabilityHandler = nil
+            let errorOutput = stderrQueue.sync {
+                String(data: stderrData, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            }
+
+            var output = String(data: stdout, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            if let headingRange = output.range(of: "(?m)^#", options: .regularExpression) {
+                output = String(output[headingRange.lowerBound...])
+            }
+
+            await MainActor.run {
+                generation.process = nil
+
+                if Task.isCancelled {
+                    generation.isGenerating = false
+                    return
+                }
+
+                if proc.terminationStatus != 0 {
+                    let errorSuffix = errorOutput.isEmpty ? "" : ": \(String(errorOutput.suffix(200)))"
+                    generation.error = "Claude exited with code \(proc.terminationStatus)\(errorSuffix)"
+                } else if output.isEmpty {
+                    generation.error = "Claude produced no output"
+                } else {
+                    generation.result = output
+                    generation.error = nil
+                }
+
+                generation.isGenerating = false
+            }
+        }
+    }
+
+    func cancelClaudeMDGeneration(projectId: String) {
+        guard let generation = claudeMDGenerations[projectId] else { return }
+        generation.task?.cancel()
+        generation.process?.terminate()
+        claudeMDGenerations.removeValue(forKey: projectId)
+    }
+
+    func clearClaudeMDGeneration(projectId: String) {
+        claudeMDGenerations.removeValue(forKey: projectId)
     }
 
     private func handleChatEvent(_ event: AgentEvent, runner: AgentRunner, projectId: String, permissionRules: [PermissionRule]) {
