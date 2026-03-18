@@ -6,6 +6,7 @@ enum NavigationItem: Hashable {
     case kanban
     case gantt
     case activity
+    case chat
     case git
     case settings
 }
@@ -51,6 +52,10 @@ struct ContentView: View {
                             .opacity(selectedNav == .activity ? 1 : 0)
                             .allowsHitTesting(selectedNav == .activity)
 
+                        ChatView(project: project)
+                            .opacity(selectedNav == .chat ? 1 : 0)
+                            .allowsHitTesting(selectedNav == .chat)
+
                         GitIntegrationView(project: project)
                             .opacity(selectedNav == .git ? 1 : 0)
                             .allowsHitTesting(selectedNav == .git)
@@ -92,10 +97,12 @@ struct ContentView: View {
                     .keyboardShortcut("2", modifiers: .command)
                 Button("") { selectedNav = .gantt }
                     .keyboardShortcut("3", modifiers: .command)
-                Button("") { selectedNav = .git }
+                Button("") { selectedNav = .chat }
                     .keyboardShortcut("4", modifiers: .command)
-                Button("") { selectedNav = .settings }
+                Button("") { selectedNav = .git }
                     .keyboardShortcut("5", modifiers: .command)
+                Button("") { selectedNav = .settings }
+                    .keyboardShortcut("6", modifiers: .command)
                 Button("") { if selectedProject != nil { showingNewTask = true } }
                     .keyboardShortcut("n", modifiers: .command)
             }

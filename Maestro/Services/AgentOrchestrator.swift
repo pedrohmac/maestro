@@ -48,7 +48,16 @@ final class AgentOrchestrator {
         modelContext?.insert(agentRun)
         print("[Agent] AgentRun inserted into modelContext, context is \(modelContext == nil ? "nil" : "set")")
 
-        let prompt = PromptBuilder.build(task: task, project: project, workspacePath: project.workspaceRoot)
+        // Gather previous discussion context if this task has been run before
+        let previousDiscussion: [TaskComment]? = {
+            guard let comments = task.comments else { return nil }
+            let discussion = comments
+                .filter { $0.authorType == .agent || $0.authorType == .user }
+                .sorted { $0.createdDate < $1.createdDate }
+            return discussion.isEmpty ? nil : discussion
+        }()
+
+        let prompt = PromptBuilder.build(task: task, project: project, workspacePath: project.workspaceRoot, previousDiscussion: previousDiscussion)
         let allowedTools = project.defaultAllowedTools
         let maxTurns = project.maxTurns
         let maxBudget = project.maxBudgetUSD

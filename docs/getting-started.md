@@ -66,29 +66,15 @@ You should see a version number. If you get "command not found", the installatio
 
 ---
 
-## Step 3: Get Your API Key
+## Step 3: Log In to Claude
 
-Maestro uses Claude through the Anthropic API, which charges per use. Typical cost is $5-20/month depending on how much you use it.
-
-1. Go to [console.anthropic.com](https://console.anthropic.com) and create an account
-2. Add a payment method (Settings > Billing)
-3. Go to **API Keys** in your dashboard
-4. Click **Create Key** and copy it — it starts with `sk-ant-`
-
-Now add it to your shell profile so Claude can find it. In Terminal:
+Maestro runs tasks through the Claude CLI, which needs an active Claude account. After installing Claude CLI, log in:
 
 ```bash
-echo 'export ANTHROPIC_API_KEY="sk-ant-YOUR-KEY-HERE"' >> ~/.zshrc
-source ~/.zshrc
+claude login
 ```
 
-Replace `sk-ant-YOUR-KEY-HERE` with your actual key. To verify it worked:
-
-```bash
-echo $ANTHROPIC_API_KEY
-```
-
-You should see your key printed back.
+Follow the prompts to authenticate. Once logged in, Claude CLI handles everything — no API keys to manage.
 
 ---
 

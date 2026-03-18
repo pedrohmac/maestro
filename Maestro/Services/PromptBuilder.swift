@@ -2,7 +2,7 @@ import Foundation
 import MaestroCore
 
 struct PromptBuilder {
-    static func build(task: ProjectTask, project: Project, workspacePath: String) -> String {
+    static func build(task: ProjectTask, project: Project, workspacePath: String, previousDiscussion: [TaskComment]? = nil) -> String {
         var parts: [String] = []
 
         parts.append("""
@@ -14,6 +14,16 @@ struct PromptBuilder {
 
         if !task.taskDescription.isEmpty {
             parts.append("\n## Description\n\(task.taskDescription)")
+        }
+
+        // Include previous discussion context when re-running a task
+        if let discussion = previousDiscussion, !discussion.isEmpty {
+            var section = "\n## Previous Discussion\nThis task has been worked on before. Here is the discussion from previous run(s) for context:\n"
+            for comment in discussion {
+                let author = comment.authorType == .agent ? "Agent" : "User"
+                section += "\n**\(author):**\n\(comment.body)\n"
+            }
+            parts.append(section)
         }
 
         parts.append("\n## Workspace\nYou are working in: \(workspacePath)")
