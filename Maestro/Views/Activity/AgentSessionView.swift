@@ -700,7 +700,8 @@ private struct CopyableOverlay: ViewModifier {
             .overlay(alignment: .topTrailing) {
                 if isHovered {
                     CopyButton(text: text)
-                        .padding(4)
+                        .padding(.top, 28)
+                        .padding(.trailing, 4)
                         .transition(.opacity)
                 }
             }
