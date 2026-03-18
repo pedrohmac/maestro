@@ -521,11 +521,6 @@ private struct NoiseGroupBubble: View {
         }
         .padding(8)
         .background(Color.secondary.opacity(0.05), in: RoundedRectangle(cornerRadius: 8))
-        .copyable(copyableText)
-    }
-
-    private var copyableText: String {
-        events.map { $0.event.copyableText }.joined(separator: "\n\n")
     }
 }
 
