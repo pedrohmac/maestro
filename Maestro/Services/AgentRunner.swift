@@ -227,7 +227,9 @@ final class AgentRunner: Identifiable, @unchecked Sendable {
     ) async {
         isRunning = true
         output = ""
-        events = []
+        // Don't clear events — callers may have pre-populated user messages
+        // (e.g. chat adds the initial message before start). Runners are always
+        // freshly created so the array is empty unless intentionally seeded.
         pendingPermissions = []
 
         let proc = Process()

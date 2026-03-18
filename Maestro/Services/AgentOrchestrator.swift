@@ -371,9 +371,9 @@ final class AgentOrchestrator {
                         self.handleChatEvent(event, runner: runner, projectId: projectId, permissionRules: permissionRules)
                     }
                 }
-                await MainActor.run {
-                    self.chatRunners.removeValue(forKey: projectId)
-                }
+                // Don't remove the runner here — keep it so the UI can still
+                // display the conversation after the process exits. The runner
+                // is cleaned up explicitly via endChat() or when a new chat starts.
             }
 
             let prompt = """
@@ -405,6 +405,7 @@ final class AgentOrchestrator {
         if let runner = chatRunners[projectId] {
             runner.cancel()
         }
+        chatRunners.removeValue(forKey: projectId)
     }
 
     func getChatRunner(for projectId: String) -> AgentRunner? {
