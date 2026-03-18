@@ -401,6 +401,39 @@ final class AgentOrchestrator {
         chatRunners[projectId]?.sendMessage(message)
     }
 
+    func resumeChat(project: Project, message: String) {
+        let projectId = project.id
+        guard let runner = chatRunners[projectId],
+              let sessionId = runner.sessionId else { return }
+
+        // Record the user's follow-up message
+        runner.addUserMessage(message)
+
+        let workspacePath = project.workspaceRoot
+        let claudeP = claudePath
+        let permissionRules = project.permissionRules
+
+        Task {
+            let eventStream = runner.eventStream()
+
+            Task {
+                for await event in eventStream {
+                    await MainActor.run {
+                        self.handleChatEvent(event, runner: runner, projectId: projectId, permissionRules: permissionRules)
+                    }
+                }
+            }
+
+            await runner.resume(
+                sessionId: sessionId,
+                prompt: message,
+                workspacePath: workspacePath,
+                claudePath: claudeP,
+                timeoutMinutes: 60
+            )
+        }
+    }
+
     func endChat(projectId: String) {
         if let runner = chatRunners[projectId] {
             runner.cancel()
@@ -414,6 +447,10 @@ final class AgentOrchestrator {
 
     private func handleChatEvent(_ event: AgentEvent, runner: AgentRunner, projectId: String, permissionRules: [PermissionRule]) {
         switch event {
+        case .result(let sessionId, _, _, _):
+            if let sid = sessionId {
+                runner.sessionId = sid
+            }
         case .permissionRequest(let toolName, let input, let requestId):
             runner.addPendingPermission(requestId: requestId, toolName: toolName, input: input)
             if let action = PermissionRuleEngine.evaluate(toolName: toolName, input: input, rules: permissionRules) {

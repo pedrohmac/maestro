@@ -26,6 +26,7 @@ final class AgentRunner: Identifiable, @unchecked Sendable {
     private(set) var output: String = ""
     private(set) var events: [AgentEvent] = []
     private(set) var pendingPermissions: [PendingPermission] = []
+    var sessionId: String?
 
     private var process: Process?
     private var stdinPipe: Pipe?

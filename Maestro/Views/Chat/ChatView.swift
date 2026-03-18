@@ -174,13 +174,16 @@ struct ChatView: View {
         let text = messageText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
 
-        if runner == nil || !isActive {
-            // Start a new chat session
+        if let runner = runner, isActive {
+            // Send follow-up to active session (process still running)
+            orchestrator.sendChatMessage(projectId: project.id, message: text)
+        } else if let runner = runner, runner.sessionId != nil {
+            // Process exited but we have a session ID — resume the conversation
+            orchestrator.resumeChat(project: project, message: text)
+        } else {
+            // No runner or no session ID — start a new chat session
             orchestrator.endChat(projectId: project.id) // Clean up any dead runner
             orchestrator.startChat(project: project, initialMessage: text)
-        } else {
-            // Send follow-up to active session
-            orchestrator.sendChatMessage(projectId: project.id, message: text)
         }
 
         messageText = ""
