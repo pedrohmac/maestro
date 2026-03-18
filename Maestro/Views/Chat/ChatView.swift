@@ -21,7 +21,7 @@ struct ChatView: View {
             // Header
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Chat")
+                    Text("Agent Chat")
                         .font(.headline)
                     Text(project.name)
                         .font(.caption)
@@ -243,11 +243,8 @@ private func chatGroupEvents(_ events: [AgentEvent]) -> [ChatDisplayItem] {
             items.append(.other(indexed))
 
         case .result:
-            if !workingBuffer.isEmpty {
-                items.append(.workingGroup(workingBuffer))
-                workingBuffer = []
-            }
-            items.append(.other(indexed))
+            // Skip "Session Complete" in chat — the conversation is continuous
+            break
 
         default:
             // Tool use, tool result, system messages, permissions -> working group

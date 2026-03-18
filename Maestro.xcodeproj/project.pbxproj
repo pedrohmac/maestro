@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		016C4B625D8A5A7F280AEC1D /* GanttBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACB2F5F71E03EED6C2A651D0 /* GanttBarView.swift */; };
 		029F2A866367E66FBB7338D6 /* WorkspaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989CC2A436FFEFAA0A576A03 /* WorkspaceManager.swift */; };
+		089F7E9A7E464D29124445D5 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A6C3930AE0EA260C62416B /* OnboardingView.swift */; };
 		16B6DA3E61F60F81B3B6E84F /* TrialManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89770217EDF23E64CD5A73D /* TrialManagerTests.swift */; };
 		16C5D82AD71C6064BFD5987D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = D40500BED9C672277835179A /* ArgumentParser */; };
 		182D87DDACE0D6964B9B4348 /* Resolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD06AD9B373B918B5B053949 /* Resolver.swift */; };
 		1F1F2AF48EDD340067740211 /* ProjectSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC116D9EE16B279E194F31E /* ProjectSettingsView.swift */; };
 		222C453954D2596574A1FDB4 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254CDDB033CFCA673D424059 /* Project.swift */; };
 		2DFD5ECA0D6B7D1C4029BD72 /* TaskCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4B4F983191C6264796D9FD /* TaskCommand.swift */; };
+		33F46974A33D303DB3CE1B27 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF31DF52EAABE346862D5A8 /* AppState.swift */; };
 		3B65DC9DD451271A28BDA631 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A7960896E9520C46949A5D /* Enums.swift */; };
 		416C9B372C71C107834115B7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11F4D315C3688D21359F416 /* SettingsView.swift */; };
 		4194B90BE0E8B8F70DD7DA6F /* MaestroStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844EA070BE6719036A77FDD6 /* MaestroStore.swift */; };
@@ -43,11 +45,13 @@
 		92243EB72F311A93372D1B1F /* AgentActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65E003488CDA386AFA9B033 /* AgentActivityView.swift */; };
 		93876E371A362933A1530105 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854DD07C95E9CF86C5AB8B64 /* ChatView.swift */; };
 		9D74C654FFABA95873194EFE /* TrialManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B34323D60283771D5031163 /* TrialManager.swift */; };
+		A28468B676CBAA1448D0DFBA /* APIKeySetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9A446D730F5F0EBEF5D8D2 /* APIKeySetupView.swift */; };
 		AD89559F376CF77E5D567394 /* NarrationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38DB7A8C66E44D2A9E0FE257 /* NarrationEngine.swift */; };
 		AF2CE764FE95960F305D6AFD /* AgentOrchestrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEA98346D576EDEA6B6CDE2 /* AgentOrchestrator.swift */; };
 		B55135FE27B205DC88690C8A /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16516C93349282E34B02124 /* SidebarView.swift */; };
 		B98EACA4211CBA04B6CC19CF /* MockLicenseAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166ACCE0054AA64C6E3CD48D /* MockLicenseAPIClient.swift */; };
 		BA57C6152E7DF6E19DE2CFC9 /* MaestroCLI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059EE7E5B27E7F28D71284AF /* MaestroCLI.swift */; };
+		BD160D7CB62974AA671AAE5F /* GitGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1715CD7617FA220DFCDC5C /* GitGraphView.swift */; };
 		C1279EF017CB7495D7840E3F /* NewTaskSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5177C3B949480C930A19BDD /* NewTaskSheet.swift */; };
 		C81D2DE740137777707ABB3B /* GitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27BB1FEB5F45FB06337E9D7 /* GitService.swift */; };
 		C8E9518A16CBF3868A44093A /* MaestroTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176787C543DC11C15C2119E1 /* MaestroTests.swift */; };
@@ -105,6 +109,7 @@
 /* Begin PBXFileReference section */
 		04B356937DFC8DB0549232EF /* AgentPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentPool.swift; sourceTree = "<group>"; };
 		059EE7E5B27E7F28D71284AF /* MaestroCLI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaestroCLI.swift; sourceTree = "<group>"; };
+		0A9A446D730F5F0EBEF5D8D2 /* APIKeySetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeySetupView.swift; sourceTree = "<group>"; };
 		0AC116D9EE16B279E194F31E /* ProjectSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSettingsView.swift; sourceTree = "<group>"; };
 		166ACCE0054AA64C6E3CD48D /* MockLicenseAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLicenseAPIClient.swift; sourceTree = "<group>"; };
 		176787C543DC11C15C2119E1 /* MaestroTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaestroTests.swift; sourceTree = "<group>"; };
@@ -131,10 +136,12 @@
 		75448AA6F26B0C8E7DD4B315 /* AgentRun.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentRun.swift; sourceTree = "<group>"; };
 		789F6490ED572AC30B5CE365 /* KanbanBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanbanBoardView.swift; sourceTree = "<group>"; };
 		7A8BABEC65B3E4B5F09D8D27 /* MaestroCLI */ = {isa = PBXFileReference; includeInIndex = 0; path = MaestroCLI; sourceTree = BUILT_PRODUCTS_DIR; };
+		7E1715CD7617FA220DFCDC5C /* GitGraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitGraphView.swift; sourceTree = "<group>"; };
 		84486C756E1730495A760481 /* ProjectCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectCommand.swift; sourceTree = "<group>"; };
 		844EA070BE6719036A77FDD6 /* MaestroStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaestroStore.swift; sourceTree = "<group>"; };
 		854DD07C95E9CF86C5AB8B64 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		8A02CBA676540B37B614B6DA /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		8CF31DF52EAABE346862D5A8 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		8D4B4F983191C6264796D9FD /* TaskCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCommand.swift; sourceTree = "<group>"; };
 		93A7960896E9520C46949A5D /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		95CD4377C7C2146E317225BB /* RunCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunCommand.swift; sourceTree = "<group>"; };
@@ -151,6 +158,7 @@
 		B7B71EA91B002D2D24B45163 /* ProjectTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectTask.swift; sourceTree = "<group>"; };
 		B9892AFAEEA1B9B5BF63A2AF /* MaestroApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaestroApp.swift; sourceTree = "<group>"; };
 		BD06AD9B373B918B5B053949 /* Resolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resolver.swift; sourceTree = "<group>"; };
+		C0A6C3930AE0EA260C62416B /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		C16516C93349282E34B02124 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		C34AE10861BDF637372E8D46 /* ImportCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportCommand.swift; sourceTree = "<group>"; };
 		C844AF8B00974E6E74AE3A9A /* AgentRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentRunner.swift; sourceTree = "<group>"; };
@@ -220,6 +228,7 @@
 				CCEA98346D576EDEA6B6CDE2 /* AgentOrchestrator.swift */,
 				04B356937DFC8DB0549232EF /* AgentPool.swift */,
 				C844AF8B00974E6E74AE3A9A /* AgentRunner.swift */,
+				8CF31DF52EAABE346862D5A8 /* AppState.swift */,
 				F04B2F76E6DCECEEE2758353 /* ClaudePathResolver.swift */,
 				D27BB1FEB5F45FB06337E9D7 /* GitService.swift */,
 				38DB7A8C66E44D2A9E0FE257 /* NarrationEngine.swift */,
@@ -330,6 +339,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A62EFD2E7419DA7691D9A82B /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				0A9A446D730F5F0EBEF5D8D2 /* APIKeySetupView.swift */,
+				C0A6C3930AE0EA260C62416B /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		AB5F345BFA89653F625C1B96 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -424,6 +442,7 @@
 				5876803FBC466B4DBF0FE5C0 /* Gantt */,
 				F464C293E20B57A0DA5F8924 /* Git */,
 				51898806D5B5119747749585 /* Kanban */,
+				A62EFD2E7419DA7691D9A82B /* Onboarding */,
 				BE5E737DDD0284704C74BE97 /* Settings */,
 				DDAE18C21047FA4137ABF582 /* Shared */,
 				E3264EFE502C7D767ECC767A /* Sidebar */,
@@ -434,6 +453,7 @@
 		F464C293E20B57A0DA5F8924 /* Git */ = {
 			isa = PBXGroup;
 			children = (
+				7E1715CD7617FA220DFCDC5C /* GitGraphView.swift */,
 				A4D360E3A46EDB892741784C /* GitIntegrationView.swift */,
 			);
 			path = Git;
@@ -642,11 +662,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A28468B676CBAA1448D0DFBA /* APIKeySetupView.swift in Sources */,
 				92243EB72F311A93372D1B1F /* AgentActivityView.swift in Sources */,
 				AF2CE764FE95960F305D6AFD /* AgentOrchestrator.swift in Sources */,
 				FBBC81D3D3E9389FCE33530B /* AgentPool.swift in Sources */,
 				4A6BD9F4A3E835819F2A6634 /* AgentRunner.swift in Sources */,
 				8D4945A50032C860B1D1E6D4 /* AgentSessionView.swift in Sources */,
+				33F46974A33D303DB3CE1B27 /* AppState.swift in Sources */,
 				7D3D97034EBF28C44CCBC02A /* AppearanceSettingsView.swift in Sources */,
 				93876E371A362933A1530105 /* ChatView.swift in Sources */,
 				F4A3FE44B3D8117148966787 /* ClaudePathResolver.swift in Sources */,
@@ -654,6 +676,7 @@
 				016C4B625D8A5A7F280AEC1D /* GanttBarView.swift in Sources */,
 				E5498E63D3BFDA793F85AFC6 /* GanttChartView.swift in Sources */,
 				DF2CC95B6B65647C716223B0 /* GeneralSettingsView.swift in Sources */,
+				BD160D7CB62974AA671AAE5F /* GitGraphView.swift in Sources */,
 				4FEB2EA94EA976AFBD6406FA /* GitIntegrationView.swift in Sources */,
 				C81D2DE740137777707ABB3B /* GitService.swift in Sources */,
 				77D5F7C1A38A1B39A0453913 /* KanbanBoardView.swift in Sources */,
@@ -661,6 +684,7 @@
 				79C6BC4C7DF8F9498707FD7E /* MaestroApp.swift in Sources */,
 				AD89559F376CF77E5D567394 /* NarrationEngine.swift in Sources */,
 				C1279EF017CB7495D7840E3F /* NewTaskSheet.swift in Sources */,
+				089F7E9A7E464D29124445D5 /* OnboardingView.swift in Sources */,
 				EEAFF978653277417211634E /* OutputParser.swift in Sources */,
 				6CFBB314C0C532A07A434E90 /* PermissionRequestCard.swift in Sources */,
 				5FB4F50954FA4BDEE52EAC4C /* PermissionRuleEngine.swift in Sources */,

@@ -20,11 +20,11 @@ final class AppState {
     nonisolated(unsafe) private var refreshTask: Task<Void, Never>?
 
     init(
-        trialManager: TrialManager = TrialManager(),
-        licenseManager: LicenseManager = LicenseManager()
+        trialManager: TrialManager? = nil,
+        licenseManager: LicenseManager? = nil
     ) {
-        self.trialManager = trialManager
-        self.licenseManager = licenseManager
+        self.trialManager = trialManager ?? TrialManager()
+        self.licenseManager = licenseManager ?? LicenseManager()
         refresh()
         self.isShowingOnboarding = !isTrialStarted && !isActivated
         startPeriodicRefresh()

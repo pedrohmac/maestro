@@ -19,6 +19,23 @@ struct GitDiffFile {
     let deletions: Int
 }
 
+struct GitGraphCommit: Identifiable {
+    let id: String       // full SHA
+    let shortSha: String
+    let message: String
+    let authorName: String
+    let authorDate: Date
+    let parents: [String]
+    let refs: [GitRef]
+}
+
+struct GitRef {
+    let name: String
+    let isHead: Bool
+    let isRemote: Bool
+    let isTag: Bool
+}
+
 struct GitService {
     // MARK: - Branch Operations
 
@@ -117,6 +134,68 @@ struct GitService {
             i += 5
         }
         return commits
+    }
+
+    // MARK: - Graph Operations
+
+    /// Returns all commits for graph visualization, in topological order (newest first).
+    static func allCommitsForGraph(in directory: String, maxCount: Int = 200) -> [GitGraphCommit] {
+        let sep = "\u{1e}" // ASCII Record Separator
+        let format = "%H\(sep)%P\(sep)%s\(sep)%an\(sep)%aI\(sep)%D"
+        let output = runGit(["log", "--all", "--topo-order", "--format=\(format)", "-\(maxCount)"], in: directory)
+        guard let output, !output.isEmpty else { return [] }
+
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime]
+
+        return output.components(separatedBy: "\n").compactMap { line in
+            let fields = line.components(separatedBy: sep)
+            guard fields.count >= 5 else { return nil }
+
+            let sha = fields[0]
+            guard !sha.isEmpty else { return nil }
+            let parentLine = fields[1]
+            let message = fields[2]
+            let author = fields[3]
+            let dateStr = fields[4]
+            let refsLine = fields.count > 5 ? fields[5] : ""
+
+            let parents = parentLine.isEmpty ? [] : parentLine.components(separatedBy: " ")
+            let date = formatter.date(from: dateStr) ?? Date()
+            let refs = parseRefs(refsLine)
+
+            return GitGraphCommit(
+                id: sha,
+                shortSha: String(sha.prefix(7)),
+                message: message,
+                authorName: author,
+                authorDate: date,
+                parents: parents,
+                refs: refs
+            )
+        }
+    }
+
+    private static func parseRefs(_ refString: String) -> [GitRef] {
+        guard !refString.isEmpty else { return [] }
+        return refString.components(separatedBy: ", ").compactMap { part in
+            let trimmed = part.trimmingCharacters(in: .whitespaces)
+            guard !trimmed.isEmpty else { return nil }
+
+            if trimmed.hasPrefix("HEAD -> ") {
+                let name = String(trimmed.dropFirst("HEAD -> ".count))
+                return GitRef(name: name, isHead: true, isRemote: false, isTag: false)
+            } else if trimmed == "HEAD" {
+                return GitRef(name: "HEAD", isHead: true, isRemote: false, isTag: false)
+            } else if trimmed.hasPrefix("tag: ") {
+                let name = String(trimmed.dropFirst("tag: ".count))
+                return GitRef(name: name, isHead: false, isRemote: false, isTag: true)
+            } else if trimmed.contains("/") {
+                return GitRef(name: trimmed, isHead: false, isRemote: true, isTag: false)
+            } else {
+                return GitRef(name: trimmed, isHead: false, isRemote: false, isTag: false)
+            }
+        }
     }
 
     // MARK: - Diff Operations
