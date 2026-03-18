@@ -6,6 +6,7 @@ import MaestroCore
 struct MaestroApp: App {
     let modelContainer: ModelContainer
     @State private var orchestrator = AgentOrchestrator()
+    @State private var appState = AppState()
     @AppStorage("appearanceMode") private var appearanceMode: String = AppearanceMode.system.rawValue
 
     private var currentMode: AppearanceMode {
@@ -28,8 +29,13 @@ struct MaestroApp: App {
         WindowGroup {
             ContentView()
                 .environment(orchestrator)
+                .environment(appState)
                 .environment(\.isDarkerMode, currentMode.isDarker)
                 .preferredColorScheme(colorScheme)
+                .task {
+                    orchestrator.appState = appState
+                    await appState.validateOnLaunch()
+                }
         }
         .modelContainer(modelContainer)
         .commands {
@@ -39,6 +45,7 @@ struct MaestroApp: App {
         Settings {
             SettingsView()
                 .environment(orchestrator)
+                .environment(appState)
                 .modelContainer(modelContainer)
                 .environment(\.isDarkerMode, currentMode.isDarker)
                 .preferredColorScheme(colorScheme)
