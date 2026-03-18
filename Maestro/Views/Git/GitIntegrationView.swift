@@ -64,6 +64,13 @@ struct GitIntegrationView: View {
                 refreshBranches()
             }
         }
+        .onChange(of: project.id) {
+            branches = []
+            selectedBranch = nil
+            if viewMode == .branches {
+                refreshBranches()
+            }
+        }
     }
 
     // MARK: - Branches Split View

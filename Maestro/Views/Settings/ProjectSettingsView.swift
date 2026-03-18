@@ -10,10 +10,7 @@ struct ProjectSettingsView: View {
     @State private var claudeMDContent: String = ""
     @State private var savedClaudeMDContent: String = ""
     @State private var claudeMDFileExists: Bool = false
-    @State private var isGenerating: Bool = false
-    @State private var generationError: String?
-    @State private var generateTask: Task<Void, Never>?
-    @State private var generationProcess: Process?
+    @State private var saveError: String?
     @State private var showTemplateConfirmation: Bool = false
     @State private var showGenerateConfirmation: Bool = false
     @State private var isGitInitialized: Bool = false
@@ -50,6 +47,18 @@ struct ProjectSettingsView: View {
     private var hasValidWorkspace: Bool {
         !project.workspaceRoot.isEmpty &&
         FileManager.default.fileExists(atPath: project.workspaceRoot)
+    }
+
+    private var generation: ClaudeMDGeneration? {
+        orchestrator.claudeMDGenerations[project.id]
+    }
+
+    private var isGenerating: Bool {
+        generation?.isGenerating ?? false
+    }
+
+    private var generationError: String? {
+        saveError ?? generation?.error
     }
 
     var body: some View {
@@ -228,7 +237,9 @@ struct ProjectSettingsView: View {
                         .disabled(isGenerating)
 
                         Button {
-                            if isClaudeMDDirty {
+                            if isGenerating {
+                                orchestrator.cancelClaudeMDGeneration(projectId: project.id)
+                            } else if isClaudeMDDirty {
                                 showGenerateConfirmation = true
                             } else {
                                 generateClaudeMD()
@@ -244,7 +255,6 @@ struct ProjectSettingsView: View {
                                 Text("Generate with Claude")
                             }
                         }
-                        .disabled(isGenerating)
                     }
 
                     Text("This file is read automatically by Claude agents working in this project's workspace.")
@@ -364,6 +374,11 @@ struct ProjectSettingsView: View {
             loadClaudeMD()
             checkGitStatus()
             refreshTotalCost()
+            // Pick up result from background generation that completed while away
+            if let gen = generation, !gen.isGenerating, let result = gen.result {
+                claudeMDContent = result
+                orchestrator.clearClaudeMDGeneration(projectId: project.id)
+            }
         }
         .onChange(of: project.workspaceRoot) {
             checkGitStatus()
@@ -371,11 +386,11 @@ struct ProjectSettingsView: View {
         .onChange(of: project.id) {
             refreshTotalCost()
         }
-.onDisappear {
-            if isGenerating {
-                generateTask?.cancel()
-                generationProcess?.terminate()
-                isGenerating = false
+        .onChange(of: generation?.isGenerating) {
+            // Apply result when generation completes while view is visible
+            if let gen = generation, !gen.isGenerating, let result = gen.result {
+                claudeMDContent = result
+                orchestrator.clearClaudeMDGeneration(projectId: project.id)
             }
         }
         .alert("Replace unsaved changes with template?", isPresented: $showTemplateConfirmation) {
@@ -427,9 +442,9 @@ struct ProjectSettingsView: View {
             try claudeMDContent.write(toFile: claudeMDPath, atomically: true, encoding: .utf8)
             savedClaudeMDContent = claudeMDContent
             claudeMDFileExists = true
-            generationError = nil
+            saveError = nil
         } catch {
-            generationError = "Failed to save: \(error.localizedDescription)"
+            saveError = "Failed to save: \(error.localizedDescription)"
         }
     }
 
@@ -462,121 +477,11 @@ struct ProjectSettingsView: View {
 
         - ...
         """
-        generationError = nil
+        saveError = nil
     }
 
     private func generateClaudeMD() {
-        isGenerating = true
-        generationError = nil
-
-        let workspacePath = project.workspaceRoot
-        let claudePath = orchestrator.claudePath
-
-        generateTask = Task {
-            let resolvedPath = await ClaudePathResolver.resolve(preferredPath: claudePath)
-
-            let prompt = """
-            Analyze this codebase and generate a CLAUDE.md file that will give AI coding agents instant context about this project. Output ONLY the raw markdown content with no preamble or explanation.
-
-            Cover these sections:
-            - Project name and one-paragraph description of what it does
-            - Tech stack (languages, frameworks, key dependencies)
-            - Project structure (key directories and what lives where)
-            - Build commands (how to build, test, run)
-            - Key architecture decisions
-            - Conventions (naming, patterns, anything non-obvious)
-
-            Be concise and specific. Focus on information that would help an agent start working immediately without exploring the codebase first.
-            """
-
-            let proc = Process()
-            let stdoutPipe = Pipe()
-            let stderrPipe = Pipe()
-
-            let shellCmd = [resolvedPath, "-p", prompt, "--output-format", "text", "--max-turns", "5", "--allowedTools", "Bash,Read,Glob,Grep"]
-                .map { "'" + $0.replacingOccurrences(of: "'", with: "'\\''") + "'" }
-                .joined(separator: " ")
-
-            proc.executableURL = URL(fileURLWithPath: "/bin/zsh")
-            proc.arguments = ["-l", "-c", shellCmd]
-            proc.currentDirectoryURL = URL(fileURLWithPath: workspacePath)
-            proc.standardOutput = stdoutPipe
-            proc.standardError = stderrPipe
-            proc.environment = [
-                "HOME": NSHomeDirectory(),
-                "USER": NSUserName(),
-                "SHELL": "/bin/zsh",
-                "TERM": "xterm-256color",
-                "LANG": "en_US.UTF-8",
-                "PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
-                "TMPDIR": NSTemporaryDirectory(),
-                "NO_COLOR": "1"
-            ]
-
-            await MainActor.run {
-                self.generationProcess = proc
-            }
-
-            do {
-                try proc.run()
-            } catch {
-                await MainActor.run {
-                    self.generationError = "Failed to start Claude: \(error.localizedDescription)"
-                    self.isGenerating = false
-                    self.generationProcess = nil
-                }
-                return
-            }
-
-            // Read stdout and stderr concurrently to avoid pipe buffer deadlock
-            // (if one pipe fills while the other is being read, the process blocks)
-            var stderrData = Data()
-            let stderrQueue = DispatchQueue(label: "claudemd.stderr")
-            stderrPipe.fileHandleForReading.readabilityHandler = { handle in
-                let data = handle.availableData
-                if data.isEmpty {
-                    stderrPipe.fileHandleForReading.readabilityHandler = nil
-                } else {
-                    stderrQueue.sync { stderrData.append(data) }
-                }
-            }
-
-            let stdout = stdoutPipe.fileHandleForReading.readDataToEndOfFile()
-            proc.waitUntilExit()
-
-            // Collect stderr
-            stderrPipe.fileHandleForReading.readabilityHandler = nil
-            let errorOutput = stderrQueue.sync {
-                String(data: stderrData, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            }
-
-            // Trim whitespace and strip any preamble before the first markdown heading
-            var output = String(data: stdout, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            if let headingRange = output.range(of: "(?m)^#", options: .regularExpression) {
-                output = String(output[headingRange.lowerBound...])
-            }
-
-            await MainActor.run {
-                self.generationProcess = nil
-
-                if Task.isCancelled {
-                    self.isGenerating = false
-                    return
-                }
-
-                if proc.terminationStatus != 0 {
-                    let errorSuffix = errorOutput.isEmpty ? "" : ": \(String(errorOutput.suffix(200)))"
-                    self.generationError = "Claude exited with code \(proc.terminationStatus)\(errorSuffix)"
-                } else if output.isEmpty {
-                    self.generationError = "Claude produced no output"
-                } else {
-                    self.claudeMDContent = output
-                    self.generationError = nil
-                }
-
-                self.isGenerating = false
-            }
-        }
+        orchestrator.generateClaudeMD(projectId: project.id, workspacePath: project.workspaceRoot)
     }
 
     private static let knownTools = ["Bash", "Read", "Edit", "Write", "Glob", "Grep", "*"]

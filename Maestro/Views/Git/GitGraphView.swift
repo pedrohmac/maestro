@@ -216,6 +216,7 @@ struct GitGraphView: View {
             }
         }
         .onAppear { loadGraph() }
+        .onChange(of: project.id) { loadGraph() }
     }
 
     private var graphContent: some View {
