@@ -71,7 +71,7 @@ struct OnboardingView: View {
         VStack(spacing: 20) {
             Image(systemName: "wand.and.stars")
                 .font(.system(size: 48))
-                .foregroundStyle(.accent)
+                .foregroundStyle(Color.accentColor)
 
             Text("Welcome to Maestro")
                 .font(.largeTitle)
@@ -103,7 +103,7 @@ private struct FeatureRow: View {
     var body: some View {
         HStack(spacing: 10) {
             Image(systemName: icon)
-                .foregroundStyle(.accent)
+                .foregroundStyle(Color.accentColor)
                 .frame(width: 24)
             Text(text)
         }
