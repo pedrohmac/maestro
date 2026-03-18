@@ -54,14 +54,19 @@ struct TaskCardView: View {
                     .background(priorityColor.opacity(0.15), in: Capsule())
                     .foregroundStyle(priorityColor)
 
-                // Branch indicator
+                // Worktree indicator
                 if task.useWorktree {
-                    HStack(spacing: 2) {
-                        Image(systemName: task.hasMergeConflict ? "exclamationmark.triangle.fill" : "arrow.triangle.branch")
-                            .foregroundStyle(task.hasMergeConflict ? .red : .blue)
-                    }
-                    .font(.caption2)
-                    .help(task.hasMergeConflict ? "Branch has conflicts" : "maestro/task-\(task.id.prefix(8))...")
+                    Image(systemName: task.hasMergeConflict ? "exclamationmark.triangle.fill" : "arrow.triangle.branch")
+                        .font(.caption2)
+                        .fontWeight(.medium)
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 2)
+                        .background(
+                            (task.hasMergeConflict ? Color.red : Color.cyan).opacity(0.15),
+                            in: Capsule()
+                        )
+                        .foregroundStyle(task.hasMergeConflict ? .red : .cyan)
+                        .help(task.hasMergeConflict ? "Branch has merge conflicts" : "Worktree: maestro/task-\(task.id.prefix(8))…")
                 }
 
                 Spacer()
