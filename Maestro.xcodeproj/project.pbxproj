@@ -34,6 +34,7 @@
 		5FB4F50954FA4BDEE52EAC4C /* PermissionRuleEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 192706A91F9B97244FC0171D /* PermissionRuleEngine.swift */; };
 		66FE03E9FA1B1AC68956A14E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C72282F4106932B5C9865F /* ContentView.swift */; };
 		6CFBB314C0C532A07A434E90 /* PermissionRequestCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C62005E94C0EE7C5D9A6CD4 /* PermissionRequestCard.swift */; };
+		71EF1FE8E5BBE5C1E4E2B8F6 /* ConnectionChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE007A53A2D3CB4B800F94E /* ConnectionChecker.swift */; };
 		77D5F7C1A38A1B39A0453913 /* KanbanBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789F6490ED572AC30B5CE365 /* KanbanBoardView.swift */; };
 		79C6BC4C7DF8F9498707FD7E /* MaestroApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9892AFAEEA1B9B5BF63A2AF /* MaestroApp.swift */; };
 		7CE7382B304174334AB58CB4 /* TaskCommit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A0EDC741B246D84E0FAE4A /* TaskCommit.swift */; };
@@ -153,6 +154,7 @@
 		A4D360E3A46EDB892741784C /* GitIntegrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitIntegrationView.swift; sourceTree = "<group>"; };
 		AAFDA0B4A6E491B651F6B41A /* MaestroTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MaestroTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACB2F5F71E03EED6C2A651D0 /* GanttBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GanttBarView.swift; sourceTree = "<group>"; };
+		AFE007A53A2D3CB4B800F94E /* ConnectionChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionChecker.swift; sourceTree = "<group>"; };
 		B5177C3B949480C930A19BDD /* NewTaskSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskSheet.swift; sourceTree = "<group>"; };
 		B65E003488CDA386AFA9B033 /* AgentActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentActivityView.swift; sourceTree = "<group>"; };
 		B6AEA8ABDB68EC5C1C7F307F /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 				C844AF8B00974E6E74AE3A9A /* AgentRunner.swift */,
 				8CF31DF52EAABE346862D5A8 /* AppState.swift */,
 				F04B2F76E6DCECEEE2758353 /* ClaudePathResolver.swift */,
+				AFE007A53A2D3CB4B800F94E /* ConnectionChecker.swift */,
 				D27BB1FEB5F45FB06337E9D7 /* GitService.swift */,
 				38DB7A8C66E44D2A9E0FE257 /* NarrationEngine.swift */,
 				A4BCD3B1FC88427B9A039CC8 /* OutputParser.swift */,
@@ -678,6 +681,7 @@
 				7D3D97034EBF28C44CCBC02A /* AppearanceSettingsView.swift in Sources */,
 				93876E371A362933A1530105 /* ChatView.swift in Sources */,
 				F4A3FE44B3D8117148966787 /* ClaudePathResolver.swift in Sources */,
+				71EF1FE8E5BBE5C1E4E2B8F6 /* ConnectionChecker.swift in Sources */,
 				66FE03E9FA1B1AC68956A14E /* ContentView.swift in Sources */,
 				016C4B625D8A5A7F280AEC1D /* GanttBarView.swift in Sources */,
 				E5498E63D3BFDA793F85AFC6 /* GanttChartView.swift in Sources */,

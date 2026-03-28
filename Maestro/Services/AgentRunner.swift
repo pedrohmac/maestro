@@ -32,6 +32,7 @@ final class AgentRunner: Identifiable, @unchecked Sendable {
     private var stdinPipe: Pipe?
     private var continuation: AsyncStream<AgentEvent>.Continuation?
     private var timeoutTask: Task<Void, Never>?
+    private var connectionErrorEmitted = false
 
     init(taskId: String, taskTitle: String) {
         self.id = UUID().uuidString
@@ -304,8 +305,16 @@ final class AgentRunner: Identifiable, @unchecked Sendable {
                 if let text = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines),
                    !text.isEmpty {
                     DispatchQueue.main.async {
-                        let event = AgentEvent.systemMessage("[stderr] \(text)")
-                        self?.appendEvent(event)
+                        // Always surface the raw stderr for debugging
+                        let stderrEvent = AgentEvent.systemMessage("[stderr] \(text)")
+                        self?.appendEvent(stderrEvent)
+
+                        // Detect connection/API errors and emit a friendly warning (once)
+                        if ConnectionChecker.isConnectionError(text),
+                           !(self?.connectionErrorEmitted ?? true) {
+                            self?.connectionErrorEmitted = true
+                            self?.appendEvent(.error(ConnectionChecker.userMessage))
+                        }
                     }
                 }
             }
@@ -332,6 +341,10 @@ final class AgentRunner: Identifiable, @unchecked Sendable {
                             remainingEvent = nil
                         }
 
+                        // Wait for process to fully exit so we can check its status
+                        proc.waitUntilExit()
+                        let exitCode = Int(proc.terminationStatus)
+
                         DispatchQueue.main.async {
                             if let line = remainingLine {
                                 self?.output += line + "\n"
@@ -339,6 +352,24 @@ final class AgentRunner: Identifiable, @unchecked Sendable {
                                     self?.appendEvent(event)
                                 }
                             }
+
+                            // Emit error for non-zero exit when no error was already recorded
+                            if exitCode != 0, let self = self {
+                                let hasError = self.events.contains {
+                                    if case .error = $0 { return true }
+                                    return false
+                                }
+                                if !hasError {
+                                    let errorMsg: String
+                                    if ConnectionChecker.isConnectionError(self.output) {
+                                        errorMsg = ConnectionChecker.userMessage
+                                    } else {
+                                        errorMsg = "Agent process exited unexpectedly (code \(exitCode))"
+                                    }
+                                    self.appendEvent(.error(errorMsg))
+                                }
+                            }
+
                             self?.isRunning = false
                             self?.timeoutTask?.cancel()
                             self?.continuation?.finish()

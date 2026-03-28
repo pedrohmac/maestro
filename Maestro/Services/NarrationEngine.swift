@@ -12,6 +12,9 @@ struct NarrationEngine {
         case .toolUse(let name, let input):
             return narrateToolUse(name: name, input: input)
         case .error(let message):
+            if ConnectionChecker.isConnectionError(message) {
+                return "Connection issue: The AI API appears unreachable. Check your internet connection and try again."
+            }
             let truncated = message.prefix(120)
             return "Encountered an error: \(truncated)"
         default:

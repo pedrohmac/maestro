@@ -477,7 +477,9 @@ final class AgentOrchestrator {
     // MARK: - CLAUDE.md Generation
 
     func generateClaudeMD(projectId: String, workspacePath: String) {
-        guard claudeMDGenerations[projectId] == nil else { return }
+        if let existing = claudeMDGenerations[projectId], existing.isGenerating {
+            return
+        }
 
         let generation = ClaudeMDGeneration()
         claudeMDGenerations[projectId] = generation
@@ -525,65 +527,65 @@ final class AgentOrchestrator {
                 "NO_COLOR": "1"
             ]
 
-            await MainActor.run {
-                generation.process = proc
-            }
+            generation.process = proc
 
             do {
                 try proc.run()
             } catch {
-                await MainActor.run {
-                    generation.error = "Failed to start Claude: \(error.localizedDescription)"
-                    generation.isGenerating = false
-                    generation.process = nil
-                }
+                generation.error = "Failed to start Claude: \(error.localizedDescription)"
+                generation.isGenerating = false
+                generation.process = nil
                 return
             }
 
-            var stderrData = Data()
-            let stderrQueue = DispatchQueue(label: "claudemd.stderr")
-            stderrPipe.fileHandleForReading.readabilityHandler = { handle in
-                let data = handle.availableData
-                if data.isEmpty {
+            let (output, errorOutput, exitStatus) = await withCheckedContinuation { (continuation: CheckedContinuation<(String, String, Int32), Never>) in
+                DispatchQueue.global(qos: .userInitiated).async {
+                    var stderrData = Data()
+                    let stderrQueue = DispatchQueue(label: "claudemd.stderr")
+                    stderrPipe.fileHandleForReading.readabilityHandler = { handle in
+                        let data = handle.availableData
+                        if data.isEmpty {
+                            stderrPipe.fileHandleForReading.readabilityHandler = nil
+                        } else {
+                            stderrQueue.sync { stderrData.append(data) }
+                        }
+                    }
+
+                    let stdout = stdoutPipe.fileHandleForReading.readDataToEndOfFile()
+                    proc.waitUntilExit()
+
                     stderrPipe.fileHandleForReading.readabilityHandler = nil
-                } else {
-                    stderrQueue.sync { stderrData.append(data) }
+                    let errorOutput = stderrQueue.sync {
+                        String(data: stderrData, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                    }
+
+                    var output = String(data: stdout, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                    if let headingRange = output.range(of: "(?m)^#", options: .regularExpression) {
+                        output = String(output[headingRange.lowerBound...])
+                    }
+
+                    continuation.resume(returning: (output, errorOutput, proc.terminationStatus))
                 }
             }
 
-            let stdout = stdoutPipe.fileHandleForReading.readDataToEndOfFile()
-            proc.waitUntilExit()
+            generation.process = nil
 
-            stderrPipe.fileHandleForReading.readabilityHandler = nil
-            let errorOutput = stderrQueue.sync {
-                String(data: stderrData, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            }
-
-            var output = String(data: stdout, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            if let headingRange = output.range(of: "(?m)^#", options: .regularExpression) {
-                output = String(output[headingRange.lowerBound...])
-            }
-
-            await MainActor.run {
-                generation.process = nil
-
-                if Task.isCancelled {
-                    generation.isGenerating = false
-                    return
-                }
-
-                if proc.terminationStatus != 0 {
-                    let errorSuffix = errorOutput.isEmpty ? "" : ": \(String(errorOutput.suffix(200)))"
-                    generation.error = "Claude exited with code \(proc.terminationStatus)\(errorSuffix)"
-                } else if output.isEmpty {
-                    generation.error = "Claude produced no output"
-                } else {
-                    generation.result = output
-                    generation.error = nil
-                }
-
+            if Task.isCancelled {
                 generation.isGenerating = false
+                return
             }
+
+            if exitStatus != 0 {
+                let errorSuffix = errorOutput.isEmpty ? "" : ": \(String(errorOutput.suffix(200)))"
+                generation.error = "Claude exited with code \(exitStatus)\(errorSuffix)"
+            } else if output.isEmpty {
+                generation.error = "Claude produced no output"
+            } else {
+                generation.result = output
+                generation.error = nil
+            }
+
+            generation.isGenerating = false
         }
     }
 

@@ -265,14 +265,32 @@ struct ProjectSettingsView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
 
+                    if let error = generationError {
+                        Text(error)
+                            .font(.caption)
+                            .foregroundStyle(.red)
+                    }
+
                     HStack {
                         Button("New from Template") {
                             applyTemplate()
                         }
+                        .disabled(isGenerating)
 
-                        Button("Generate with Claude") {
+                        Button {
                             generateClaudeMD()
+                        } label: {
+                            if isGenerating {
+                                HStack(spacing: 6) {
+                                    ProgressView()
+                                        .controlSize(.small)
+                                    Text("Generating...")
+                                }
+                            } else {
+                                Text("Generate with Claude")
+                            }
                         }
+                        .disabled(isGenerating)
                     }
                 }
             }
@@ -375,8 +393,10 @@ struct ProjectSettingsView: View {
             checkGitStatus()
             refreshTotalCost()
             // Pick up result from background generation that completed while away
-            if let gen = generation, !gen.isGenerating, let result = gen.result {
-                claudeMDContent = result
+            if let gen = generation, !gen.isGenerating {
+                if let result = gen.result {
+                    claudeMDContent = result
+                }
                 orchestrator.clearClaudeMDGeneration(projectId: project.id)
             }
         }
@@ -388,8 +408,10 @@ struct ProjectSettingsView: View {
         }
         .onChange(of: generation?.isGenerating) {
             // Apply result when generation completes while view is visible
-            if let gen = generation, !gen.isGenerating, let result = gen.result {
-                claudeMDContent = result
+            if let gen = generation, !gen.isGenerating {
+                if let result = gen.result {
+                    claudeMDContent = result
+                }
                 orchestrator.clearClaudeMDGeneration(projectId: project.id)
             }
         }
