@@ -264,7 +264,7 @@ struct AgentEventBubble: View {
 
     var body: some View {
         bubbleContent
-            .copyable(event.copyableText)
+            .copyable(event.copyableText, topOffset: event.hasCollapsibleHeader ? 28 : 4)
     }
 
     @ViewBuilder
@@ -650,6 +650,16 @@ private struct DiffBlock: View {
 // MARK: - Copy to Clipboard
 
 private extension AgentEvent {
+    /// Whether this event renders with a collapsible header row that has a chevron at the trailing edge.
+    var hasCollapsibleHeader: Bool {
+        switch self {
+        case .toolUse, .toolResult:
+            return true
+        default:
+            return false
+        }
+    }
+
     var copyableText: String {
         switch self {
         case .assistantText(let text):
@@ -693,6 +703,7 @@ private extension AgentEvent {
 
 private struct CopyableOverlay: ViewModifier {
     let text: String
+    let topOffset: CGFloat
     @State private var isHovered = false
 
     func body(content: Content) -> some View {
@@ -700,7 +711,7 @@ private struct CopyableOverlay: ViewModifier {
             .overlay(alignment: .topTrailing) {
                 if isHovered {
                     CopyButton(text: text)
-                        .padding(.top, 4)
+                        .padding(.top, topOffset)
                         .padding(.trailing, 4)
                         .transition(.opacity)
                 }
@@ -737,7 +748,7 @@ private struct CopyButton: View {
 }
 
 extension View {
-    fileprivate func copyable(_ text: String) -> some View {
-        modifier(CopyableOverlay(text: text))
+    fileprivate func copyable(_ text: String, topOffset: CGFloat = 4) -> some View {
+        modifier(CopyableOverlay(text: text, topOffset: topOffset))
     }
 }
