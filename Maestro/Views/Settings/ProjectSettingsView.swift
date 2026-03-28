@@ -6,6 +6,7 @@ struct ProjectSettingsView: View {
     @Bindable var project: Project
     @Environment(\.modelContext) private var modelContext
     @Environment(AgentOrchestrator.self) private var orchestrator
+    @Environment(ProjectLauncher.self) private var launcher
     @State private var showAllArchived = false
     @State private var claudeMDContent: String = ""
     @State private var savedClaudeMDContent: String = ""
@@ -16,6 +17,11 @@ struct ProjectSettingsView: View {
     @State private var isGitInitialized: Bool = false
 
     @State private var totalCostUSD: Double = 0
+
+    // Launch config state
+    @State private var launchConfig: LaunchConfig = LaunchConfig()
+    @State private var hasLaunchConfig: Bool = false
+    @State private var launchConfigSaveError: String?
 
     private func refreshTotalCost() {
         let projectId = project.id
@@ -308,6 +314,8 @@ struct ProjectSettingsView: View {
                     .foregroundStyle(.secondary)
             }
 
+            launchConfigSection
+
             Section("Archived Tasks") {
                 if archivedTasks.isEmpty {
                     Text("No archived tasks.")
@@ -390,6 +398,7 @@ struct ProjectSettingsView: View {
         .navigationTitle("Project Settings")
         .onAppear {
             loadClaudeMD()
+            loadLaunchConfig()
             checkGitStatus()
             refreshTotalCost()
             // Pick up result from background generation that completed while away
@@ -402,6 +411,7 @@ struct ProjectSettingsView: View {
         }
         .onChange(of: project.workspaceRoot) {
             checkGitStatus()
+            loadLaunchConfig()
         }
         .onChange(of: project.id) {
             refreshTotalCost()
@@ -413,6 +423,11 @@ struct ProjectSettingsView: View {
                     claudeMDContent = result
                 }
                 orchestrator.clearClaudeMDGeneration(projectId: project.id)
+            }
+        }
+        .onChange(of: launcher.isGeneratingConfig) {
+            if !launcher.isGeneratingConfig {
+                loadLaunchConfig()
             }
         }
         .alert("Replace unsaved changes with template?", isPresented: $showTemplateConfirmation) {
@@ -504,6 +519,212 @@ struct ProjectSettingsView: View {
 
     private func generateClaudeMD() {
         orchestrator.generateClaudeMD(projectId: project.id, workspacePath: project.workspaceRoot)
+    }
+
+    // MARK: - Launch Config
+
+    @ViewBuilder
+    private var launchConfigSection: some View {
+        Section("Launch Configuration") {
+            if !hasValidWorkspace {
+                Text("Set a workspace root path first.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else if hasLaunchConfig {
+                // Steps list
+                ForEach(Array(launchConfig.steps.enumerated()), id: \.element.id) { index, step in
+                    HStack(spacing: 8) {
+                        // Reorder
+                        VStack(spacing: 0) {
+                            Button {
+                                moveLaunchStep(at: index, direction: -1)
+                            } label: {
+                                Image(systemName: "chevron.up")
+                                    .font(.caption2)
+                            }
+                            .buttonStyle(.plain)
+                            .disabled(index == 0)
+
+                            Button {
+                                moveLaunchStep(at: index, direction: 1)
+                            } label: {
+                                Image(systemName: "chevron.down")
+                                    .font(.caption2)
+                            }
+                            .buttonStyle(.plain)
+                            .disabled(index == launchConfig.steps.count - 1)
+                        }
+                        .foregroundStyle(.secondary)
+
+                        VStack(alignment: .leading, spacing: 4) {
+                            TextField("Step name", text: Binding(
+                                get: { launchConfig.steps[index].name },
+                                set: { launchConfig.steps[index].name = $0 }
+                            ))
+                            .font(.system(size: 12, weight: .medium))
+
+                            TextField("Command", text: Binding(
+                                get: { launchConfig.steps[index].command },
+                                set: { launchConfig.steps[index].command = $0 }
+                            ))
+                            .font(.system(size: 11, design: .monospaced))
+                            .textFieldStyle(.roundedBorder)
+                        }
+
+                        Toggle("BG", isOn: Binding(
+                            get: { launchConfig.steps[index].background },
+                            set: { launchConfig.steps[index].background = $0 }
+                        ))
+                        .toggleStyle(.checkbox)
+                        .font(.caption)
+                        .help("Run in background (for servers)")
+
+                        Button {
+                            launchConfig.steps.remove(at: index)
+                        } label: {
+                            Image(systemName: "trash")
+                                .foregroundStyle(.red)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+
+                Button {
+                    launchConfig.steps.append(
+                        LaunchStep(name: "New Step", command: "")
+                    )
+                } label: {
+                    Label("Add Step", systemImage: "plus.circle")
+                }
+                .controlSize(.small)
+
+                Divider()
+
+                HStack {
+                    Text("Open URL")
+                    TextField("http://localhost:3000", text: Binding(
+                        get: { launchConfig.openUrl ?? "" },
+                        set: { launchConfig.openUrl = $0.isEmpty ? nil : $0 }
+                    ))
+                    .textFieldStyle(.roundedBorder)
+                }
+
+                HStack {
+                    Text("Ready Check URL")
+                    TextField("http://localhost:3000/health", text: Binding(
+                        get: { launchConfig.readyCheckUrl ?? "" },
+                        set: { launchConfig.readyCheckUrl = $0.isEmpty ? nil : $0 }
+                    ))
+                    .textFieldStyle(.roundedBorder)
+                }
+                Text("The system polls this URL before opening the browser. Leave empty to open immediately.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                if let error = launchConfigSaveError {
+                    Text(error)
+                        .font(.caption)
+                        .foregroundStyle(.red)
+                }
+
+                HStack {
+                    Button("Save") {
+                        saveLaunchConfig()
+                    }
+
+                    Button("Delete Config") {
+                        deleteLaunchConfig()
+                    }
+                    .foregroundStyle(.red)
+
+                    Spacer()
+
+                    generateLaunchConfigButton
+                }
+            } else {
+                Text("No launch configuration found. This lets users open and test the project with a single click — starting databases, servers, and opening the browser automatically.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                if let error = launcher.generationError {
+                    Text(error)
+                        .font(.caption)
+                        .foregroundStyle(.red)
+                }
+
+                HStack {
+                    Button("Create Manually") {
+                        launchConfig = LaunchConfig(steps: [
+                            LaunchStep(name: "Install dependencies", command: ""),
+                            LaunchStep(name: "Start server", command: "", background: true, waitSeconds: 3)
+                        ], openUrl: "http://localhost:3000")
+                        hasLaunchConfig = true
+                    }
+
+                    generateLaunchConfigButton
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var generateLaunchConfigButton: some View {
+        Button {
+            if launcher.isGeneratingConfig {
+                launcher.cancelGeneration()
+            } else {
+                launcher.generateConfig(
+                    workspaceRoot: project.workspaceRoot,
+                    claudePath: orchestrator.claudePath
+                )
+            }
+        } label: {
+            if launcher.isGeneratingConfig {
+                HStack(spacing: 6) {
+                    ProgressView()
+                        .controlSize(.small)
+                    Text("Generating...")
+                }
+            } else {
+                Text("Generate with Claude")
+            }
+        }
+    }
+
+    private func loadLaunchConfig() {
+        guard hasValidWorkspace else {
+            hasLaunchConfig = false
+            return
+        }
+        if let config = LaunchConfig.load(from: project.workspaceRoot) {
+            launchConfig = config
+            hasLaunchConfig = true
+        } else {
+            launchConfig = LaunchConfig()
+            hasLaunchConfig = false
+        }
+    }
+
+    private func saveLaunchConfig() {
+        do {
+            try launchConfig.save(to: project.workspaceRoot)
+            launchConfigSaveError = nil
+        } catch {
+            launchConfigSaveError = "Failed to save: \(error.localizedDescription)"
+        }
+    }
+
+    private func deleteLaunchConfig() {
+        let path = "\(project.workspaceRoot)/\(LaunchConfig.configPath)"
+        try? FileManager.default.removeItem(atPath: path)
+        launchConfig = LaunchConfig()
+        hasLaunchConfig = false
+    }
+
+    private func moveLaunchStep(at index: Int, direction: Int) {
+        let newIndex = index + direction
+        guard newIndex >= 0 && newIndex < launchConfig.steps.count else { return }
+        launchConfig.steps.swapAt(index, newIndex)
     }
 
     private static let knownTools = ["Bash", "Read", "Edit", "Write", "Glob", "Grep", "*"]

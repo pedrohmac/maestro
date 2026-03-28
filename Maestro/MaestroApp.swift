@@ -7,6 +7,7 @@ struct MaestroApp: App {
     let modelContainer: ModelContainer
     @State private var orchestrator = AgentOrchestrator()
     @State private var appState = AppState()
+    @State private var launcher = ProjectLauncher()
     @AppStorage("appearanceMode") private var appearanceMode: String = AppearanceMode.system.rawValue
 
     private var currentMode: AppearanceMode {
@@ -30,6 +31,7 @@ struct MaestroApp: App {
             ContentView()
                 .environment(orchestrator)
                 .environment(appState)
+                .environment(launcher)
                 .environment(\.isDarkerMode, currentMode.isDarker)
                 .preferredColorScheme(colorScheme)
                 .task {
