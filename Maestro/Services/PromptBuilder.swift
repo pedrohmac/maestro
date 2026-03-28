@@ -48,6 +48,29 @@ struct PromptBuilder {
             parts.append("\n## Workflow Instructions\n\(project.workflowPrompt)")
         }
 
+        // Instruct agents to maintain the launch config when they change how the project runs
+        if !project.workspaceRoot.isEmpty {
+            parts.append("""
+
+                ## Launch Configuration
+                When you make changes that affect how this project is started, tested, or run locally (e.g. adding dependencies, changing ports, adding services, modifying build steps), you MUST update the launch configuration file at `.maestro/launch.json`. This file tells non-technical users how to run the project with a single click. Create the `.maestro` directory if it does not exist.
+
+                The JSON format is:
+                ```json
+                {
+                  "steps": [
+                    { "id": "unique-id", "name": "Step name", "command": "shell command", "background": false },
+                    { "id": "unique-id", "name": "Start server", "command": "npm run dev", "background": true, "waitSeconds": 3 }
+                  ],
+                  "openUrl": "http://localhost:3000",
+                  "readyCheckUrl": "http://localhost:3000",
+                  "readyCheckTimeoutSeconds": 30
+                }
+                ```
+                Steps with `"background": true` run as background processes (servers, watchers). Steps with `"background": false` run sequentially. If `readyCheckUrl` is set, it is polled before opening `openUrl` in the browser.
+                """)
+        }
+
         return parts.joined(separator: "\n")
     }
 

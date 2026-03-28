@@ -69,6 +69,11 @@ struct ContentView: View {
                             .opacity(selectedNav == .settings ? 1 : 0)
                             .allowsHitTesting(selectedNav == .settings)
                     }
+                    .toolbar {
+                        ToolbarItem(placement: .navigation) {
+                            LaunchButton(project: project)
+                        }
+                    }
                 } else {
                     ContentUnavailableView("No Project Selected", systemImage: "folder", description: Text("Select a project from the sidebar or create a new one."))
                 }
