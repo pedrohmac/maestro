@@ -9,6 +9,7 @@ enum NavigationItem: Hashable {
     case chat
     case git
     case settings
+    case help
 }
 
 struct ContentView: View {
@@ -68,12 +69,18 @@ struct ContentView: View {
                             .id(project.id)
                             .opacity(selectedNav == .settings ? 1 : 0)
                             .allowsHitTesting(selectedNav == .settings)
+
+                        HelpView()
+                            .opacity(selectedNav == .help ? 1 : 0)
+                            .allowsHitTesting(selectedNav == .help)
                     }
                     .toolbar {
                         ToolbarItem(placement: .automatic) {
                             LaunchButton(project: project)
                         }
                     }
+                } else if selectedNav == .help {
+                    HelpView()
                 } else {
                     ContentUnavailableView("No Project Selected", systemImage: "folder", description: Text("Select a project from the sidebar or create a new one."))
                 }
@@ -124,6 +131,8 @@ struct ContentView: View {
                     .keyboardShortcut("5", modifiers: .command)
                 Button("") { selectedNav = .settings }
                     .keyboardShortcut("6", modifiers: .command)
+                Button("") { selectedNav = .help }
+                    .keyboardShortcut("7", modifiers: .command)
                 Button("") { if selectedProject != nil { showingNewTask = true } }
                     .keyboardShortcut("n", modifiers: .command)
             }

@@ -16,6 +16,7 @@
 		1F1F2AF48EDD340067740211 /* ProjectSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC116D9EE16B279E194F31E /* ProjectSettingsView.swift */; };
 		222C453954D2596574A1FDB4 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254CDDB033CFCA673D424059 /* Project.swift */; };
 		23B48B904C51C797A2214CC9 /* ProjectLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1DC66BE8DE28CE9004D6E0 /* ProjectLauncher.swift */; };
+		2C352EB1901CE4AAE85E4FFA /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1AC3C996CC6C8B3150CDBD /* HelpView.swift */; };
 		2DFD5ECA0D6B7D1C4029BD72 /* TaskCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D4B4F983191C6264796D9FD /* TaskCommand.swift */; };
 		33F46974A33D303DB3CE1B27 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF31DF52EAABE346862D5A8 /* AppState.swift */; };
 		3B65DC9DD451271A28BDA631 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A7960896E9520C46949A5D /* Enums.swift */; };
@@ -139,6 +140,7 @@
 		545434EA4E7E472C55B2AE83 /* PromptBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptBuilder.swift; sourceTree = "<group>"; };
 		5D89E2FA8A82D88218732BE6 /* Maestro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Maestro.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6938D25B4B43B9B528D5AEDC /* LicenseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseManager.swift; sourceTree = "<group>"; };
+		6E1AC3C996CC6C8B3150CDBD /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		6F9289B0F9AC801DB7660281 /* LicenseAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseAPIClient.swift; sourceTree = "<group>"; };
 		75448AA6F26B0C8E7DD4B315 /* AgentRun.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentRun.swift; sourceTree = "<group>"; };
 		789F6490ED572AC30B5CE365 /* KanbanBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanbanBoardView.swift; sourceTree = "<group>"; };
@@ -353,6 +355,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A2E67A2F56099AAB984CD9AC /* Help */ = {
+			isa = PBXGroup;
+			children = (
+				6E1AC3C996CC6C8B3150CDBD /* HelpView.swift */,
+			);
+			path = Help;
+			sourceTree = "<group>";
+		};
 		A62EFD2E7419DA7691D9A82B /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
@@ -459,6 +469,7 @@
 				5FDF85096E088B08BE3A3016 /* Chat */,
 				5876803FBC466B4DBF0FE5C0 /* Gantt */,
 				F464C293E20B57A0DA5F8924 /* Git */,
+				A2E67A2F56099AAB984CD9AC /* Help */,
 				51898806D5B5119747749585 /* Kanban */,
 				A62EFD2E7419DA7691D9A82B /* Onboarding */,
 				BE5E737DDD0284704C74BE97 /* Settings */,
@@ -699,6 +710,7 @@
 				BD160D7CB62974AA671AAE5F /* GitGraphView.swift in Sources */,
 				4FEB2EA94EA976AFBD6406FA /* GitIntegrationView.swift in Sources */,
 				C81D2DE740137777707ABB3B /* GitService.swift in Sources */,
+				2C352EB1901CE4AAE85E4FFA /* HelpView.swift in Sources */,
 				77D5F7C1A38A1B39A0453913 /* KanbanBoardView.swift in Sources */,
 				E9BA581522AB61682AC7A4D5 /* KanbanColumnView.swift in Sources */,
 				FDE88EEAD112395CA68982D0 /* LaunchButton.swift in Sources */,

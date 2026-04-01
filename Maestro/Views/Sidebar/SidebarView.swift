@@ -18,6 +18,7 @@ struct SidebarView: View {
                 navRow("Agent Chat", systemImage: "bubble.left.and.bubble.right", item: .chat, shortcut: "4")
                 navRow("Git", systemImage: "arrow.triangle.branch", item: .git, shortcut: "5")
                 navRow("Project Settings", systemImage: "gearshape", item: .settings, shortcut: "6")
+                navRow("Help", systemImage: "questionmark.circle", item: .help, shortcut: "7")
             }
 
             Section("Projects") {
