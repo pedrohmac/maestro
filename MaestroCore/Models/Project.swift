@@ -19,6 +19,7 @@ public final class Project {
     public var permissionRulesData: Data? = nil
     public var customColumnsData: Data? = nil
     public var defaultUseWorktree: Bool = false
+    public var nextTicketNumber: Int = 1
     public var createdDate: Date = Date()
 
     @Relationship(deleteRule: .cascade, inverse: \ProjectTask.project)
@@ -53,6 +54,12 @@ public final class Project {
 
     public func columnForStatus(_ status: TaskStatus) -> KanbanColumn? {
         customColumns.first { $0.mappedStatus == status.rawValue }
+    }
+
+    /// Assigns the next sequential ticket number to the given task within this project.
+    public func assignTicketNumber(to task: ProjectTask) {
+        task.ticketNumber = nextTicketNumber
+        nextTicketNumber += 1
     }
 
     public init(name: String, workspaceRoot: String = "") {

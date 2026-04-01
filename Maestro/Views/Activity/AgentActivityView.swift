@@ -125,25 +125,6 @@ struct AgentActivityView: View {
             }
         }
         .navigationTitle("\(project.name) — Activity")
-        .confirmationDialog(
-            "Clear all history?",
-            isPresented: $showClearHistoryConfirmation,
-            titleVisibility: .visible
-        ) {
-            Button("Clear History", role: .destructive) {
-                selectedRunId = nil
-                let projectId = project.id
-                let descriptor = FetchDescriptor<AgentRun>(
-                    predicate: #Predicate { $0.projectId == projectId && $0.statusRaw != "running" && $0.statusRaw != "queued" },
-                    sortBy: [SortDescriptor(\.startedAt, order: .reverse)]
-                )
-                let allCompleted = (try? modelContext.fetch(descriptor)) ?? []
-                orchestrator.deleteRuns(allCompleted)
-            }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("This will permanently remove all completed agent runs from history. Active runs will not be affected.")
-        }
     }
 }
 

@@ -17,6 +17,7 @@ struct ProjectSettingsView: View {
     @State private var isGitInitialized: Bool = false
 
     @State private var totalCostUSD: Double = 0
+    @State private var showClearHistoryConfirmation = false
 
     // Launch config state
     @State private var launchConfig: LaunchConfig = LaunchConfig()
@@ -190,6 +191,10 @@ struct ProjectSettingsView: View {
                     Spacer()
                     Text(String(format: "$%.2f", totalCostUSD))
                         .foregroundStyle(.secondary)
+                }
+
+                Button("Clear All Agent History", role: .destructive) {
+                    showClearHistoryConfirmation = true
                 }
             }
 
@@ -429,6 +434,25 @@ struct ProjectSettingsView: View {
             if !launcher.isGeneratingConfig {
                 loadLaunchConfig()
             }
+        }
+        .confirmationDialog(
+            "Clear all history?",
+            isPresented: $showClearHistoryConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Clear History", role: .destructive) {
+                let projectId = project.id
+                let descriptor = FetchDescriptor<AgentRun>(
+                    predicate: #Predicate { $0.projectId == projectId && $0.statusRaw != "running" && $0.statusRaw != "queued" },
+                    sortBy: [SortDescriptor(\.startedAt, order: .reverse)]
+                )
+                let allCompleted = (try? modelContext.fetch(descriptor)) ?? []
+                orchestrator.deleteRuns(allCompleted)
+                refreshTotalCost()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This will permanently remove all completed agent runs from history. Active runs will not be affected.")
         }
         .alert("Replace unsaved changes with template?", isPresented: $showTemplateConfirmation) {
             Button("Replace", role: .destructive) { applyTemplate() }
