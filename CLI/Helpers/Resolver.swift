@@ -92,6 +92,19 @@ enum Resolver {
         let descriptor = FetchDescriptor<ProjectTask>()
         let tasks = try context.fetch(descriptor)
 
+        // 0. Ticket number match (#N or just a number)
+        let ticketQuery = query.hasPrefix("#") ? String(query.dropFirst()) : nil
+        if let numStr = ticketQuery, let num = Int(numStr) {
+            let ticketMatches = tasks.filter { $0.ticketNumber == num }
+            if ticketMatches.count == 1 {
+                return ticketMatches[0]
+            }
+            if ticketMatches.count > 1 {
+                let candidates = ticketMatches.map { "\($0.ticketDisplay) \($0.title) [\($0.project?.name ?? "?")] (\($0.id.prefix(8)))" }
+                throw ResolverError.ambiguousTask(query, candidates)
+            }
+        }
+
         // 1. Exact ID match
         if let match = tasks.first(where: { $0.id == query }) {
             return match
@@ -103,7 +116,7 @@ enum Resolver {
             return idPrefixMatches[0]
         }
         if idPrefixMatches.count > 1 {
-            let candidates = idPrefixMatches.map { "\($0.title) (\($0.id.prefix(8)))" }
+            let candidates = idPrefixMatches.map { "\($0.ticketDisplay) \($0.title) (\($0.id.prefix(8)))" }
             throw ResolverError.ambiguousTask(query, candidates)
         }
 

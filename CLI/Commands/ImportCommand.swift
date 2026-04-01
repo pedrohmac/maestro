@@ -56,6 +56,9 @@ struct ImportCommand: ParsableCommand {
                 }
             }
 
+            // Assign ticket number
+            proj.assignTicketNumber(to: task)
+
             // Assign column and place at top
             let targetColumnId = proj.columnForStatus(task.status)?.id ?? proj.customColumns.first?.id ?? ""
             task.columnId = targetColumnId

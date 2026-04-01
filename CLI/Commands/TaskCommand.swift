@@ -76,6 +76,7 @@ struct TaskCommand: ParsableCommand {
                 let items = tasks.map { t in
                     var dict: [String: String] = [
                         "id": t.id,
+                        "ticketNumber": String(t.ticketNumber),
                         "title": t.title,
                         "status": t.status.cliName,
                         "priority": t.priority.cliName,
@@ -106,6 +107,7 @@ struct TaskCommand: ParsableCommand {
                 }
 
                 return [
+                    t.ticketDisplay,
                     String(t.id.prefix(8)),
                     t.status.cliName,
                     t.priority.cliName,
@@ -116,7 +118,7 @@ struct TaskCommand: ParsableCommand {
             }
 
             TableFormatter.print(
-                headers: ["ID", "STATUS", "PRIORITY", "TITLE", "PROJECT", "DUE"],
+                headers: ["#", "ID", "STATUS", "PRIORITY", "TITLE", "PROJECT", "DUE"],
                 rows: rows
             )
         }
@@ -174,6 +176,9 @@ struct TaskCommand: ParsableCommand {
                 task.dueDate = date
             }
 
+            // Assign ticket number
+            proj.assignTicketNumber(to: task)
+
             // Assign column and place at top
             let targetColumnId = proj.columnForStatus(task.status)?.id ?? proj.customColumns.first?.id ?? ""
             task.columnId = targetColumnId
@@ -189,6 +194,7 @@ struct TaskCommand: ParsableCommand {
             if global.json {
                 let item: [String: String] = [
                     "id": task.id,
+                    "ticketNumber": String(task.ticketNumber),
                     "title": task.title,
                     "status": task.status.cliName,
                     "priority": task.priority.cliName,
@@ -198,7 +204,7 @@ struct TaskCommand: ParsableCommand {
             } else if global.quiet {
                 print(task.id)
             } else {
-                print("Created task '\(task.title)' (\(task.id.prefix(8))) in project '\(proj.name)'")
+                print("Created task \(task.ticketDisplay) '\(task.title)' (\(task.id.prefix(8))) in project '\(proj.name)'")
             }
         }
     }
@@ -218,6 +224,7 @@ struct TaskCommand: ParsableCommand {
             if global.json {
                 var dict: [String: Any] = [
                     "id": task.id,
+                    "ticketNumber": task.ticketNumber,
                     "title": task.title,
                     "description": task.taskDescription,
                     "status": task.status.cliName,
@@ -251,7 +258,7 @@ struct TaskCommand: ParsableCommand {
             let dateFmt = DateFormatter()
             dateFmt.dateFormat = "yyyy-MM-dd HH:mm"
 
-            print("Task:     \(task.title)")
+            print("Task:     \(task.ticketDisplay) \(task.title)")
             print("ID:       \(task.id)")
             print("Status:   \(task.status.rawValue)")
             print("Priority: \(task.priority.rawValue)")
