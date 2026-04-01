@@ -162,9 +162,16 @@ struct AgentRunRow: View {
                 .foregroundStyle(statusColor)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(run.task?.title ?? run.taskTitle)
-                    .font(.body)
-                    .lineLimit(1)
+                HStack(spacing: 4) {
+                    if let ticketNum = run.task?.ticketNumber, ticketNum > 0 {
+                        Text("#\(ticketNum)")
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                    }
+                    Text(run.task?.title ?? run.taskTitle)
+                        .font(.body)
+                        .lineLimit(1)
+                }
 
                 HStack(spacing: 8) {
                     Text(run.relativeTimeFormatted)

@@ -85,6 +85,7 @@ struct ProjectSettingsView: View {
                         let panel = NSOpenPanel()
                         panel.canChooseFiles = false
                         panel.canChooseDirectories = true
+                        panel.canCreateDirectories = true
                         panel.allowsMultipleSelection = false
                         if panel.runModal() == .OK, let url = panel.url {
                             project.workspaceRoot = url.path
