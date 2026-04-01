@@ -27,9 +27,16 @@ struct TaskCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text(task.title)
-                    .font(.system(.body, weight: .medium))
-                    .lineLimit(2)
+                HStack(spacing: 4) {
+                    if task.ticketNumber > 0 {
+                        Text(task.ticketDisplay)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Text(task.title)
+                        .font(.system(.body, weight: .medium))
+                        .lineLimit(2)
+                }
                 Spacer()
                 if task.isAgentRunning {
                     ProgressView()

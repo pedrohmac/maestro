@@ -20,6 +20,7 @@ public final class ProjectTask {
     public var useWorktree: Bool = false
     public var worktreePath: String? = nil
     public var hasMergeConflict: Bool = false
+    public var ticketNumber: Int = 0
 
     public var project: Project?
 
@@ -56,6 +57,10 @@ public final class ProjectTask {
 
     public var isAgentRunning: Bool {
         latestRun?.statusRaw == RunStatus.running.rawValue
+    }
+
+    public var ticketDisplay: String {
+        ticketNumber > 0 ? "#\(ticketNumber)" : ""
     }
 
     public var isAutoGitEnabled: Bool {

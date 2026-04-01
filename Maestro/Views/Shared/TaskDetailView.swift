@@ -36,10 +36,17 @@ struct TaskDetailView: View {
 
                 // Header
                 VStack(alignment: .leading, spacing: 8) {
-                    TextField("Title", text: $task.title)
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                        .textFieldStyle(.plain)
+                    HStack(spacing: 6) {
+                        if task.ticketNumber > 0 {
+                            Text(task.ticketDisplay)
+                                .font(.title3)
+                                .foregroundStyle(.secondary)
+                        }
+                        TextField("Title", text: $task.title)
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                            .textFieldStyle(.plain)
+                    }
 
                     HStack {
                         Picker("Status", selection: Binding(

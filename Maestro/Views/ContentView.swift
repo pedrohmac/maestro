@@ -70,7 +70,7 @@ struct ContentView: View {
                             .allowsHitTesting(selectedNav == .settings)
                     }
                     .toolbar {
-                        ToolbarItem(placement: .navigation) {
+                        ToolbarItem(placement: .automatic) {
                             LaunchButton(project: project)
                         }
                     }

@@ -74,6 +74,7 @@ struct NewTaskSheet: View {
                     task.columnId = targetColumnId
                     task.dueDate = hasDueDate ? (dueDate ?? Date()) : nil
                     task.useWorktree = useWorktree
+                    project.assignTicketNumber(to: task)
 
                     // Place new task at the top of its column
                     let columnTasks = (project.tasks ?? []).filter { $0.columnId == targetColumnId }

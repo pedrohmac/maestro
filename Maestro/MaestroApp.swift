@@ -37,6 +37,8 @@ struct MaestroApp: App {
                 .task {
                     orchestrator.appState = appState
                     await appState.validateOnLaunch()
+                    let context = modelContainer.mainContext
+                    MaestroStore.assignMissingTicketNumbers(in: context)
                 }
         }
         .modelContainer(modelContainer)

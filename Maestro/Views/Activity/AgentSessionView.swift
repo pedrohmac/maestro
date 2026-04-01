@@ -262,9 +262,17 @@ struct AgentEventBubble: View {
     @State private var isToolUseExpanded = true
     @State private var isToolResultExpanded = true
 
+    private var isContentExpanded: Bool {
+        switch event {
+        case .toolUse: return isToolUseExpanded
+        case .toolResult: return isToolResultExpanded
+        default: return true
+        }
+    }
+
     var body: some View {
         bubbleContent
-            .copyable(event.copyableText, topOffset: event.hasCollapsibleHeader ? 28 : 4)
+            .copyable(event.copyableText, topOffset: event.hasCollapsibleHeader ? 28 : 4, isVisible: isContentExpanded)
     }
 
     @ViewBuilder
@@ -704,12 +712,13 @@ private extension AgentEvent {
 private struct CopyableOverlay: ViewModifier {
     let text: String
     let topOffset: CGFloat
+    var isVisible: Bool = true
     @State private var isHovered = false
 
     func body(content: Content) -> some View {
         content
             .overlay(alignment: .topTrailing) {
-                if isHovered {
+                if isVisible && isHovered {
                     CopyButton(text: text)
                         .padding(.top, topOffset)
                         .padding(.trailing, 4)
@@ -748,7 +757,7 @@ private struct CopyButton: View {
 }
 
 extension View {
-    fileprivate func copyable(_ text: String, topOffset: CGFloat = 4) -> some View {
-        modifier(CopyableOverlay(text: text, topOffset: topOffset))
+    fileprivate func copyable(_ text: String, topOffset: CGFloat = 4, isVisible: Bool = true) -> some View {
+        modifier(CopyableOverlay(text: text, topOffset: topOffset, isVisible: isVisible))
     }
 }

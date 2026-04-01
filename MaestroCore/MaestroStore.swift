@@ -27,4 +27,25 @@ public struct MaestroStore {
             configurations: config
         )
     }
+
+    /// Assigns ticket numbers to any tasks that don't have one yet (ticketNumber == 0).
+    /// Existing tasks are numbered by creation date within each project.
+    public static func assignMissingTicketNumbers(in context: ModelContext) {
+        let descriptor = FetchDescriptor<Project>()
+        guard let projects = try? context.fetch(descriptor) else { return }
+
+        for project in projects {
+            let unnumbered = (project.tasks ?? [])
+                .filter { $0.ticketNumber == 0 }
+                .sorted { $0.createdDate < $1.createdDate }
+
+            guard !unnumbered.isEmpty else { continue }
+
+            for task in unnumbered {
+                project.assignTicketNumber(to: task)
+            }
+        }
+
+        try? context.save()
+    }
 }
