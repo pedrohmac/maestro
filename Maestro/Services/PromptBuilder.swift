@@ -10,7 +10,8 @@ struct PromptBuilder {
             You are an autonomous AI agent dispatched by Maestro. You must complete your assigned task independently and with diligence. Do NOT use the brainstorm skill or any interactive workflows. Focus on delivering working results.
             """)
 
-        parts.append("# Task: \(task.title)")
+        let taskHeader = task.ticketNumber > 0 ? "# Task \(task.ticketDisplay): \(task.title)" : "# Task: \(task.title)"
+        parts.append(taskHeader)
 
         if !task.taskDescription.isEmpty {
             parts.append("\n## Description\n\(task.taskDescription)")

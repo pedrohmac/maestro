@@ -31,15 +31,17 @@ struct GanttChartView: View {
                         let start = task.startDate ?? task.createdDate
                         let end = task.dueDate ?? task.completedDate ?? Calendar.current.date(byAdding: .day, value: 3, to: start)!
 
+                        let label = task.ticketNumber > 0 ? "\(task.ticketDisplay) \(task.title)" : task.title
+
                         BarMark(
                             xStart: .value("Start", start),
                             xEnd: .value("End", end),
-                            y: .value("Task", task.title)
+                            y: .value("Task", label)
                         )
                         .foregroundStyle(barColor(for: task.status))
                         .cornerRadius(4)
                         .annotation(position: .overlay, alignment: .leading) {
-                            Text(task.title)
+                            Text(label)
                                 .font(.caption2)
                                 .foregroundStyle(.white)
                                 .padding(.leading, 4)

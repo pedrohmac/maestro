@@ -87,6 +87,10 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showingNewProject) {
             NewProjectSheet { name, workspace in
+                if !workspace.isEmpty {
+                    let url = URL(fileURLWithPath: workspace)
+                    try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+                }
                 let project = Project(name: name, workspaceRoot: workspace)
                 modelContext.insert(project)
                 selectedProject = project
