@@ -176,7 +176,8 @@ final class ProjectLauncher {
             // Extract JSON from output (may have surrounding text)
             var jsonString = output
             if let startRange = output.range(of: "{"),
-               let endRange = output.range(of: "}", options: .backwards) {
+               let endRange = output.range(of: "}", options: .backwards),
+               startRange.lowerBound <= endRange.upperBound {
                 jsonString = String(output[startRange.lowerBound...endRange.upperBound])
             }
 

@@ -29,7 +29,9 @@ final class AppState {
         #if DEBUG
         self.isShowingOnboarding = false
         #else
-        self.isShowingOnboarding = !isTrialStarted && !isActivated
+        // TODO: Uncomment when ready to launch with trial/licensing
+        // self.isShowingOnboarding = !isTrialStarted && !isActivated
+        self.isShowingOnboarding = false
         #endif
         startPeriodicRefresh()
     }
@@ -37,11 +39,9 @@ final class AppState {
     // MARK: - Computed (reads tracked stored properties, so @Observable works)
 
     var isReadOnly: Bool {
-        #if DEBUG
+        // TODO: Uncomment when ready to launch with trial/licensing
+        // return isTrialExpired && !isActivated
         return false
-        #else
-        return isTrialExpired && !isActivated
-        #endif
     }
 
     var canRunAgents: Bool {
@@ -49,11 +49,9 @@ final class AppState {
     }
 
     var shouldShowTrialBanner: Bool {
-        #if DEBUG
+        // TODO: Uncomment when ready to launch with trial/licensing
+        // return isTrialStarted && !isActivated
         return false
-        #else
-        return isTrialStarted && !isActivated
-        #endif
     }
 
     var trialStatusText: String {

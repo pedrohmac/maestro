@@ -122,6 +122,21 @@ struct KanbanBoardView: View {
                 }
             }
             ToolbarItem(placement: .automatic) {
+                Picker("Dispatch", selection: Binding(
+                    get: { project.dispatchMode },
+                    set: { project.dispatchMode = $0 }
+                )) {
+                    ForEach(DispatchMode.allCases) { mode in
+                        Label(mode.rawValue, systemImage: mode == .auto ? "bolt.fill" : "hand.tap.fill")
+                            .tag(mode)
+                    }
+                }
+                .pickerStyle(.menu)
+                .help(project.dispatchMode == .auto
+                    ? "Auto: tasks moved to In Progress automatically spawn an agent"
+                    : "Manual: agents must be started manually per task")
+            }
+            ToolbarItem(placement: .automatic) {
                 Button(action: { showingNewTask = true }) {
                     Label("New Task", systemImage: "plus")
                 }

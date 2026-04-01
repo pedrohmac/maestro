@@ -7,7 +7,6 @@ struct AgentActivityView: View {
     @Environment(AgentOrchestrator.self) private var orchestrator
     @Environment(\.modelContext) private var modelContext
     @Binding var selectedRunId: String?
-    @State private var showClearHistoryConfirmation = false
     @State private var historyLimit: Int = 10
 
     var activeRuns: [AgentRun] {
@@ -114,12 +113,6 @@ struct AgentActivityView: View {
                         Label("Cancel All", systemImage: "stop.circle")
                     }
                     .disabled(orchestrator.activeRunners.isEmpty)
-                }
-                ToolbarItem {
-                    Button(action: { showClearHistoryConfirmation = true }) {
-                        Label("Clear History", systemImage: "trash")
-                    }
-                    .disabled(completedRuns.isEmpty)
                 }
             }
         } detail: {
