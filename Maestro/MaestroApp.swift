@@ -50,6 +50,15 @@ struct MaestroApp: App {
                     selectedNavigation?.wrappedValue = .help
                 }
                 .keyboardShortcut("7", modifiers: .command)
+
+                Divider()
+
+                ForEach(HelpTopic.allCases) { topic in
+                    Button(topic.title) {
+                        selectedNavigation?.wrappedValue = .help
+                        NotificationCenter.default.post(name: .navigateToHelpTopic, object: topic.rawValue)
+                    }
+                }
             }
         }
 

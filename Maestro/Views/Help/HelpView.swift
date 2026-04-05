@@ -1,5 +1,9 @@
 import SwiftUI
 
+extension Notification.Name {
+    static let navigateToHelpTopic = Notification.Name("navigateToHelpTopic")
+}
+
 struct HelpView: View {
     @State private var selectedTopic: HelpTopic? = .gettingStarted
 
@@ -25,12 +29,18 @@ struct HelpView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+        .onReceive(NotificationCenter.default.publisher(for: .navigateToHelpTopic)) { notification in
+            if let topicRaw = notification.object as? String,
+               let topic = HelpTopic(rawValue: topicRaw) {
+                selectedTopic = topic
+            }
+        }
     }
 }
 
 // MARK: - Help Topics
 
-private enum HelpTopic: String, CaseIterable, Identifiable {
+enum HelpTopic: String, CaseIterable, Identifiable {
     case gettingStarted
     case projects
     case tasks
