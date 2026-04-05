@@ -27,15 +27,20 @@ struct TaskCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .top) {
-                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                Group {
                     if task.ticketNumber > 0 {
-                        Text(task.ticketDisplay)
+                        (Text(task.ticketDisplay)
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                    }
-                    Text(task.title)
-                        .font(.system(.body, weight: .medium))
+                        + Text(" ")
+                        + Text(task.title)
+                            .font(.system(.body, weight: .medium)))
                         .lineLimit(2)
+                    } else {
+                        Text(task.title)
+                            .font(.system(.body, weight: .medium))
+                            .lineLimit(2)
+                    }
                 }
                 Spacer()
                 if task.isAgentRunning {
