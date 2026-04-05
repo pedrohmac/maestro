@@ -742,10 +742,16 @@ final class AgentOrchestrator {
               let workspace = run.workspacePath,
               preSha != postSha else { return }
 
-        // Filter by committer email to only collect commits made by this task's
-        // agent, not by other concurrent agents sharing the same workspace.
+        // Try filtering by committer email first to only collect commits made
+        // by this task's agent (important when concurrent agents share a workspace).
+        // Fall back to all commits in the range if the email filter returns nothing,
+        // since GIT_COMMITTER_EMAIL may not propagate reliably through the
+        // zsh → script → claude → bash → git process chain.
         let email = WorkspaceManager.committerEmail(for: task.id)
-        let commits = WorkspaceManager.gitLogBetween(from: preSha, to: postSha, in: workspace, committerEmail: email)
+        var commits = WorkspaceManager.gitLogBetween(from: preSha, to: postSha, in: workspace, committerEmail: email)
+        if commits.isEmpty {
+            commits = WorkspaceManager.gitLogBetween(from: preSha, to: postSha, in: workspace)
+        }
         guard !commits.isEmpty else { return }
 
         // Build set of commit SHAs already assigned to other tasks.
@@ -760,6 +766,7 @@ final class AgentOrchestrator {
             claimedShas = []
         }
 
+        var newCommits: [TaskCommit] = []
         for commit in commits {
             guard !claimedShas.contains(commit.sha) else { continue }
             let taskCommit = TaskCommit(
@@ -771,6 +778,15 @@ final class AgentOrchestrator {
                 agentRunId: run.id
             )
             ctx.insert(taskCommit)
+            newCommits.append(taskCommit)
+        }
+
+        // Explicitly update the task's commits array so SwiftData's
+        // @Observable tracking fires and the UI refreshes immediately.
+        if !newCommits.isEmpty {
+            var existing = task.commits ?? []
+            existing.append(contentsOf: newCommits)
+            task.commits = existing
         }
     }
 
