@@ -135,7 +135,8 @@ final class AgentOrchestrator {
                     if agentRun.status == .completed {
                         WorkspaceManager.gitAutoCommit(
                             message: "[maestro] Agent changes for: \(taskTitle)",
-                            in: workspacePath
+                            in: workspacePath,
+                            taskId: taskId
                         )
                     }
 
@@ -261,7 +262,8 @@ final class AgentOrchestrator {
                     if agentRun.status == .completed {
                         WorkspaceManager.gitAutoCommit(
                             message: "[maestro] Agent changes for: \(taskTitle)",
-                            in: workspacePath
+                            in: workspacePath,
+                            taskId: taskId
                         )
                     }
 
@@ -738,7 +740,10 @@ final class AgentOrchestrator {
               let workspace = run.workspacePath,
               preSha != postSha else { return }
 
-        let commits = WorkspaceManager.gitLogBetween(from: preSha, to: postSha, in: workspace)
+        // Filter by committer email to only collect commits made by this task's
+        // agent, not by other concurrent agents sharing the same workspace.
+        let email = WorkspaceManager.committerEmail(for: task.id)
+        let commits = WorkspaceManager.gitLogBetween(from: preSha, to: postSha, in: workspace, committerEmail: email)
         guard !commits.isEmpty else { return }
 
         // Build set of commit SHAs already assigned to other tasks.
