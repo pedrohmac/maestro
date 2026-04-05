@@ -216,7 +216,7 @@ private struct KeyboardShortcutsContent: View {
             Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 10) {
                 shortcutRow("Cmd+1", "Kanban Board")
                 shortcutRow("Cmd+2", "Agent Activity")
-                shortcutRow("Cmd+3", "Gantt Chart")
+                shortcutRow("Cmd+3", "Timeline")
                 shortcutRow("Cmd+4", "Agent Chat")
                 shortcutRow("Cmd+5", "Git")
                 shortcutRow("Cmd+6", "Project Settings")

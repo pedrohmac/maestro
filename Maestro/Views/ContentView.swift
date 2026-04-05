@@ -4,7 +4,7 @@ import MaestroCore
 
 enum NavigationItem: Hashable {
     case kanban
-    case gantt
+    case timeline
     case activity
     case chat
     case git
@@ -62,9 +62,9 @@ struct ContentView: View {
                         .opacity(selectedNav == .kanban || selectedNav == nil ? 1 : 0)
                         .allowsHitTesting(selectedNav == .kanban || selectedNav == nil)
 
-                        GanttChartView(project: project)
-                            .opacity(selectedNav == .gantt ? 1 : 0)
-                            .allowsHitTesting(selectedNav == .gantt)
+                        ProjectTimelineView(project: project)
+                            .opacity(selectedNav == .timeline ? 1 : 0)
+                            .allowsHitTesting(selectedNav == .timeline)
 
                         AgentActivityView(project: project, selectedRunId: $activitySelectedRunId)
                             .opacity(selectedNav == .activity ? 1 : 0)
@@ -137,7 +137,7 @@ struct ContentView: View {
                     .keyboardShortcut("1", modifiers: .command)
                 Button("") { selectedNav = .activity }
                     .keyboardShortcut("2", modifiers: .command)
-                Button("") { selectedNav = .gantt }
+                Button("") { selectedNav = .timeline }
                     .keyboardShortcut("3", modifiers: .command)
                 Button("") { selectedNav = .chat }
                     .keyboardShortcut("4", modifiers: .command)
