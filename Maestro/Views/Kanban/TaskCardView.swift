@@ -26,8 +26,8 @@ struct TaskCardView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                HStack(spacing: 4) {
+            HStack(alignment: .top) {
+                HStack(alignment: .firstTextBaseline, spacing: 4) {
                     if task.ticketNumber > 0 {
                         Text(task.ticketDisplay)
                             .font(.caption)

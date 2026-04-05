@@ -263,7 +263,10 @@ final class AgentRunner: Identifiable, @unchecked Sendable {
             "LANG": "en_US.UTF-8",
             "PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
             "TMPDIR": NSTemporaryDirectory(),
-            "NO_COLOR": "1"
+            "NO_COLOR": "1",
+            // Tag all git commits made by this agent with a task-specific committer
+            // email so concurrent agents' commits can be distinguished.
+            "GIT_COMMITTER_EMAIL": WorkspaceManager.committerEmail(for: taskId)
         ]
         proc.environment = env
 

@@ -272,6 +272,11 @@ struct WorkspaceManager {
         return "maestro/task-\(task.id)"
     }
 
+    /// Returns the committer email used to tag commits for a given task.
+    static func committerEmail(for taskId: String) -> String {
+        "maestro+\(taskId)@maestro.local"
+    }
+
     // MARK: - Git SHA Helpers
 
     /// Returns the current HEAD SHA in the given directory, or nil if not a git repo.
@@ -298,7 +303,7 @@ struct WorkspaceManager {
 
     /// Commits all changes in the working tree if any exist. Returns true if a commit was made.
     @discardableResult
-    static func gitAutoCommit(message: String, in directory: String) -> Bool {
+    static func gitAutoCommit(message: String, in directory: String, taskId: String? = nil) -> Bool {
         print("[WorkspaceManager] gitAutoCommit called in: \(directory)")
 
         // Check if there are any changes to commit
@@ -361,6 +366,11 @@ struct WorkspaceManager {
         commitProcess.executableURL = URL(fileURLWithPath: "/usr/bin/git")
         commitProcess.arguments = ["commit", "-m", message]
         commitProcess.currentDirectoryURL = URL(fileURLWithPath: directory)
+        if let taskId = taskId {
+            var commitEnv = ProcessInfo.processInfo.environment
+            commitEnv["GIT_COMMITTER_EMAIL"] = committerEmail(for: taskId)
+            commitProcess.environment = commitEnv
+        }
         let commitOutPipe = Pipe()
         commitProcess.standardOutput = commitOutPipe
         let commitErrPipe = Pipe()
@@ -386,13 +396,18 @@ struct WorkspaceManager {
 
     /// Returns commits between two SHAs (exclusive of fromSha, inclusive of toSha).
     /// Each commit is returned as (sha, message, authorName, authorDate).
-    static func gitLogBetween(from fromSha: String, to toSha: String, in directory: String) -> [(sha: String, message: String, authorName: String, authorDate: Date)] {
+    /// When `committerEmail` is provided, only commits with that committer email are returned.
+    static func gitLogBetween(from fromSha: String, to toSha: String, in directory: String, committerEmail: String? = nil) -> [(sha: String, message: String, authorName: String, authorDate: Date)] {
         guard fromSha != toSha else { return [] }
 
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/git")
         // Use a delimiter to parse fields reliably
-        process.arguments = ["log", "\(fromSha)..\(toSha)", "--format=%H%n%s%n%an%n%aI", "--reverse"]
+        var args = ["log", "\(fromSha)..\(toSha)", "--format=%H%n%s%n%an%n%aI", "--reverse"]
+        if let email = committerEmail {
+            args.append("--committer=\(email)")
+        }
+        process.arguments = args
         process.currentDirectoryURL = URL(fileURLWithPath: directory)
 
         let pipe = Pipe()
