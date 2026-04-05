@@ -739,7 +739,22 @@ final class AgentOrchestrator {
               preSha != postSha else { return }
 
         let commits = WorkspaceManager.gitLogBetween(from: preSha, to: postSha, in: workspace)
+        guard !commits.isEmpty else { return }
+
+        // Build set of commit SHAs already assigned to other tasks.
+        // This prevents duplicate attribution when concurrent agents
+        // share a workspace and their commit ranges overlap.
+        let claimedShas: Set<String>
+        do {
+            let descriptor = FetchDescriptor<TaskCommit>()
+            let existing = try ctx.fetch(descriptor)
+            claimedShas = Set(existing.map { $0.sha })
+        } catch {
+            claimedShas = []
+        }
+
         for commit in commits {
+            guard !claimedShas.contains(commit.sha) else { continue }
             let taskCommit = TaskCommit(
                 sha: commit.sha,
                 message: commit.message,
