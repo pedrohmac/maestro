@@ -58,7 +58,6 @@ struct GitIntegrationView: View {
                 branchesSplitView
             }
         }
-        .navigationTitle("\(project.name) — Git")
         .onChange(of: viewMode) {
             if viewMode == .branches && branches.isEmpty {
                 refreshBranches()

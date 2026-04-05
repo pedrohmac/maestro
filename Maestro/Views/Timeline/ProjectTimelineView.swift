@@ -131,7 +131,6 @@ struct ProjectTimelineView: View {
                 }
             }
         }
-        .navigationTitle("\(project.name) — Timeline")
         .onAppear { refresh() }
         .onChange(of: project.tasks) { refresh() }
     }

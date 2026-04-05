@@ -117,7 +117,7 @@ final class ProjectLauncher {
             let stdoutPipe = Pipe()
             let stderrPipe = Pipe()
 
-            let shellCmd = [resolvedPath, "-p", prompt, "--output-format", "text", "--max-turns", "5", "--allowedTools", "Bash,Read,Glob,Grep"]
+            let shellCmd = [resolvedPath, "-p", prompt, "--output-format", "text", "--max-turns", "50", "--allowedTools", "Bash,Read,Glob,Grep"]
                 .map { "'" + $0.replacingOccurrences(of: "'", with: "'\\''") + "'" }
                 .joined(separator: " ")
 
@@ -177,8 +177,8 @@ final class ProjectLauncher {
             var jsonString = output
             if let startRange = output.range(of: "{"),
                let endRange = output.range(of: "}", options: .backwards),
-               startRange.lowerBound <= endRange.upperBound {
-                jsonString = String(output[startRange.lowerBound...endRange.upperBound])
+               startRange.lowerBound <= endRange.lowerBound {
+                jsonString = String(output[startRange.lowerBound...endRange.lowerBound])
             }
 
             guard let jsonData = jsonString.data(using: .utf8),

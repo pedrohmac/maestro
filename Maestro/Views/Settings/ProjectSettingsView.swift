@@ -401,7 +401,6 @@ struct ProjectSettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .navigationTitle("Project Settings")
         .onAppear {
             loadClaudeMD()
             loadLaunchConfig()

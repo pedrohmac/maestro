@@ -1,0 +1,28 @@
+{
+  "steps" : [
+    {
+      "background" : false,
+      "command" : "xcodegen generate",
+      "id" : "generate-xcodeproj",
+      "name" : "Generate Xcode project"
+    },
+    {
+      "background" : false,
+      "command" : "xcodebuild -resolvePackageDependencies -scheme Maestro",
+      "id" : "resolve-packages",
+      "name" : "Resolve Swift packages"
+    },
+    {
+      "background" : false,
+      "command" : "xcodebuild -scheme Maestro -configuration Debug build",
+      "id" : "build-app",
+      "name" : "Build Maestro app"
+    },
+    {
+      "background" : false,
+      "command" : "open $(xcodebuild -scheme Maestro -configuration Debug -showBuildSettings 2>\/dev\/null | grep -m1 ' BUILT_PRODUCTS_DIR' | awk '{print $3}')\/Maestro.app",
+      "id" : "launch-app",
+      "name" : "Launch Maestro app"
+    }
+  ]
+}

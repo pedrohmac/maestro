@@ -124,7 +124,6 @@ struct AgentActivityView: View {
                 ContentUnavailableView("Select a Session", systemImage: "bolt.circle", description: Text("Select an agent session to view details."))
             }
         }
-        .navigationTitle("\(project.name) — Activity")
     }
 }
 

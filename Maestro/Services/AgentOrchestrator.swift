@@ -511,7 +511,7 @@ final class AgentOrchestrator {
             let stdoutPipe = Pipe()
             let stderrPipe = Pipe()
 
-            let shellCmd = [resolvedPath, "-p", prompt, "--output-format", "text", "--max-turns", "5", "--allowedTools", "Bash,Read,Glob,Grep"]
+            let shellCmd = [resolvedPath, "-p", prompt, "--output-format", "text", "--max-turns", "50", "--allowedTools", "Bash,Read,Glob,Grep"]
                 .map { "'" + $0.replacingOccurrences(of: "'", with: "'\\''") + "'" }
                 .joined(separator: " ")
 

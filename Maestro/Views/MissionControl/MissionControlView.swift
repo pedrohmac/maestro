@@ -8,6 +8,8 @@ struct MissionControlView: View {
     @Environment(\.isDarkerMode) private var isDarkerMode
     @Query(sort: \Project.createdDate, order: .reverse) private var projects: [Project]
     @State private var activityLimit: Int = 20
+    @State private var cachedAgentRuns: [AgentRun] = []
+    var isActive: Bool = true
 
     // MARK: - Aggregated Stats
 
@@ -31,16 +33,7 @@ struct MissionControlView: View {
     }
 
     private var totalSpend: Double {
-        let allRuns = allAgentRuns
-        return allRuns.compactMap(\.costUSD).reduce(0, +)
-    }
-
-    private var allAgentRuns: [AgentRun] {
-        var descriptor = FetchDescriptor<AgentRun>(
-            sortBy: [SortDescriptor(\.startedAt, order: .reverse)]
-        )
-        descriptor.fetchLimit = 200
-        return (try? modelContext.fetch(descriptor)) ?? []
+        cachedAgentRuns.compactMap(\.costUSD).reduce(0, +)
     }
 
     private var bottleneckTasks: [ProjectTask] {
@@ -60,8 +53,15 @@ struct MissionControlView: View {
     }
 
     private var recentActivity: [AgentRun] {
-        let runs = allAgentRuns
-        return Array(runs.prefix(activityLimit))
+        Array(cachedAgentRuns.prefix(activityLimit))
+    }
+
+    private func refreshAgentRuns() {
+        var descriptor = FetchDescriptor<AgentRun>(
+            sortBy: [SortDescriptor(\.startedAt, order: .reverse)]
+        )
+        descriptor.fetchLimit = 200
+        cachedAgentRuns = (try? modelContext.fetch(descriptor)) ?? []
     }
 
     // MARK: - Body
@@ -79,11 +79,18 @@ struct MissionControlView: View {
             .padding(20)
         }
         .background(Color.windowBackground(darker: isDarkerMode))
-        .navigationTitle("Mission Control")
         .toolbar {
-            ToolbarItem(placement: .automatic) {
-                globalAgentControls
+            if isActive {
+                ToolbarItem(placement: .automatic) {
+                    globalAgentControls
+                }
             }
+        }
+        .task {
+            refreshAgentRuns()
+        }
+        .onChange(of: orchestrator.activeRunners.count) {
+            refreshAgentRuns()
         }
     }
 
@@ -184,7 +191,7 @@ struct MissionControlView: View {
                         ActivityRow(run: run)
                     }
 
-                    if allAgentRuns.count > activityLimit {
+                    if cachedAgentRuns.count > activityLimit {
                         Button {
                             activityLimit += 20
                         } label: {

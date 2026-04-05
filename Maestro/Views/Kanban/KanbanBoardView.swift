@@ -16,9 +16,11 @@ struct KanbanBoardView: View {
     @State private var columnDropTargetIndex: Int?
     var onNavigateToRun: ((String) -> Void)?
     var onNavigateToSettings: (() -> Void)?
+    var showToolbar: Bool
 
-    init(project: Project, onNavigateToRun: ((String) -> Void)? = nil, onNavigateToSettings: (() -> Void)? = nil) {
+    init(project: Project, showToolbar: Bool = true, onNavigateToRun: ((String) -> Void)? = nil, onNavigateToSettings: (() -> Void)? = nil) {
         self.project = project
+        self.showToolbar = showToolbar
         self.onNavigateToRun = onNavigateToRun
         self.onNavigateToSettings = onNavigateToSettings
         let projectId = project.id
@@ -107,42 +109,43 @@ struct KanbanBoardView: View {
         }
         .background(Color.windowBackground(darker: isDarkerMode))
         .toolbar {
-            ToolbarItem(placement: .automatic) {
-                if !claudeMDExists && !project.workspaceRoot.isEmpty {
-                    Button {
-                        onNavigateToSettings?()
-                    } label: {
-                        HStack(spacing: 4) {
-                            Image(systemName: "sparkles")
-                            Text("Agents don't know this project yet — Set up CLAUDE.md")
+            if showToolbar {
+                ToolbarItem(placement: .automatic) {
+                    if !claudeMDExists && !project.workspaceRoot.isEmpty {
+                        Button {
+                            onNavigateToSettings?()
+                        } label: {
+                            HStack(spacing: 4) {
+                                Image(systemName: "sparkles")
+                                Text("Agents don't know this project yet — Set up CLAUDE.md")
+                            }
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                    }
+                }
+                ToolbarItem(placement: .automatic) {
+                    Picker("Dispatch", selection: Binding(
+                        get: { project.dispatchMode },
+                        set: { project.dispatchMode = $0 }
+                    )) {
+                        ForEach(DispatchMode.allCases) { mode in
+                            Label(mode.rawValue, systemImage: mode == .auto ? "bolt.fill" : "hand.tap.fill")
+                                .tag(mode)
                         }
                     }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
+                    .pickerStyle(.menu)
+                    .help(project.dispatchMode == .auto
+                        ? "Auto: tasks moved to In Progress automatically spawn an agent"
+                        : "Manual: agents must be started manually per task")
                 }
-            }
-            ToolbarItem(placement: .automatic) {
-                Picker("Dispatch", selection: Binding(
-                    get: { project.dispatchMode },
-                    set: { project.dispatchMode = $0 }
-                )) {
-                    ForEach(DispatchMode.allCases) { mode in
-                        Label(mode.rawValue, systemImage: mode == .auto ? "bolt.fill" : "hand.tap.fill")
-                            .tag(mode)
+                ToolbarItem(placement: .automatic) {
+                    Button(action: { showingNewTask = true }) {
+                        Label("New Task", systemImage: "plus")
                     }
-                }
-                .pickerStyle(.menu)
-                .help(project.dispatchMode == .auto
-                    ? "Auto: tasks moved to In Progress automatically spawn an agent"
-                    : "Manual: agents must be started manually per task")
-            }
-            ToolbarItem(placement: .automatic) {
-                Button(action: { showingNewTask = true }) {
-                    Label("New Task", systemImage: "plus")
                 }
             }
         }
-        .navigationTitle(project.name)
         .sheet(isPresented: $showingNewTask) {
             NewTaskSheet(project: project, initialColumn: newTaskColumn)
         }

@@ -38,6 +38,28 @@ struct ContentView: View {
     @State private var showingNewTask = false
     @State private var columnVisibility: NavigationSplitViewVisibility = .automatic
 
+    private var isMissionControlVisible: Bool {
+        selectedNav == .missionControl || (selectedProject == nil && selectedNav != .help)
+    }
+
+    private var detailNavigationTitle: String {
+        if isMissionControlVisible {
+            return "Mission Control"
+        }
+        guard let project = selectedProject else {
+            return selectedNav == .help ? "Help" : "Maestro"
+        }
+        switch selectedNav {
+        case .kanban, nil: return project.name
+        case .timeline: return "\(project.name) — Timeline"
+        case .activity: return "\(project.name) — Activity"
+        case .git: return "\(project.name) — Git"
+        case .settings: return "Project Settings"
+        case .help: return "Help"
+        default: return project.name
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             TrialBannerView()
@@ -50,55 +72,54 @@ struct ContentView: View {
                 showingNewProject: $showingNewProject
             )
         } detail: {
-            Group {
-                if selectedNav == .missionControl {
-                    MissionControlView()
-                } else if let project = selectedProject {
-                    ZStack {
-                        KanbanBoardView(project: project, onNavigateToRun: { runId in
-                            activitySelectedRunId = runId
-                            selectedNav = .activity
-                        }, onNavigateToSettings: {
-                            selectedNav = .settings
-                        })
+            ZStack {
+                MissionControlView(isActive: isMissionControlVisible)
+                    .opacity(isMissionControlVisible ? 1 : 0)
+                    .allowsHitTesting(isMissionControlVisible)
+
+                if let project = selectedProject {
+                    KanbanBoardView(project: project, showToolbar: !isMissionControlVisible && selectedNav != .help, onNavigateToRun: { runId in
+                        activitySelectedRunId = runId
+                        selectedNav = .activity
+                    }, onNavigateToSettings: {
+                        selectedNav = .settings
+                    })
+                    .id(project.id)
+                    .opacity(selectedNav == .kanban || selectedNav == nil ? 1 : 0)
+                    .allowsHitTesting(selectedNav == .kanban || selectedNav == nil)
+
+                    ProjectTimelineView(project: project)
+                        .opacity(selectedNav == .timeline ? 1 : 0)
+                        .allowsHitTesting(selectedNav == .timeline)
+
+                    AgentActivityView(project: project, selectedRunId: $activitySelectedRunId)
+                        .opacity(selectedNav == .activity ? 1 : 0)
+                        .allowsHitTesting(selectedNav == .activity)
+
+                    ChatView(project: project)
+                        .opacity(selectedNav == .chat ? 1 : 0)
+                        .allowsHitTesting(selectedNav == .chat)
+
+                    GitIntegrationView(project: project)
+                        .opacity(selectedNav == .git ? 1 : 0)
+                        .allowsHitTesting(selectedNav == .git)
+
+                    ProjectSettingsView(project: project)
                         .id(project.id)
-                        .opacity(selectedNav == .kanban || selectedNav == nil ? 1 : 0)
-                        .allowsHitTesting(selectedNav == .kanban || selectedNav == nil)
+                        .opacity(selectedNav == .settings ? 1 : 0)
+                        .allowsHitTesting(selectedNav == .settings)
+                }
 
-                        ProjectTimelineView(project: project)
-                            .opacity(selectedNav == .timeline ? 1 : 0)
-                            .allowsHitTesting(selectedNav == .timeline)
-
-                        AgentActivityView(project: project, selectedRunId: $activitySelectedRunId)
-                            .opacity(selectedNav == .activity ? 1 : 0)
-                            .allowsHitTesting(selectedNav == .activity)
-
-                        ChatView(project: project)
-                            .opacity(selectedNav == .chat ? 1 : 0)
-                            .allowsHitTesting(selectedNav == .chat)
-
-                        GitIntegrationView(project: project)
-                            .opacity(selectedNav == .git ? 1 : 0)
-                            .allowsHitTesting(selectedNav == .git)
-
-                        ProjectSettingsView(project: project)
-                            .id(project.id)
-                            .opacity(selectedNav == .settings ? 1 : 0)
-                            .allowsHitTesting(selectedNav == .settings)
-
-                        HelpView()
-                            .opacity(selectedNav == .help ? 1 : 0)
-                            .allowsHitTesting(selectedNav == .help)
+                HelpView()
+                    .opacity(selectedNav == .help ? 1 : 0)
+                    .allowsHitTesting(selectedNav == .help)
+            }
+            .navigationTitle(detailNavigationTitle)
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    if let project = selectedProject, !isMissionControlVisible, selectedNav != .help {
+                        LaunchButton(project: project)
                     }
-                    .toolbar {
-                        ToolbarItem(placement: .automatic) {
-                            LaunchButton(project: project)
-                        }
-                    }
-                } else if selectedNav == .help {
-                    HelpView()
-                } else {
-                    MissionControlView()
                 }
             }
         }
