@@ -3,6 +3,7 @@ import SwiftData
 import MaestroCore
 
 enum NavigationItem: Hashable {
+    case missionControl
     case kanban
     case timeline
     case activity
@@ -50,7 +51,9 @@ struct ContentView: View {
             )
         } detail: {
             Group {
-                if let project = selectedProject {
+                if selectedNav == .missionControl {
+                    MissionControlView()
+                } else if let project = selectedProject {
                     ZStack {
                         KanbanBoardView(project: project, onNavigateToRun: { runId in
                             activitySelectedRunId = runId
@@ -95,7 +98,7 @@ struct ContentView: View {
                 } else if selectedNav == .help {
                     HelpView()
                 } else {
-                    ContentUnavailableView("No Project Selected", systemImage: "folder", description: Text("Select a project from the sidebar or create a new one."))
+                    MissionControlView()
                 }
             }
         }
@@ -133,6 +136,8 @@ struct ContentView: View {
         .focusedSceneValue(\.selectedNavigation, $selectedNav)
         .background {
             Group {
+                Button("") { selectedNav = .missionControl }
+                    .keyboardShortcut("0", modifiers: .command)
                 Button("") { selectedNav = .kanban }
                     .keyboardShortcut("1", modifiers: .command)
                 Button("") { selectedNav = .activity }

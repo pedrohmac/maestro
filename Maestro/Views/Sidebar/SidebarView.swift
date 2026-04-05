@@ -12,6 +12,7 @@ struct SidebarView: View {
     var body: some View {
         List(selection: $selectedProject) {
             Section("Views") {
+                navRow("Mission Control", systemImage: "gauge.with.dots.needle.33percent", item: .missionControl, shortcut: "0")
                 navRow("Kanban Board", systemImage: "rectangle.split.3x1", item: .kanban, shortcut: "1")
                 navRow("Agent Activity", systemImage: "bolt.circle", item: .activity, shortcut: "2")
                 navRow("Timeline", systemImage: "clock.arrow.circlepath", item: .timeline, shortcut: "3")
