@@ -12,6 +12,19 @@ enum NavigationItem: Hashable {
     case help
 }
 
+// MARK: - Focused Values
+
+private struct SelectedNavigationKey: FocusedValueKey {
+    typealias Value = Binding<NavigationItem?>
+}
+
+extension FocusedValues {
+    var selectedNavigation: Binding<NavigationItem?>? {
+        get { self[SelectedNavigationKey.self] }
+        set { self[SelectedNavigationKey.self] = newValue }
+    }
+}
+
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(AgentOrchestrator.self) private var orchestrator
@@ -117,6 +130,7 @@ struct ContentView: View {
             orchestrator.configure(modelContext: modelContext)
         }
         .frame(minWidth: 900, minHeight: 600)
+        .focusedSceneValue(\.selectedNavigation, $selectedNav)
         .background {
             Group {
                 Button("") { selectedNav = .kanban }
@@ -131,8 +145,6 @@ struct ContentView: View {
                     .keyboardShortcut("5", modifiers: .command)
                 Button("") { selectedNav = .settings }
                     .keyboardShortcut("6", modifiers: .command)
-                Button("") { selectedNav = .help }
-                    .keyboardShortcut("7", modifiers: .command)
                 Button("") { if selectedProject != nil { showingNewTask = true } }
                     .keyboardShortcut("n", modifiers: .command)
             }

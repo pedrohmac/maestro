@@ -9,6 +9,7 @@ struct MaestroApp: App {
     @State private var appState = AppState()
     @State private var launcher = ProjectLauncher()
     @AppStorage("appearanceMode") private var appearanceMode: String = AppearanceMode.system.rawValue
+    @FocusedValue(\.selectedNavigation) private var selectedNavigation
 
     private var currentMode: AppearanceMode {
         AppearanceMode(rawValue: appearanceMode) ?? .system
@@ -44,6 +45,12 @@ struct MaestroApp: App {
         .modelContainer(modelContainer)
         .commands {
             CommandGroup(replacing: .newItem) { }
+            CommandGroup(replacing: .help) {
+                Button("Maestro Help") {
+                    selectedNavigation?.wrappedValue = .help
+                }
+                .keyboardShortcut("7", modifiers: .command)
+            }
         }
 
         Settings {
