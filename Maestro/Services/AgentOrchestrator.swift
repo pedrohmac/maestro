@@ -48,6 +48,7 @@ final class AgentOrchestrator {
         }
         let taskId = task.id
         let taskTitle = task.title
+        let commitLabel = task.ticketNumber > 0 ? "\(task.ticketDisplay) \(task.title)" : task.title
         print("[Agent] runAgent called for task: \(taskTitle) (id: \(taskId))")
 
         guard activeRunners[taskId] == nil else {
@@ -134,7 +135,7 @@ final class AgentOrchestrator {
                     // Auto-commit only on successful completion
                     if agentRun.status == .completed {
                         WorkspaceManager.gitAutoCommit(
-                            message: "[maestro] Agent changes for: \(taskTitle)",
+                            message: "[maestro] Agent changes for: \(commitLabel)",
                             in: workspacePath,
                             taskId: taskId
                         )
@@ -199,6 +200,7 @@ final class AgentOrchestrator {
         }
         let taskId = task.id
         let taskTitle = task.title
+        let commitLabel = task.ticketNumber > 0 ? "\(task.ticketDisplay) \(task.title)" : task.title
 
         guard activeRunners[taskId] == nil else { return }
 
@@ -261,7 +263,7 @@ final class AgentOrchestrator {
                     // Auto-commit only on successful completion
                     if agentRun.status == .completed {
                         WorkspaceManager.gitAutoCommit(
-                            message: "[maestro] Agent changes for: \(taskTitle)",
+                            message: "[maestro] Agent changes for: \(commitLabel)",
                             in: workspacePath,
                             taskId: taskId
                         )

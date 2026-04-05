@@ -163,7 +163,8 @@ struct AgentRunRow: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 4) {
-                    if let ticketNum = run.task?.ticketNumber, ticketNum > 0 {
+                    let ticketNum = run.task?.ticketNumber ?? run.ticketNumber
+                    if ticketNum > 0 {
                         Text("#\(ticketNum)")
                             .font(.body)
                             .foregroundStyle(.secondary)

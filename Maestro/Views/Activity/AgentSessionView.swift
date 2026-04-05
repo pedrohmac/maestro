@@ -32,8 +32,16 @@ struct AgentSessionView: View {
             // Header
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(run.task?.title ?? "Agent Session")
-                        .font(.headline)
+                    HStack(spacing: 4) {
+                        let ticketNum = run.task?.ticketNumber ?? run.ticketNumber
+                        if ticketNum > 0 {
+                            Text("#\(ticketNum)")
+                                .font(.headline)
+                                .foregroundStyle(.secondary)
+                        }
+                        Text(run.task?.title ?? run.taskTitle)
+                            .font(.headline)
+                    }
                     HStack(spacing: 12) {
                         Label(run.status.rawValue, systemImage: isActive ? "bolt.fill" : "circle")
                             .font(.caption)

@@ -16,6 +16,7 @@ public final class AgentRun {
     public var eventsData: Data? = nil
     public var projectId: String = ""
     public var taskTitle: String = ""
+    public var ticketNumber: Int = 0
 
     // Rollback tracking
     public var preRunHeadSha: String? = nil
@@ -59,6 +60,7 @@ public final class AgentRun {
         self.id = UUID().uuidString
         self.task = task
         self.taskTitle = task?.title ?? "Unknown Task"
+        self.ticketNumber = task?.ticketNumber ?? 0
         self.projectId = task?.project?.id ?? ""
         self.startedAt = Date()
     }
