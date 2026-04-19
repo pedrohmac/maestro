@@ -1,0 +1,20 @@
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.xccheckout
+*.xcscmblueprint
+
+# macOS
+.DS_Store
+
+# Claude Code / Maestro workspaces
+.maestro-workspaces/
+.superpowers/
+
+# Dependencies
+Packages/
+
+# Swift Package Manager
+.build/
