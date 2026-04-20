@@ -13,6 +13,9 @@ xcuserdata/
 .maestro-workspaces/
 .superpowers/
 
+# Internal design docs (specs, plans)
+docs/superpowers/
+
 # Dependencies
 Packages/
 

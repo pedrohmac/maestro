@@ -19,14 +19,13 @@ Maestro is a native macOS app that gives you a visual project board (kanban + ti
 ## Requirements
 
 - macOS 14.0+ (Sonoma)
-- [Claude CLI](https://docs.anthropic.com/en/docs/claude-code) installed and authenticated
-- An Anthropic API key
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed and configured in your terminal — Maestro spawns Claude Code processes to run agents, so it must be available in your PATH and authenticated with your Anthropic account
 
 ## Quick Start
 
 ### Download
 
-Get the latest release from [usemaestro.dev](https://usemaestro.dev).
+Get the latest release from [getmaestro.dev](https://getmaestro.dev).
 
 ### Build from Source
 
