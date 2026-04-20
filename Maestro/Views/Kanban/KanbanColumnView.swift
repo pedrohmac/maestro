@@ -27,156 +27,12 @@ struct KanbanColumnView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // Column header
-            HStack {
-                Circle()
-                    .fill(column.swiftUIColor)
-                    .frame(width: 8, height: 8)
-                if isRenaming {
-                    TextField("Column name", text: $editedName, onCommit: {
-                        var updated = column
-                        updated.name = editedName
-                        onColumnChanged?(updated)
-                        isRenaming = false
-                    })
-                    .textFieldStyle(.plain)
-                    .font(.headline)
-                    .frame(maxWidth: 140)
-                    .onExitCommand {
-                        isRenaming = false
-                    }
-                } else {
-                    Text(column.name)
-                        .font(.headline)
-                        .foregroundStyle(.primary)
-                }
-                Text("\(tasks.count)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 2)
-                    .background(.quaternary, in: Capsule())
-                Spacer()
-                if column.mappedStatus == TaskStatus.done.rawValue && !tasks.isEmpty {
-                    Button(action: { showClearConfirmation = true }) {
-                        Image(systemName: "archivebox")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .padding(4)
-                            .background(.quaternary, in: RoundedRectangle(cornerRadius: 4))
-                    }
-                    .buttonStyle(.plain)
-                    .help("Archive all done tasks")
-                }
-                if let onAddTask {
-                    Button(action: onAddTask) {
-                        Image(systemName: "plus")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .padding(4)
-                            .background(.quaternary, in: RoundedRectangle(cornerRadius: 4))
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 10)
-            .background(Color.primary.opacity(0.001))
-            .contentShape(Rectangle())
-            .background(
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(isColumnDragTarget ? column.swiftUIColor.opacity(0.2) : Color.clear)
-            )
-            .overlay(alignment: .leading) {
-                if isColumnDragTarget {
-                    Capsule()
-                        .fill(Color.accentColor)
-                        .frame(width: 3)
-                        .padding(.vertical, 4)
-                }
-            }
-            .draggable("column:\(column.id)")
-            .dropDestination(for: String.self) { droppedIds, _ in
-                defer { isColumnDragTarget = false }
-                guard let droppedId = droppedIds.first,
-                      droppedId.hasPrefix("column:") else { return false }
-                let columnId = String(droppedId.dropFirst("column:".count))
-                guard columnId != column.id else { return false }
-                onColumnDroppedOnMe?(columnId)
-                return true
-            } isTargeted: { targeted in
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    isColumnDragTarget = targeted
-                }
-            }
-            .contextMenu {
-                Button("Rename") {
-                    editedName = column.name
-                    isRenaming = true
-                }
-                Button("Change Color") {
-                    showColorPicker = true
-                }
-                if onMoveLeft != nil || onMoveRight != nil {
-                    Divider()
-                }
-                if let onMoveLeft {
-                    Button("Move Left") { onMoveLeft() }
-                }
-                if let onMoveRight {
-                    Button("Move Right") { onMoveRight() }
-                }
-                if onColumnDeleted != nil {
-                    Divider()
-                    Button("Delete Column", role: .destructive) {
-                        showDeleteConfirmation = true
-                    }
-                }
-            }
-
+            columnHeader
             Divider()
-
-            // Task cards
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 0) {
-                    dropZone(at: 0)
-
-                    ForEach(Array(tasks.enumerated()), id: \.element.id) { index, task in
-                        TaskCardView(task: task, isSelected: selectedTask?.id == task.id)
-                            .padding(.horizontal, 8)
-                            .overlay {
-                                cardDropOverlay(at: index)
-                            }
-                            .draggable(task.id)
-                            .onTapGesture {
-                                selectedTask = task
-                            }
-
-                        dropZone(at: index + 1)
-                    }
-                }
-                .padding(.vertical, 4)
-            }
-            .contentShape(Rectangle())
-            .dropDestination(for: String.self) { droppedIds, _ in
-                handleDrop(droppedIds, at: dropTargetIndex ?? tasks.count)
-            } isTargeted: { targeted in
-                if !targeted {
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
-                        dropTargetIndex = nil
-                    }
-                }
-            }
+            taskList
         }
         .frame(width: 280)
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color.controlBackground(darker: isDarkerMode))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .strokeBorder(dropTargetIndex != nil ? column.swiftUIColor.opacity(0.6) : Color.clear, lineWidth: 2)
-                )
-        )
+        .background(columnBackground)
         .confirmationDialog("Archive all done tasks?", isPresented: $showClearConfirmation) {
             Button("Archive", role: .destructive) {
                 for task in tasks {
@@ -210,6 +66,156 @@ struct KanbanColumnView: View {
             let arrivals = newIds.subtracting(oldIds)
             for task in tasks where arrivals.contains(task.id) {
                 orchestrator.runAgent(task: task, project: project)
+            }
+        }
+    }
+
+    private var columnBackground: some View {
+        RoundedRectangle(cornerRadius: 10)
+            .fill(Color.controlBackground(darker: isDarkerMode))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .strokeBorder(dropTargetIndex != nil ? column.swiftUIColor.opacity(0.6) : Color.clear, lineWidth: 2)
+            )
+    }
+
+    private var columnHeader: some View {
+        HStack {
+            Circle()
+                .fill(column.swiftUIColor)
+                .frame(width: 8, height: 8)
+            if isRenaming {
+                TextField("Column name", text: $editedName, onCommit: {
+                    var updated = column
+                    updated.name = editedName
+                    onColumnChanged?(updated)
+                    isRenaming = false
+                })
+                .textFieldStyle(.plain)
+                .font(.headline)
+                .frame(maxWidth: 140)
+                .onExitCommand {
+                    isRenaming = false
+                }
+            } else {
+                Text(column.name)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+            }
+            Text("\(tasks.count)")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .padding(.horizontal, 6)
+                .padding(.vertical, 2)
+                .background(.quaternary, in: Capsule())
+            Spacer()
+            if column.mappedStatus == TaskStatus.done.rawValue && !tasks.isEmpty {
+                Button(action: { showClearConfirmation = true }) {
+                    Image(systemName: "archivebox")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .padding(4)
+                        .background(.quaternary, in: RoundedRectangle(cornerRadius: 4))
+                }
+                .buttonStyle(.plain)
+                .help("Archive all done tasks")
+            }
+            if let onAddTask {
+                Button(action: onAddTask) {
+                    Image(systemName: "plus")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .padding(4)
+                        .background(.quaternary, in: RoundedRectangle(cornerRadius: 4))
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(Color.primary.opacity(0.001))
+        .contentShape(Rectangle())
+        .background(
+            RoundedRectangle(cornerRadius: 6)
+                .fill(isColumnDragTarget ? column.swiftUIColor.opacity(0.2) : Color.clear)
+        )
+        .overlay(alignment: .leading) {
+            if isColumnDragTarget {
+                Capsule()
+                    .fill(Color.accentColor)
+                    .frame(width: 3)
+                    .padding(.vertical, 4)
+            }
+        }
+        .draggable("column:\(column.id)")
+        .dropDestination(for: String.self) { droppedIds, _ in
+            defer { isColumnDragTarget = false }
+            guard let droppedId = droppedIds.first,
+                  droppedId.hasPrefix("column:") else { return false }
+            let columnId = String(droppedId.dropFirst("column:".count))
+            guard columnId != column.id else { return false }
+            onColumnDroppedOnMe?(columnId)
+            return true
+        } isTargeted: { targeted in
+            withAnimation(.easeInOut(duration: 0.2)) {
+                isColumnDragTarget = targeted
+            }
+        }
+        .contextMenu {
+            Button("Rename") {
+                editedName = column.name
+                isRenaming = true
+            }
+            Button("Change Color") {
+                showColorPicker = true
+            }
+            if onMoveLeft != nil || onMoveRight != nil {
+                Divider()
+            }
+            if let onMoveLeft {
+                Button("Move Left") { onMoveLeft() }
+            }
+            if let onMoveRight {
+                Button("Move Right") { onMoveRight() }
+            }
+            if onColumnDeleted != nil {
+                Divider()
+                Button("Delete Column", role: .destructive) {
+                    showDeleteConfirmation = true
+                }
+            }
+        }
+    }
+
+    private var taskList: some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack(spacing: 0) {
+                dropZone(at: 0)
+
+                ForEach(Array(tasks.enumerated()), id: \.element.id) { index, task in
+                    TaskCardView(task: task, isSelected: selectedTask?.id == task.id)
+                        .padding(.horizontal, 8)
+                        .overlay {
+                            cardDropOverlay(at: index)
+                        }
+                        .draggable(task.id)
+                        .onTapGesture {
+                            selectedTask = task
+                        }
+
+                    dropZone(at: index + 1)
+                }
+            }
+            .padding(.vertical, 4)
+        }
+        .contentShape(Rectangle())
+        .dropDestination(for: String.self) { droppedIds, _ in
+            handleDrop(droppedIds, at: dropTargetIndex ?? tasks.count)
+        } isTargeted: { targeted in
+            if !targeted {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                    dropTargetIndex = nil
+                }
             }
         }
     }
