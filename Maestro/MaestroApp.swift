@@ -6,7 +6,6 @@ import MaestroCore
 struct MaestroApp: App {
     let modelContainer: ModelContainer
     @State private var orchestrator = AgentOrchestrator()
-    @State private var appState = AppState()
     @State private var launcher = ProjectLauncher()
     @AppStorage("appearanceMode") private var appearanceMode: String = AppearanceMode.system.rawValue
     @FocusedValue(\.selectedNavigation) private var selectedNavigation
@@ -31,13 +30,10 @@ struct MaestroApp: App {
         WindowGroup {
             ContentView()
                 .environment(orchestrator)
-                .environment(appState)
                 .environment(launcher)
                 .environment(\.isDarkerMode, currentMode.isDarker)
                 .preferredColorScheme(colorScheme)
                 .task {
-                    orchestrator.appState = appState
-                    await appState.validateOnLaunch()
                     let context = modelContainer.mainContext
                     MaestroStore.assignMissingTicketNumbers(in: context)
                 }
@@ -65,7 +61,6 @@ struct MaestroApp: App {
         Settings {
             SettingsView()
                 .environment(orchestrator)
-                .environment(appState)
                 .modelContainer(modelContainer)
                 .environment(\.isDarkerMode, currentMode.isDarker)
                 .preferredColorScheme(colorScheme)

@@ -3,47 +3,12 @@ import MaestroCore
 
 struct GeneralSettingsView: View {
     @Environment(AgentOrchestrator.self) private var orchestrator
-    @Environment(AppState.self) private var appState
-    @State private var showingLicenseSheet = false
     @State private var claudePath: String = ""
     @State private var maxConcurrency: Int = 3
     @State private var detectedPath: String? = nil
 
     var body: some View {
         Form {
-            Section("License") {
-                HStack {
-                    if appState.isActivated {
-                        Image(systemName: "checkmark.seal.fill")
-                            .foregroundStyle(.green)
-                        VStack(alignment: .leading) {
-                            Text("Licensed")
-                                .fontWeight(.medium)
-                            if let key = appState.currentLicenseKey {
-                                Text(maskedKey(key))
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                        Spacer()
-                        Button("Deactivate") {
-                            Task { await appState.deactivateLicense() }
-                        }
-                        .buttonStyle(.bordered)
-                    } else {
-                        Image(systemName: "key")
-                            .foregroundStyle(.secondary)
-                        Text(appState.trialStatusText)
-                            .foregroundStyle(appState.isReadOnly ? .red : .secondary)
-                        Spacer()
-                        Button("Activate License") {
-                            showingLicenseSheet = true
-                        }
-                        .buttonStyle(.borderedProminent)
-                    }
-                }
-            }
-
             Section("Claude CLI") {
                 HStack {
                     TextField("Claude Path", text: $claudePath)
@@ -130,9 +95,6 @@ struct GeneralSettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .sheet(isPresented: $showingLicenseSheet) {
-            LicenseActivationSheet()
-        }
         .padding()
         .onAppear {
             claudePath = orchestrator.claudePath
@@ -202,13 +164,6 @@ struct GeneralSettingsView: View {
             cliStatusMessage = "Failed to uninstall: \(error.localizedDescription)"
             cliMessageIsError = true
         }
-    }
-
-    private func maskedKey(_ key: String) -> String {
-        guard key.count > 8 else { return key }
-        let prefix = key.prefix(4)
-        let suffix = key.suffix(4)
-        return "\(prefix)...\(suffix)"
     }
 
     private func detectClaude() {

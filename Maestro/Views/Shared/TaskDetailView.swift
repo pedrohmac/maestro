@@ -9,7 +9,6 @@ struct TaskDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.isDarkerMode) private var isDarkerMode
     @Environment(AgentOrchestrator.self) private var orchestrator
-    @Environment(AppState.self) private var appState
     @State private var showDeleteConfirmation = false
     @State private var newCommentText = ""
     @State private var rollbackTargetCommitId: String?
@@ -332,7 +331,7 @@ struct TaskDetailView: View {
                                 Label("Run Agent", systemImage: "bolt.fill")
                             }
                             .buttonStyle(.borderedProminent)
-                            .disabled((task.project?.workspaceRoot.isEmpty ?? true) || appState.isReadOnly)
+                            .disabled(task.project?.workspaceRoot.isEmpty ?? true)
 
                             if let lastRun = task.latestRun, let sessionId = lastRun.sessionId {
                                 Button(action: {
@@ -343,7 +342,6 @@ struct TaskDetailView: View {
                                     Label("Resume", systemImage: "arrow.clockwise")
                                 }
                                 .buttonStyle(.bordered)
-                                .disabled(appState.isReadOnly)
                             }
                         }
                     }
