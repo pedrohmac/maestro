@@ -1,0 +1,44 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build
+        run: xcodebuild -scheme Maestro -configuration Release -derivedDataPath build
+
+      - name: Create DMG
+        run: |
+          mkdir -p dmg-staging
+          cp -R "build/Build/Products/Release/Maestro.app" dmg-staging/
+          ln -s /Applications dmg-staging/Applications
+          hdiutil create -volname "Maestro" -srcfolder dmg-staging -ov -format UDZO Maestro.dmg
+
+      - name: Update latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete latest --yes || true
+          git tag -d latest || true
+          git push origin :refs/tags/latest || true
+          git tag latest
+          git push origin latest
+          gh release create latest Maestro.dmg \
+            --title "Latest Build" \
+            --notes "Built from $(git rev-parse --short HEAD) on $(date -u +%Y-%m-%d)" \
+            --latest

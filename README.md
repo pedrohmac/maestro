@@ -31,7 +31,7 @@ Get the latest release from [getmaestro.dev](https://getmaestro.dev).
 
 ```bash
 brew install xcodegen
-git clone https://github.com/user/maestro.git
+git clone https://github.com/pedrohmac/maestro.git
 cd maestro
 xcodegen generate
 open Maestro.xcodeproj
@@ -70,6 +70,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for build instructions and guidelines.
 
 ## License
 
-[Business Source License 1.1](LICENSE) — source-available, converts to Apache 2.0 on April 19, 2029.
-
-You are free to use, modify, and contribute. Commercial use (selling a competing product) is restricted until the change date.
+[MIT License](LICENSE)
