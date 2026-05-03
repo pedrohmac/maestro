@@ -42,7 +42,35 @@ jobs:
             CODE_SIGN_IDENTITY="Developer ID Application" \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
             CODE_SIGN_STYLE=Manual \
-            OTHER_CODE_SIGN_FLAGS="--keychain $RUNNER_TEMP/build.keychain-db"
+            ENABLE_HARDENED_RUNTIME=YES \
+            OTHER_CODE_SIGN_FLAGS="--keychain $RUNNER_TEMP/build.keychain-db --timestamp --options runtime"
+
+      - name: Re-sign embedded binaries
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          APP="build/Build/Products/Release/Maestro.app"
+          KEYCHAIN="$RUNNER_TEMP/build.keychain-db"
+          IDENTITY="Developer ID Application"
+
+          # Sign the embedded CLI binary with hardened runtime
+          codesign --force --sign "$IDENTITY" \
+            --keychain "$KEYCHAIN" \
+            --timestamp \
+            --options runtime \
+            "$APP/Contents/Resources/maestro"
+
+          # Re-sign the entire app bundle
+          codesign --force --deep --sign "$IDENTITY" \
+            --keychain "$KEYCHAIN" \
+            --timestamp \
+            --options runtime \
+            --entitlements Maestro/Maestro.entitlements \
+            "$APP"
+
+          # Verify
+          codesign --verify --verbose=2 "$APP"
+          spctl --assess --type execute --verbose=2 "$APP"
 
       - name: Create DMG
         run: |
