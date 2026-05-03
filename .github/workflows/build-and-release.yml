@@ -68,9 +68,8 @@ jobs:
             --entitlements Maestro/Maestro.entitlements \
             "$APP"
 
-          # Verify
+          # Verify signing (notarization checked after stapling)
           codesign --verify --verbose=2 "$APP"
-          spctl --assess --type execute --verbose=2 "$APP"
 
       - name: Create DMG
         run: |
